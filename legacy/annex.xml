@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <server host="irc.epiknet.org" name="epiknet">
+        <channel name="#scrutator">
+            <verbose>1</verbose>
+            <canTalk>1</canTalk>
+            <canLearn>1</canLearn>
+        </channel>
+    </server>
+    <server host="irc.langochat.net" name="langochat">
+        <channel name="#scrutator">
+            <verbose>1</verbose>
+            <canTalk>1</canTalk>
+            <canLearn>1</canLearn>
+        </channel>
+    </server>
+    <server host="irc.quakenet.org" name="quakenet">
+        <channel name="#scrutator">
+            <verbose>1</verbose>
+            <canTalk>1</canTalk>
+            <canLearn>1</canLearn>
+        </channel>
+    </server>
+    <option>
+        <nickname>RedDwarf</nickname>
+    </option>
+</config>

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <server host="irc.worldnet.net" name="worldnet">
+        <channel name="#scrutator">
+            <verbose>1</verbose>
+            <canTalk>1</canTalk>
+            <canLearn>1</canLearn>
+        </channel>
+        <channel name="#enigma">
+            <verbose>1</verbose>
+            <canTalk>1</canTalk>
+            <canLearn>1</canLearn>
+        </channel>
+        <channel name="#funradio">
+            <verbose>1</verbose>
+            <canTalk>0</canTalk>
+            <canLearn>1</canLearn>
+        </channel>
+    </server>
+    <server host="irc.efnet.net" name="efnet">
+        <channel name="#dev-fr">
+            <verbose>1</verbose>
+            <canTalk>1</canTalk>
+            <canLearn>1</canLearn>
+        </channel>
+        <channel name="#wiihack"/>
+        <channel name="#france"/>
+        <channel name="#wiidev"/>
+        <channel name="#fw"/>
+        <channel name="#gommeaencre"/>
+    </server>
+    <option>
+        <nickname>scrutator</nickname>
+    </option>
+</config>

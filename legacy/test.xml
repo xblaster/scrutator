@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <server host="irc.langochat.net" name="langochat">
+    </server>
+    <option>
+        <nickname>scrutator</nickname>
+    </option>
+</config>
