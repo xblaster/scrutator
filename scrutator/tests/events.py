@@ -1,5 +1,5 @@
 import unittest
-from scrutator.core.events import *
+from scrutator.core.event import *
 
 class TestEvents(unittest.TestCase):
     def setUp(self):
