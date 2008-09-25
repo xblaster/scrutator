@@ -1,4 +1,4 @@
-import scrutator.core.event
+import sys
 
 def smart_load(classFullString):
 	"""load automatically a class with this name (include package)"""
@@ -17,8 +17,7 @@ def __fetch_object(objectSourceTree, basePath = None):
 		return None
 	
 	if not basePath:
-		basePath = globals()
-		obj_new_root = basePath[sourceTree.pop(0)]
+		obj_new_root = sys.modules[sourceTree.pop(0)] 
 	else:
 		obj_new_root = getattr(basePath, sourceTree.pop(0))
 	
@@ -29,5 +28,10 @@ def __fetch_object(objectSourceTree, basePath = None):
 		return recusSearch
 
 def __safeimport(packageName):
-	#to implement
-	pass
+	"""this is a not so safe import for the moment"""
+	try:
+		exec(packageName)
+	except NameError:
+		#exec("global "+packageName.split('.').pop(0))
+		__import__(packageName)
+		
