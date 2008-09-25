@@ -1,6 +1,7 @@
 from scrutator.core.listener import *
 from scrutator.core.event import *
 
+from twisted.internet import threads, reactor
 
 class EventManager:
 	""" handle event in the application"""
@@ -29,10 +30,10 @@ class EventManager:
 		if not isinstance(eventObj, SimpleEvent):
 			raise Exception("Not a SimpleEvent inherited object")
 		for listener_obj in self.__getListenerMap(eventObj.getType()):
-			listener_obj.action(eventObj)
+			threads.deferToThread(listener_obj.action(eventObj))
 		
 		for listener_obj in self.__getListenerMap('all'):
-			listener_obj.action(eventObj)
+			threads.deferToThread(listener_obj.action(eventObj))
 			
 	
 	def __getListenerMap(self, mapname):

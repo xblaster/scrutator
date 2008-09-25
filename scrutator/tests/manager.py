@@ -3,12 +3,15 @@ from scrutator.core.manager import *
 from scrutator.core.event import *
 from scrutator.core.listener import *
 
+class TestMockupException(Exception):
+	pass
+
 class ListenerMockup(SimpleListener):
 	"""docstring for EventMockup"""
 	def __init__(self, arg = []):
 		self.arg = arg
 	def action(self, obj):
-		print "test"
+		raise TestMockupException("ACTION !!!")
 		
 
 class TestEventManager(unittest.TestCase):
@@ -21,5 +24,15 @@ class TestEventManager(unittest.TestCase):
 		self.manager.unbind('all', self.listenermock)
 		
 	def testSimplePush(self):
+		self.manager.bind(KickEvent().getType(), self.listenermock)
+		try:
+			self.manager.push(KickEvent())
+		except TestMockupException: 
+			pass
+		else:
+			fail("expected TestMockupException")
+		
+		self.manager.unbind(KickEvent().getType(), self.listenermock)
 		self.manager.push(KickEvent())
+		
 
