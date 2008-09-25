@@ -3,18 +3,24 @@ from scrutator.core.manager import *
 from scrutator.core.event import *
 from scrutator.core.listener import *
 
-class EventMockup(SimpleListener):
+class ListenerMockup(SimpleListener):
 	"""docstring for EventMockup"""
 	def __init__(self, arg = []):
 		self.arg = arg
-	def action(self):
+	def action(self, obj):
 		print "test"
 		
 
 class TestEventManager(unittest.TestCase):
 	def setUp(self):
 		self.manager = EventManager()
+		self.listenermock  = ListenerMockup()
 		
 	def testSimpleBind(self):
-		self.manager.bind('all', EventMockup())
-		pass
+		self.manager.bind('all', self.listenermock)
+	
+	def testSimpleUnbind(self):
+		self.manager.unbind('all', self.listenermock)
+	
+	def testSimplePush(self):
+		self.manager.push(KickEvent())

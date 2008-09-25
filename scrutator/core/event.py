@@ -4,7 +4,7 @@ class SimpleEvent:
     def __init__(self, arg = []):
         self.arg = arg
 
-    def getTypes(self):
+    def getType(self):
         return self.__class__.__name__
         
 class KickEvent(SimpleEvent):

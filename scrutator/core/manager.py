@@ -1,4 +1,5 @@
 from scrutator.core.listener import *
+from scrutator.core.event import *
 
 
 class EventManager:
@@ -11,8 +12,28 @@ class EventManager:
 		
 	def bind(self, eventName, listener):
 		if not isinstance(listener, SimpleListener):
-			raise Exception("Not an SimpleListener")
+			raise Exception("Not an SimpleListener inherited object")
 		self.__getListenerMap(str(eventName)).append(listener)
+	
+	def unbind(self, eventName, listener):
+		if not listener in self.__getListenerMap(eventName):
+			raise Exception("This listener is not binded")
+		
+		map_list = self.__getListenerMap(eventName)
+		item_index = map_list.index(listener)
+		del map_list[item_index]
+	
+	def push(self, eventObj):
+		""" This push an event and activate action listener
+		"""
+		if not isinstance(eventObj, SimpleEvent):
+			raise Exception("Not a SimpleEvent inherited object")
+		for listener_obj in self.__getListenerMap(eventObj.getType()):
+			listener_obj.action(eventObj)
+		
+		for listener_obj in self.__getListenerMap('all'):
+			listener_obj.action(eventObj)
+			
 	
 	def __getListenerMap(self, mapname):
 		""""

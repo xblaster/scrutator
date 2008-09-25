@@ -7,9 +7,9 @@ class TestEvents(unittest.TestCase):
         
     def testSimpleEvent(self):
         s = SimpleEvent()
-        self.assertEqual( s.getTypes(), "SimpleEvent")
+        self.assertEqual( s.getType(), "SimpleEvent")
         
     def testInheritedEvent(self):
         s = KickEvent()
-        self.assertEqual( s.getTypes(), "KickEvent")
+        self.assertEqual( s.getType(), "KickEvent")
         
