@@ -1,9 +1,8 @@
-
 class SimpleEvent:
     """simple event
     base class of all event"""
-    def __init__(self):
-        self.args = []
+    def __init__(self, arg = []):
+        self.arg = arg
 
     def getTypes(self):
         return self.__class__.__name__

@@ -1,6 +1,6 @@
 class SimpleListener:
     """ base of all listener"""
-    def __init__(self:
+    def __init__(self):
         pass
     
     def action(self, eventObj):
