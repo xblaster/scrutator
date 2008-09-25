@@ -16,11 +16,10 @@ class TestEventManager(unittest.TestCase):
 		self.manager = EventManager()
 		self.listenermock  = ListenerMockup()
 		
-	def testSimpleBind(self):
+	def testSimpleBindAndUnbind(self):
 		self.manager.bind('all', self.listenermock)
-	
-	def testSimpleUnbind(self):
 		self.manager.unbind('all', self.listenermock)
-	
+		
 	def testSimplePush(self):
 		self.manager.push(KickEvent())
+
