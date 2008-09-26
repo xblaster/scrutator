@@ -89,6 +89,9 @@ class CoreManager:
 		
 		def push(self, eventObj):
 			return self.eventManager.push(eventObj)
+			
+		def getEventManager(self):
+			return self.eventManager
 
 	# storage for the instance reference
 	__instance = None
