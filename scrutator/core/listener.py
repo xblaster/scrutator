@@ -8,3 +8,11 @@ class SimpleListener:
         eventObj -- event object to handle
         """
         pass
+
+
+class ExceptionListener(SimpleListener):
+	"""docstring for EventMockup"""
+	def __init__(self, arg = []):
+		self.arg = arg
+	def action(self, obj):
+		raise Exception("ACTION !!!")

@@ -119,6 +119,6 @@ class CoreManager:
 class XmlEventManagerLoader:
 	pass
 	
-	def load(self):
+	def load(self, filename, eventManager):
 		from xml.dom.minidom import parse
-		self.doc = parse('resource/loader.xml')
+		self.doc = parse(filename)

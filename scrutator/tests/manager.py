@@ -43,4 +43,6 @@ class TestCoreManager(unittest.TestCase):
 class TestXml(unittest.TestCase):
 	def testLoad(self):
 		xeml = XmlEventManagerLoader()
-		xeml.load()
+		em = EventManager()
+		xeml.load('resource/loader.xml', em)
+		
