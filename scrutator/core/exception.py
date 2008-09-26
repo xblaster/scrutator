@@ -1,0 +1,3 @@
+
+class BadTypeException(Exception):
+	pass
