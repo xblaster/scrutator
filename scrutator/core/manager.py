@@ -131,3 +131,4 @@ class XmlEventManagerLoader:
 			eventClass = smart_load(eventName)()
 			listenerClass = smart_load(listenerName)()
 			
+			eventManager.bind(eventClass.getType(),listenerClass)

@@ -46,3 +46,12 @@ class TestXml(unittest.TestCase):
 		em = EventManager()
 		xeml.load('resource/loader.xml', em)
 		
+		em.push(BanEvent())
+		
+		try: 
+			em.push(KickEvent())
+		except Exception:
+			pass
+		else:
+			self.fail("expected an exception from ExceptionListener")
+		
