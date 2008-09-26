@@ -1,6 +1,8 @@
 from scrutator.core.listener import *
 from scrutator.core.event import *
 
+from scrutator.core.tool import *
+
 from twisted.internet import threads, reactor
 
 """   
@@ -121,4 +123,11 @@ class XmlEventManagerLoader:
 	
 	def load(self, filename, eventManager):
 		from xml.dom.minidom import parse
-		self.doc = parse(filename)
+		doc = parse(filename)
+		for trigger in doc.getElementsByTagName('trigger'):
+			eventName = trigger.getAttribute('event')
+			listenerName = trigger.getAttribute('listener')
+			
+			eventClass = smart_load(eventName)()
+			listenerClass = smart_load(listenerName)()
+			

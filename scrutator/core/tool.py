@@ -19,7 +19,11 @@ def __fetch_object(objectSourceTree, basePath = None):
 	if not basePath:
 		obj_new_root = sys.modules[sourceTree.pop(0)] 
 	else:
-		obj_new_root = getattr(basePath, sourceTree.pop(0))
+		popelt = sourceTree.pop(0)
+		try:
+			obj_new_root = getattr(basePath, popelt)
+		except AttributeError:
+			raise Exception("Can't import '"+ str(basePath)+'.'+popelt+"'")
 	
 	recusSearch = __fetch_object(objectSourceTree, obj_new_root)
 	if recusSearch == None:

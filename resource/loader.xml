@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map>
-	
+	<trigger event="scrutator.core.event.KickEvent" listener="scrutator.core.listener.ExceptionListener">
+	</trigger>
 </map>
