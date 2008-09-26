@@ -3,6 +3,39 @@ from scrutator.core.event import *
 
 from twisted.internet import threads, reactor
 
+"""   
+def getPersonnes(self):
+
+        if self.__personneList__ != None:
+
+            return 
+
+        self.__personneList__ = []
+
+        for personnes in self.getRootElement().getElementsByTagName("personne"):
+
+            if personnes.nodeType == personnes.ELEMENT_NODE:
+
+                p = Personne()
+
+                try:
+
+                    p.nom = self.getText(personnes.getElementsByTagName("nom")[0])
+
+                    p.prenom = self.getText(personnes.getElementsByTagName("prenom")[0])
+
+                    p.adresse = self.getAdresse(personnes.getElementsByTagName("adresse")[0])
+
+                except:
+
+                    print 'Un des TAGS suivant est manquents : nom, prenom, adresse'
+
+                self.__personneList__.append(p)
+
+        return self.__personneList__
+"""
+
+
 class EventManager:
 	""" handle event in the application"""
 	
@@ -35,7 +68,6 @@ class EventManager:
 		for listener_obj in self.__getListenerMap('all'):
 			threads.deferToThread(listener_obj.action(eventObj))
 			
-	
 	def __getListenerMap(self, mapname):
 		""""
 		return a listener map name for bindings
@@ -43,3 +75,47 @@ class EventManager:
 		if not self.listeners_map.has_key(mapname):
 			self.listeners_map[mapname] = list()
 		return self.listeners_map[mapname]
+
+class CoreManager:
+	""" A python singleton """
+
+	class __CoreManagerimpl:
+		""" Implementation of the singleton interface """
+		
+		eventManager = EventManager()
+		
+		def __init__(self):
+			pass
+		
+		def push(self, eventObj):
+			return self.eventManager.push(eventObj)
+
+	# storage for the instance reference
+	__instance = None
+
+	def __init__(self):
+		""" Create singleton instance """
+		# Check whether we already have an instance
+		if CoreManager.__instance is None:
+			# Create and remember instance
+			CoreManager.__instance = CoreManager.__CoreManagerimpl()
+		
+		# Store instance reference as the only member in the handle
+		self.__dict__['_Singleton__instance'] = CoreManager.__instance
+
+	def __getattr__(self, attr):
+		""" Delegate access to implementation """
+		return getattr(self.__instance, attr)
+	
+	def __setattr__(self, attr, value):
+		""" Delegate access to implementation """
+		return setattr(self.__instance, attr, value)
+
+
+
+class XmlLoaderManager:
+	pass
+	
+	def load(self):
+		from xml.dom.minidom import parse
+		self.doc = parse('resource/loader.xml')

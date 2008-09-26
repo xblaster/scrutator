@@ -30,9 +30,11 @@ class TestEventManager(unittest.TestCase):
 		except TestMockupException: 
 			pass
 		else:
-			fail("expected TestMockupException")
+			self.fail("expected TestMockupException")
 		
 		self.manager.unbind(KickEvent().getType(), self.listenermock)
 		self.manager.push(KickEvent())
-		
+	
+	def testSingleton(self):
+		self.assertEquals(id(CoreManager()),id(CoreManager()))
 
