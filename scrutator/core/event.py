@@ -8,7 +8,7 @@ class EventSerializer(object):
 	def event2array(self, obj):
 		if not isinstance(obj, SimpleEvent):
 			raise scrutator.core.exception.BadTypeException("Not a SimpleEvent")
-		return dict(type=obj.getType(), arg = obj.getArg())
+		return dict(type = obj.getType(), arg = obj.getArg())
 		
 	def array2event(self, refDict):
 		if not refDict.has_key('type'):

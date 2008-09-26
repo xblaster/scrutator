@@ -34,7 +34,13 @@ class TestEventManager(unittest.TestCase):
 		
 		self.manager.unbind(KickEvent().getType(), self.listenermock)
 		self.manager.push(KickEvent())
-	
+
+
+class TestCoreManager(unittest.TestCase):
 	def testSingleton(self):
 		self.assertEquals(id(CoreManager()),id(CoreManager()))
 
+class TestXml(unittest.TestCase):
+	def testLoad(self):
+		xeml = XmlEventManagerLoader()
+		xeml.load()

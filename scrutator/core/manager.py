@@ -116,7 +116,7 @@ class CoreManager:
 
 
 
-class XmlLoaderManager:
+class XmlEventManagerLoader:
 	pass
 	
 	def load(self):
