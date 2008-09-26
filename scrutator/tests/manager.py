@@ -44,7 +44,7 @@ class TestXml(unittest.TestCase):
 	def testLoad(self):
 		xeml = XmlEventManagerLoader()
 		em = EventManager()
-		xeml.load('resource/loader.xml', em)
+		xeml.load('resource/sample.xml', em)
 		
 		em.push(BanEvent())
 		
