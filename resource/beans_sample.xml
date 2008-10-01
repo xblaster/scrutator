@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+	<bean id="eventManager" class="scrutator.core.events.SimpleEvent">
+        <property name="companyName">
+            <value>lizjason</value>
+        </property>
+    </bean>
+</beans>
