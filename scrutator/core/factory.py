@@ -1,16 +1,33 @@
+from scrutator.core.tool import *
+from scrutator.core.manager  import *
+
+def getText(nodelist):
+    rc = ""
+    for node in nodelist:
+        if node.nodeType == node.TEXT_NODE:
+            rc = rc + node.data
+    return rc
+
+
 class AbstractBeanFactory:
-	self.beans_list = dict()
+
 	def __init__(self):
 		pass
 	
-	def getBean(self, beanName):
-		if self.beans_list.has_key(beanName):
-			return self.beans_list[beanName]
-		raise Exception('This bean does not exist')
-	
-	def setBean(self, beanName, beanObj):
-		self.beans_list[beanName] = beanObj
 
 class XMLBeanFactory(AbstractBeanFactory):
 	def __init__(self, resource):
-		
+		from xml.dom.minidom import parse
+		doc = parse(resource)
+		for bean in doc.getElementsByTagName('bean'):
+			bean_id  = bean.getAttribute('id')
+			class_name = bean.getAttribute('class')
+			
+			class_inst = smart_load(class_name)()
+			
+			for property in bean.getElementsByTagName('property'):
+				value = getText(property.getElementsByTagName('value')[0].childNodes)
+				setattr(class_inst, property.getAttribute('name'), value)
+			
+			CoreManager().setBean(bean_id, class_inst)
+			

@@ -84,6 +84,8 @@ class CoreManager:
 	class __CoreManagerimpl:
 		""" Implementation of the singleton interface """
 		
+		beans_list = dict()
+		
 		eventManager = EventManager()
 		
 		def __init__(self):
@@ -94,6 +96,15 @@ class CoreManager:
 			
 		def getEventManager(self):
 			return self.eventManager
+			
+		def getBean(self, beanName):
+			if self.beans_list.has_key(beanName):
+				return self.beans_list[beanName]
+			raise Exception('This bean does not exist')
+	
+		def setBean(self, beanName, beanObj):
+			self.beans_list[beanName] = beanObj
+
 
 	# storage for the instance reference
 	__instance = None
