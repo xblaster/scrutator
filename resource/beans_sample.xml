@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-	<bean id="eventManager" class="scrutator.core.events.SimpleEvent">
+    <bean id="eventManager" class="scrutator.core.manager.SimpleEvent"/>
+	<bean id="eventManager2" class="scrutator.core.manager.SimpleEvent">
         <property name="companyName">
             <value>lizjason</value>
+        </property>
+		 <property name="event">
+			<ref bean="eventManager"/>
         </property>
     </bean>
 </beans>

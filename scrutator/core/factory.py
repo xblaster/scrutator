@@ -20,14 +20,21 @@ class XMLBeanFactory(AbstractBeanFactory):
 		from xml.dom.minidom import parse
 		doc = parse(resource)
 		for bean in doc.getElementsByTagName('bean'):
-			bean_id  = bean.getAttribute('id')
-			class_name = bean.getAttribute('class')
-			
-			class_inst = smart_load(class_name)()
-			
-			for property in bean.getElementsByTagName('property'):
+			self.loadBean(bean)
+	
+	def loadBean(self, bean):
+		bean_id  = bean.getAttribute('id')
+		class_name = bean.getAttribute('class')
+		
+		class_inst = smart_load(class_name)()
+		
+		for property in bean.getElementsByTagName('property'):
+			if len(property.getElementsByTagName('value')) > 0:
 				value = getText(property.getElementsByTagName('value')[0].childNodes)
 				setattr(class_inst, property.getAttribute('name'), value)
-			
-			CoreManager().setBean(bean_id, class_inst)
+			else: 
+				value = property.getElementsByTagName('ref')[0].getAttribute('bean')
+				bean_class = CoreManager().getBean(value)
+				setattr(class_inst, property.getAttribute('name'), bean_class)
+		CoreManager().setBean(bean_id, class_inst)
 			
