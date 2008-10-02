@@ -1,7 +1,7 @@
 from twisted.web import xmlrpc, server
 from scrutator.core.event import *
 from twisted.internet import threads, reactor
-
+from twisted.web.xmlrpc import Proxy
 
 class SCRTServices(xmlrpc.XMLRPC):
 	"""An example object to be published."""
@@ -23,18 +23,27 @@ class SCRTServices(xmlrpc.XMLRPC):
 		"""Pull event to a destination"""
 		return null
 
+def printValue(value):
+	print value
+
+def printError(value):
+	print value
+
 class XMLRPCClient:
 	def __init__(self, serviceuri):
 		import xmlrpclib
-		self.xmlrpc_connect = xmlrpclib.ServerProxy(serviceuri)
-		
+		self.xmlrpc_connect = Proxy(serviceuri)
+	
+
+	
 	def push(self, eventObj):
 		es = EventSerializer()
 		res = es.event2array(eventObj)
 		send_list = list()
 		send_list.append(res)
 		
-		threads.deferToThread(self.xmlrpc_connect.push(send_list))
+		self.xmlrpc_connect.callRemote(send_list).addCallbacks(printValue, printError)
+		#threads.deferToThread(self.xmlrpc_connect.push(send_list))
 
 class XMLRPCServer:
 	def __init__(self, service, port, eventMgrObj):
