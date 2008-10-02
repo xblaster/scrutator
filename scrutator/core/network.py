@@ -1,5 +1,6 @@
 from twisted.web import xmlrpc, server
 from scrutator.core.event import *
+from twisted.internet import threads, reactor
 
 
 class SCRTServices(xmlrpc.XMLRPC):
@@ -33,7 +34,7 @@ class XMLRPCClient:
 		send_list = list()
 		send_list.append(res)
 		
-		self.xmlrpc_connect.push(send_list)
+		threads.deferToThread(self.xmlrpc_connect.push(send_list))
 
 class XMLRPCServer:
 	def __init__(self, service, port, eventMgrObj):

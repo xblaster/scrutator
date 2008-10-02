@@ -20,5 +20,6 @@ class TestXMLBeanFactory(unittest.TestCase):
 		
 		
 		reactor.callLater(0.2, eventSender.push, event)
+		reactor.callLater(0.4, reactor.stop)
 		reactor.run()
 	
