@@ -10,10 +10,6 @@
 	
     <bean id="eventManager" class="scrutator.core.manager.SimpleEvent"/>
 	<bean id="eventManager2" class="scrutator.core.manager.SimpleEvent">
-		<constructor-arg>
-			<value>12</value>
-			<ref bean="eventManager"/>
-		</constructor-arg>
 		
         <property name="companyName">
             <value>lizjason</value>

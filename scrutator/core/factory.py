@@ -48,9 +48,9 @@ class XMLBeanFactory(AbstractBeanFactory):
 			if (len(argument_list)==0):
 				class_inst = class_obj()
 			else:
-				class_inst = class_obj(argument_list)
-		except TypeError:
-			raise XMLBeanConstArgError(class_obj.__name__+" bad args "+str(argument_list)+"\n")
+				class_inst = class_obj(*argument_list)
+		except TypeError, e:
+			raise XMLBeanConstArgError(class_obj.__name__+" bad args "+str(argument_list)+"\n"+str(e))
 		
 		for property in bean.getElementsByTagName('property'):
 			if len(property.getElementsByTagName('value')) > 0:
