@@ -26,7 +26,21 @@ class XMLBeanFactory(AbstractBeanFactory):
 		bean_id  = bean.getAttribute('id')
 		class_name = bean.getAttribute('class')
 		
-		class_inst = smart_load(class_name)()
+		argument_list = list()
+		
+		args = bean.getElementsByTagName('constructor-arg')
+		if len(args) == 1:
+			arg = args[0]
+			for node in arg.childNodes:
+				if (node.nodeName == "value"):
+					val = getText(node.childNodes)
+					if val.isdigit():
+						val = int(val)
+					argument_list.append(val)
+				if (node.nodeName == "ref"):
+					argument_list.append(CoreManager().getBean(node.getAttribute("bean")))
+					
+		class_inst = smart_load(class_name)(argument_list)
 		
 		for property in bean.getElementsByTagName('property'):
 			if len(property.getElementsByTagName('value')) > 0:

@@ -14,4 +14,9 @@ class SCRTServices(xmlrpc.XMLRPC):
 		"""Pull event to a destination"""
 		return a + b
 
+class SCRTXMLRPC:
+	def __init__(self, service, port):
+		from twisted.internet import reactor
+		r = service
+		reactor.listenTCP(port, server.Site(r))
 
