@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
+	<bean id="mainEventManager" class="scrutator.core.manager.EventManager"/>
 	<bean id="servicesObj" class="scrutator.core.server.SCRTServices"/>
-	<bean id="distantConnect" class="scrutator.core.server.SCRTXMLRPC">
+	<bean id="eventReceiver" class="scrutator.core.server.SCRTXMLRPC">
 		<constructor-arg>
 			<ref bean="servicesObj"/>
 			<value>7080</value>
+			<ref bean="mainEventManager"/>
 		</constructor-arg>
 	</bean>
+
 	
     <bean id="eventManager" class="scrutator.core.manager.SimpleEvent"/>
 	<bean id="eventManager2" class="scrutator.core.manager.SimpleEvent">

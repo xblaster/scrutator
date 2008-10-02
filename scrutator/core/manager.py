@@ -139,7 +139,9 @@ class XmlEventManagerLoader:
 			eventName = trigger.getAttribute('event')
 			listenerName = trigger.getAttribute('listener')
 			
-			eventClass = smart_load(eventName)()
+			#if it's not "all" events
+			if not eventName=='all':
+				eventName = smart_load(eventName)().getType()
 			listenerClass = smart_load(listenerName)()
 			
-			eventManager.bind(eventClass.getType(),listenerClass)
+			eventManager.bind(eventName,listenerClass)

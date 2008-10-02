@@ -9,4 +9,5 @@ class TestXMLBeanFactory(unittest.TestCase):
 	
 	def testLoad(self):
 		xmlbe = XMLBeanFactory('resource/beans_sample.xml')
+		
 	
