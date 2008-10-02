@@ -9,6 +9,10 @@ class SimpleListener:
         """
         pass
 
+class PrintListener(SimpleListener):
+	def action(self, eventObj):
+		print "PrintListener DEBUG: "+str(eventObj)
+
 
 class ExceptionListener(SimpleListener):
 	"""docstring for EventMockup"""
