@@ -1,6 +1,9 @@
 from scrutator.core.tool import *
 from scrutator.core.manager  import *
 
+class XMLBeanConstArgError(Exception):
+	pass
+
 def getText(nodelist):
     rc = ""
     for node in nodelist:
@@ -40,7 +43,14 @@ class XMLBeanFactory(AbstractBeanFactory):
 				if (node.nodeName == "ref"):
 					argument_list.append(CoreManager().getBean(node.getAttribute("bean")))
 					
-		class_inst = smart_load(class_name)(argument_list)
+		class_obj = smart_load(class_name)
+		try:
+			if (len(argument_list)==0):
+				class_inst = class_obj()
+			else:
+				class_inst = class_obj(argument_list)
+		except TypeError:
+			raise XMLBeanConstArgError(class_obj.__name__+" bad args "+str(argument_list)+"\n")
 		
 		for property in bean.getElementsByTagName('property'):
 			if len(property.getElementsByTagName('value')) > 0:
