@@ -10,7 +10,7 @@ class TestXMLBeanFactory(unittest.TestCase):
 	def testLoad(self):
 		xmlbe = XMLBeanFactory('resource/beans_sample.xml')
 		eventSender = CoreManager().getBean('eventSender')
-		event = KickEvent()
+		event = SimpleEvent()
 		#reactor.callLater(1, print, "hello")
 		
 		xeml = XmlEventManagerLoader()

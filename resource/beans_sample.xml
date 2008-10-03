@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
 	<bean id="mainEventManager" class="scrutator.core.manager.EventManager"/>
-	<bean id="servicesObj" class="scrutator.core.network.SCRTServices"/>
+	<bean id="servicesObj" class="scrutator.core.network.SCRTServices">
+		<property name="manager">
+			<ref bean="mainEventManager"/>
+		</property>
+	</bean>
 	
 	<bean id="eventSender" class="scrutator.core.network.XMLRPCClient">
 		<constructor-arg>
