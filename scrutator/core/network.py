@@ -71,8 +71,8 @@ def printValue(value):
 	pass
 
 def printError(value):
-	#print "ERROR !!! "+str(value)
-	pass
+	print "ERROR !!! "+str(value)
+	#pass
 
 """class SoapClient:
 	def __init__(self, serviceuri):
