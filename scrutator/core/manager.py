@@ -136,18 +136,22 @@ class CoreManager:
 
 
 class XmlEventManagerLoader:
-	pass
+	
+	def getListener(self, xmlNode):
+		listenerName = xmlNode.getAttribute('listener')
+		listenerClass = smart_load(listenerName)()
+		return listenerClass
 	
 	def load(self, filename, eventManager):
 		from xml.dom.minidom import parse
 		doc = parse(filename)
 		for trigger in doc.getElementsByTagName('trigger'):
 			eventName = trigger.getAttribute('event')
-			listenerName = trigger.getAttribute('listener')
+
 			
 			#if it's not "all" events
 			if not eventName=='all':
 				eventName = smart_load(eventName)().getType()
-			listenerClass = smart_load(listenerName)()
 			
-			eventManager.bind(eventName,listenerClass)
+			
+			eventManager.bind(eventName,self.getListener(trigger))
