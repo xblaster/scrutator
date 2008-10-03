@@ -37,6 +37,8 @@ def getPersonnes(self):
         return self.__personneList__
 """
 
+def default_callback(value):
+	pass
 
 class EventManager:
 	""" handle event in the application"""
@@ -65,10 +67,12 @@ class EventManager:
 		if not isinstance(eventObj, SimpleEvent):
 			raise Exception("Not a SimpleEvent inherited object")
 		for listener_obj in self.__getListenerMap(eventObj.getType()):
-			threads.deferToThread(listener_obj.action(eventObj))
+			#threads.deferToThread(listener_obj.action(eventObj)).addCallback(default_callback)
+			listener_obj.action(eventObj)
 		
 		for listener_obj in self.__getListenerMap('all'):
-			threads.deferToThread(listener_obj.action(eventObj))
+			#threads.deferToThread(listener_obj.action(eventObj)).addCallback(default_callback)
+			listener_obj.action(eventObj)
 			
 	def __getListenerMap(self, mapname):
 		""""
