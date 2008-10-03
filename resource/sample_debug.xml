@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+	<trigger event="all" listener="scrutator.core.listener.PrintListener"></trigger>
+</map>
