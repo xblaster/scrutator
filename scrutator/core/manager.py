@@ -74,6 +74,8 @@ class EventManager:
 			#threads.deferToThread(listener_obj.action(eventObj)).addCallback(default_callback)
 			listener_obj.action(eventObj)
 			
+		return None
+			
 	def __getListenerMap(self, mapname):
 		""""
 		return a listener map name for bindings

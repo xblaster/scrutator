@@ -67,10 +67,12 @@ class SCRTServices(xmlrpc.XMLRPC):
 		return "ok"
 
 def printValue(value):
-	print "YES !!! "+str(value)
+	#print "YES !!! "+str(value)
+	pass
 
 def printError(value):
-	print "ERROR !!! "+str(value)
+	#print "ERROR !!! "+str(value)
+	pass
 
 """class SoapClient:
 	def __init__(self, serviceuri):
