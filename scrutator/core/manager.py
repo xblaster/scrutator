@@ -138,9 +138,17 @@ class CoreManager:
 class XmlEventManagerLoader:
 	
 	def getListener(self, xmlNode):
-		listenerName = xmlNode.getAttribute('listener')
-		listenerClass = smart_load(listenerName)()
-		return listenerClass
+		if xmlNode.hasAttribute('listener'):
+			listenerName = xmlNode.getAttribute('listener')
+			listenerClass = smart_load(listenerName)()
+			return listenerClass
+			
+		if xmlNode.hasAttribute('bean'):
+			beanName = xmlNode.getAttribute('bean')
+			listenerClass = CoreManager().getBean(beanName)
+			return listenerClass
+
+
 	
 	def load(self, filename, eventManager):
 		from xml.dom.minidom import parse
