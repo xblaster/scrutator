@@ -20,3 +20,9 @@ class ExceptionListener(SimpleListener):
 		self.arg = arg
 	def action(self, obj):
 		raise Exception("ACTION !!!")
+		
+class DoReactorStopListener(SimpleListener):
+	def action(self,obj):
+		from twisted.internet import reactor
+		#reactor.stop()
+		reactor.callLater(0.1, reactor.stop)

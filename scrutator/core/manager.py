@@ -50,8 +50,11 @@ class EventManager:
 		
 	def bind(self, eventName, listener):
 		if not isinstance(listener, SimpleListener):
-			raise Exception("Not an SimpleListener inherited object")
+			raise Exception("Not a SimpleListener inherited object "+str(listener))
 		self.__getListenerMap(str(eventName)).append(listener)
+	
+	def unbindAll(self):
+		self.listeners_map = dict()
 	
 	def unbind(self, eventName, listener):
 		if not listener in self.__getListenerMap(eventName):
@@ -147,7 +150,7 @@ class XmlEventManagerLoader:
 			beanName = xmlNode.getAttribute('bean')
 			listenerClass = CoreManager().getBean(beanName)
 			return listenerClass
-
+		raise Exception('listener or bean')
 
 	
 	def load(self, filename, eventManager):
