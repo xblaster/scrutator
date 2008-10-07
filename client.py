@@ -10,7 +10,7 @@ if __name__ == '__main__':
 	xeml.load('resource/sample_debug.xml', em)
 	
 	eventSender = CoreManager().getBean('eventSender')
-	event = SimpleEvent()
+	event = KickEvent()
 	
 	eventSender.push(event)
 
