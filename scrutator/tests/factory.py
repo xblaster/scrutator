@@ -17,11 +17,7 @@ class TestXMLBeanFactory(unittest.TestCase):
 		em = CoreManager().getBean('mainEventManager')
 		xeml.load('resource/test_bean_factory_trigger.xml', em)
 		
-		
-		
-		reactor.callLater(0.2, eventSender.push, event)
-		#reactor.callLater(0.4, reactor.stop)
+		reactor.callLater(0.01, eventSender.push, event)
 		reactor.run()
 		
-		em.unbindAll()
-	
+		em.unbindAll()	
