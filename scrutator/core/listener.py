@@ -20,9 +20,20 @@ class ExceptionListener(SimpleListener):
 		self.arg = arg
 	def action(self, obj, evtMgr):
 		raise Exception("ACTION !!!")
+
+class DelayListener(SimpleListener):
+	def action(self, obj, evtMgr):
+		from twisted.internet import reactor
+		reactor.callLater(evtMgr.push, obj)
 		
 class DoReactorStopListener(SimpleListener):
 	def action(self,obj, evtMgr):
 		from twisted.internet import reactor
-		#reactor.stop()
 		reactor.callLater(0.1, reactor.stop)
+		
+class PingListener(SimpleListener):
+	"""
+	Simply resend the object (testing purpose)
+	"""
+	def action(self, obj, evtMgr):
+		evtMgr.push(obj)

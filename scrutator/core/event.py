@@ -21,7 +21,7 @@ class EventSerializer(object):
 class SimpleEvent:
 	"""simple event
 	base class of all event"""
-	def __init__(self, arg = dict()):
+	def __init__(self, **arg):
 		self.setArg(arg)
 
 	def getType(self):
@@ -39,7 +39,17 @@ class SimpleEvent:
 	
 	def setArgEntry(self, entryname, entry):
 		self.arg[entryname] = entry
+
+class DelayedEvent(SimpleEvent):
+	delay = 1
 	
+	def __init__(self, **arg):
+		SimpleEvent.__init__(arg)
+		if not self.arg.has_key('event'):
+			raise Exception('not event arg in dict')
+		
+		if not isinstance(self.arg['event'], SimpleEvent):
+			raise Exception('event arg is not an inherited SimpleEvent object')
 		
 class KickEvent(SimpleEvent):
 	pass
