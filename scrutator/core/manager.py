@@ -71,11 +71,11 @@ class EventManager:
 			raise Exception("Not a SimpleEvent inherited object")
 		for listener_obj in self.__getListenerMap(eventObj.getType()):
 			#threads.deferToThread(listener_obj.action(eventObj)).addCallback(default_callback)
-			listener_obj.action(eventObj)
+			listener_obj.action(eventObj, self)
 		
 		for listener_obj in self.__getListenerMap('all'):
 			#threads.deferToThread(listener_obj.action(eventObj)).addCallback(default_callback)
-			listener_obj.action(eventObj)
+			listener_obj.action(eventObj, self)
 			
 		return None
 			

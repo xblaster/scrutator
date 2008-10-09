@@ -10,7 +10,7 @@ class ListenerMockup(SimpleListener):
 	"""docstring for EventMockup"""
 	def __init__(self, arg = []):
 		self.arg = arg
-	def action(self, obj):
+	def action(self, obj, evtMgr):
 		raise TestMockupException("ACTION !!!")
 		
 
