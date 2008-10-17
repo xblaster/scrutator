@@ -6,7 +6,7 @@ class TestEvents(unittest.TestCase):
 		pass
 		
 	def getMockupEvent(self):
-		s = BanEvent(dict(channel="#funradio", nickname="jdl"))
+		s = BanEvent(channel="#funradio", nickname="jdl")
 		return s
 	
 	def testSimpleEvent(self):
@@ -41,4 +41,9 @@ class TestEvents(unittest.TestCase):
 			
 		if not isinstance(s_reconstruct, BanEvent):
 			self.fail('Bad reconstruction :)')
+			
+	def testEventDelayedEventConst(self):
+		mock = self.getMockupEvent()
+		
+		d = DelayedEvent(obj=mock)
 		
