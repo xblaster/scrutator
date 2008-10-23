@@ -21,8 +21,12 @@ class GateListener(SimpleListener):
 	def action(self, eventObj, evtMgr):
 		evtMgr.push(eventObj)
 
-class LoggerListerner(SimpleListener, filename):
+class LoggerListerner(SimpleListener):
 	"""log event in a file"""
+	def __init(self,filename):
+		super(LoggerListerner, self).__init__()
+		self.filename = filename
+		
 	def action(self, eventObj, evtMgr):
 		pass
 
