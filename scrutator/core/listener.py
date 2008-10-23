@@ -1,4 +1,4 @@
-class SimpleListener:
+class SimpleListener(object):
 	""" base of all listener"""
 	def __init__(self):
 		pass
@@ -12,7 +12,19 @@ class SimpleListener:
 class PrintListener(SimpleListener):
 	def action(self, eventObj, evtMgr):
 		print "PrintListener DEBUG: "+str(eventObj)
+		
+class GateListener(SimpleListener):
+	def __init(self,evtMagr):
+		super(GateListener, self).__init__()
+		self.evtMgr = evtMagr
+	
+	def action(self, eventObj, evtMgr):
+		evtMgr.push(eventObj)
 
+class LoggerListerner(SimpleListener, filename):
+	"""log event in a file"""
+	def action(self, eventObj, evtMgr):
+		pass
 
 class ExceptionListener(SimpleListener):
 	"""docstring for EventMockup"""
