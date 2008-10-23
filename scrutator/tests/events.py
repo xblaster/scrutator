@@ -45,5 +45,5 @@ class TestEvents(unittest.TestCase):
 	def testEventDelayedEventConst(self):
 		mock = self.getMockupEvent()
 		
-		d = DelayedEvent(obj=mock)
+		d = DelayedEvent(event=mock)
 		

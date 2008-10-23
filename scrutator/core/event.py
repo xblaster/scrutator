@@ -18,7 +18,7 @@ class EventSerializer(object):
 		
 		return recons
 
-class SimpleEvent:
+class SimpleEvent(object):
 	"""simple event
 	base class of all event"""
 	def __init__(self, **arg):
@@ -44,7 +44,7 @@ class DelayedEvent(SimpleEvent):
 	delay = 1
 	
 	def __init__(self, **arg):
-		SimpleEvent.__init__(arg)
+		super(DelayedEvent, self).__init__(**arg)
 		if not self.arg.has_key('event'):
 			raise Exception('not event arg in dict')
 		
