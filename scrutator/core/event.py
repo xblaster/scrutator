@@ -57,3 +57,12 @@ class KickEvent(SimpleEvent):
 class BanEvent(SimpleEvent):
 	pass
 
+#definition of all common event
+
+class ConnectionMade(SimpleEvent):
+	pass
+
+class ConnectionLost(SimpleEvent):
+	pass
+
+
