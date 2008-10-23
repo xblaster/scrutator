@@ -25,4 +25,4 @@ def get_comment(message):
             if not 'http' in comm2:
                 return comm2.strip()
             return comm.strip()
-    return ''
+    return None
