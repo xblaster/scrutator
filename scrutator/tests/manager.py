@@ -34,6 +34,28 @@ class TestEventManager(unittest.TestCase):
 		
 		self.manager.unbind(KickEvent().getType(), self.listenermock)
 		self.manager.push(KickEvent())
+		
+	def testGatePush(self):
+		self.manager = EventManager()
+		self.listenermock  = ListenerMockup()
+		
+		initialManager = EventManager()
+		gate = GateListener(self.manager)
+		initialManager.bind('all', gate)
+		
+		self.manager.bind(KickEvent().getType(), self.listenermock)
+		try:
+			#should pass through initialManager to testmanager
+			initialManager.push(KickEvent())
+		except TestMockupException: 
+			pass
+		else:
+			self.fail("expected TestMockupException")
+
+		self.manager.unbind(KickEvent().getType(), self.listenermock)
+		self.manager.push(KickEvent())
+		initialManager.unbindAll()
+		self.manager.unbindAll()
 
 
 class TestCoreManager(unittest.TestCase):

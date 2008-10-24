@@ -14,16 +14,21 @@ class PrintListener(SimpleListener):
 		print "PrintListener DEBUG: "+str(eventObj)
 		
 class GateListener(SimpleListener):
-	def __init(self,evtMagr):
+	def __init__(self,evtMagr):
+		#if not isinstance(evtMagr, EventManager):
+		#	raise Exception('gate link must be an inherited EventManager object')
+			
 		super(GateListener, self).__init__()
 		self.evtMgr = evtMagr
 	
 	def action(self, eventObj, evtMgr):
-		evtMgr.push(eventObj)
+		if (evtMgr == self.evtMgr):
+			raise Exception("Cycling gate. Aborting")
+		self.evtMgr.push(eventObj)
 
 class LoggerListerner(SimpleListener):
 	"""log event in a file"""
-	def __init(self,filename):
+	def __init__(self,filename):
 		super(LoggerListerner, self).__init__()
 		self.filename = filename
 		
