@@ -42,10 +42,9 @@ def default_callback(value):
 
 class EventManager:
 	""" handle event in the application"""
-	
-	listeners_map = dict()
 
 	def __init__(self):
+		self.listeners_map = dict()
 		pass
 		
 	def bind(self, eventName, listener):
