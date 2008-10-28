@@ -5,37 +5,6 @@ from scrutator.core.tool import *
 
 from twisted.internet import threads, reactor
 
-"""   
-def getPersonnes(self):
-
-        if self.__personneList__ != None:
-
-            return 
-
-        self.__personneList__ = []
-
-        for personnes in self.getRootElement().getElementsByTagName("personne"):
-
-            if personnes.nodeType == personnes.ELEMENT_NODE:
-
-                p = Personne()
-
-                try:
-
-                    p.nom = self.getText(personnes.getElementsByTagName("nom")[0])
-
-                    p.prenom = self.getText(personnes.getElementsByTagName("prenom")[0])
-
-                    p.adresse = self.getAdresse(personnes.getElementsByTagName("adresse")[0])
-
-                except:
-
-                    print 'Un des TAGS suivant est manquents : nom, prenom, adresse'
-
-                self.__personneList__.append(p)
-
-        return self.__personneList__
-"""
 
 def default_callback(value):
 	pass
