@@ -65,9 +65,8 @@ class AsyncEventManager(EventManager):
 		
 	def getStoredEvent(self):
 		buf = self.buffer
-		self.buffer = list
+		self.buffer = list()
 		return buf
-		
 
 class CoreManager:
 	""" A python singleton """

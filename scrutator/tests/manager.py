@@ -57,7 +57,21 @@ class TestEventManager(unittest.TestCase):
 		initialManager.unbindAll()
 		self.manager.unbindAll()
 
+class TestAsyncManager(unittest.TestCase):
+	def testAsyncManager(self):
+		asyncMgr = AsyncEventManager()
+		l = list()
+		
+		l.append(BanEvent())
+		l.append(KickEvent())
+		l.append(KickEvent(chan="#funradio"))
+		
+		for evt in l:
+			asyncMgr.push(evt)
 
+		self.assertEquals(asyncMgr.getStoredEvent(), l)
+		self.assertEquals(asyncMgr.getStoredEvent(), list())
+		
 class TestCoreManager(unittest.TestCase):
 	def testSingleton(self):
 		self.assertEquals(id(CoreManager()),id(CoreManager()))
