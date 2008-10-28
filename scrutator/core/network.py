@@ -58,13 +58,17 @@ class SCRTServices(xmlrpc.XMLRPC):
 		for obj in obj_list:
 			res = es.array2event(obj)
 			#print "RES "+str(res)
+			res.setArgEntry('source',source)
 			self.manager.push(res)
 			#threads.deferToThread(self.manager.push, res)
 			#threads.deferToThread(True)
 
 	def xmlrpc_pull(self, source):
 		"""Pull event to a destination"""
-		return "ok"
+		return self.pull(source)
+	
+	def pull(self,source):
+		pass
 
 def printValue(value):
 	#print "YES !!! "+str(value)

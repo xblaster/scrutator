@@ -39,6 +39,9 @@ class SimpleEvent(object):
 	
 	def setArgEntry(self, entryname, entry):
 		self.arg[entryname] = entry
+		
+	def hasArgEntry(self, argname):
+		return self.arg.has_key(argname)
 
 class DelayedEvent(SimpleEvent):
 	delay = 1

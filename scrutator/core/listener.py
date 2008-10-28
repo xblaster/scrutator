@@ -13,6 +13,20 @@ class PrintListener(SimpleListener):
 	def action(self, eventObj, evtMgr):
 		print "PrintListener DEBUG: "+str(eventObj)
 		
+class DispatcherListener(SimpleListener):
+	def __init__(self):
+		super(DispatcherListener, self).__init__()
+	
+	def setDispatcher(self, dispatcherList):
+		self.dispatcher = dispatcherList
+	
+	def action(self, eventObj, evtMgr):
+		if not eventObj.hasArgEntry("to"):
+			return
+		to = eventObj.getArgEntry("to")
+		if self.dispatcher.has_key(to):
+			self.dispatcher[to].push(eventObj)
+		
 class GateListener(SimpleListener):
 	def __init__(self,evtMagr):
 		#if not isinstance(evtMagr, EventManager):

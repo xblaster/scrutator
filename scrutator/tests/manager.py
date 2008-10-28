@@ -56,6 +56,34 @@ class TestEventManager(unittest.TestCase):
 		self.manager.push(KickEvent())
 		initialManager.unbindAll()
 		self.manager.unbindAll()
+		
+	def testDispatcherPush(self):
+		self.manager = EventManager()
+		self.listenermock  = ListenerMockup()
+
+		initialManager = EventManager()
+		dispatcher = DispatcherListener()
+		initialManager.bind('all', dispatcher)
+		
+		dispatchList = dict()
+		dispatchList['distant'] = self.manager
+		
+		dispatcher.setDispatcher(dispatchList)
+
+		self.manager.bind(KickEvent().getType(), self.listenermock)
+		try:
+			#should pass through initialManager to testmanager
+			ke = KickEvent(to="distant")
+			initialManager.push(ke)
+		except TestMockupException: 
+			pass
+		else:
+			self.fail("expected TestMockupException")
+
+		self.manager.unbind(KickEvent().getType(), self.listenermock)
+		self.manager.push(KickEvent())
+		initialManager.unbindAll()
+		self.manager.unbindAll()
 
 class TestAsyncManager(unittest.TestCase):
 	def testAsyncManager(self):

@@ -25,6 +25,8 @@ class TestEvents(unittest.TestCase):
 		s.setArgEntry('count',4)
 		self.assertEqual(s.getArgEntry('count'),4)
 		
+		self.assertEqual(s.hasArgEntry('channel'),True)
+		
 	def testEventSerializerEvent2Arr(self):
 		s = self.getMockupEvent()
 		es = EventSerializer()
