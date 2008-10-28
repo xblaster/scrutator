@@ -9,7 +9,7 @@ from twisted.internet import threads, reactor
 def default_callback(value):
 	pass
 
-class EventManager:
+class EventManager(object):
 	""" handle event in the application"""
 
 	def __init__(self):
@@ -54,6 +54,20 @@ class EventManager:
 		if not self.listeners_map.has_key(mapname):
 			self.listeners_map[mapname] = list()
 		return self.listeners_map[mapname]
+
+class AsyncEventManager(EventManager):
+	def __init__(self):
+		super(AsyncEventManager, self).__init__()
+		self.buffer = list()
+	
+	def push(self, eventObj):
+		self.buffer.append(eventObj)
+		
+	def getStoredEvent(self):
+		buf = self.buffer
+		self.buffer = list
+		return buf
+		
 
 class CoreManager:
 	""" A python singleton """
