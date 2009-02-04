@@ -26,6 +26,29 @@ class DispatcherListener(SimpleListener):
 		to = eventObj.getArgEntry("to")
 		if self.dispatcher.has_key(to):
 			self.dispatcher[to].push(eventObj)
+			
+class MessageBoxListener(SimpleListener):
+	""" improvement of the dispatcher listener."""
+	
+	def __init__(self):
+		super(MessageBoxListener, self).__init__()
+		self.__messageBox = dict()
+	
+	def action(self, eventObj, evtMgr):
+		if not eventObj.hasArgEntry("to"):
+			return
+		to = eventObj.getArgEntry("to")
+		if self.dispatcher.has_key(to):
+			self.dispatcher[to].push(eventObj)
+	
+	def getMessageBox(self,boxname):
+		if not self.__messageBox.has_key(boxname):
+			self.__messageBox = list()
+		
+		return self.__messageBox[boxname]
+	
+	def getMessagesFor(self, boxname):
+		return self.getMessageBox(boxname)
 		
 class GateListener(SimpleListener):
 	def __init__(self,evtMagr):
