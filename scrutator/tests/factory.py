@@ -7,7 +7,7 @@ from scrutator.core.factory import *
 
 class TestXMLBeanFactory(unittest.TestCase):
 	
-	def testLoad(self):
+	def testLoadBeanAndNetwork(self):
 		xmlbe = XMLBeanFactory('resource/beans_sample.xml')
 		eventSender = CoreManager().getBean('eventSender')
 		event = SimpleEvent()
@@ -20,4 +20,4 @@ class TestXMLBeanFactory(unittest.TestCase):
 		reactor.callLater(0.01, eventSender.push, event)
 		reactor.run()
 		
-		em.unbindAll()	
+		em.unbindAll()
