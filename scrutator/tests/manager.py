@@ -94,6 +94,8 @@ class TestMessageBoxManager(unittest.TestCase):
 		mbox = MessageBoxEvent(to="coin", msg=sevent)
 		
 		mboxMgr.push(mbox)
+		
+		self.assertEqual(mboxMgr.getMessagesFor('coin').pop(), sevent)
 
 class TestAsyncManager(unittest.TestCase):
 	def testAsyncManager(self):
