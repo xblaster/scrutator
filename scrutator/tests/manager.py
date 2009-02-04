@@ -85,9 +85,11 @@ class TestEventManager(unittest.TestCase):
 		initialManager.unbindAll()
 		self.manager.unbindAll()
 	
-	def testDispatcherSmartStore(self):
-		self.fail("not implemented")
-		
+
+class TestMessageBoxManager(unittest.TestCase):
+	def testMessageBoxManager(self):
+		mboxMgr = MessageBoxManager()
+		self.fail("Not implemented")
 
 class TestAsyncManager(unittest.TestCase):
 	def testAsyncManager(self):

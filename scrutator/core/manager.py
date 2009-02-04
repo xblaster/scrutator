@@ -68,6 +68,36 @@ class AsyncEventManager(EventManager):
 		self.buffer = list()
 		return buf
 
+class MessageBoxManagerException(Exception):
+	pass
+	
+class MessageBoxManager(EventManager):
+	""" improvement of the dispatcher listener."""
+
+	def __init__(self):
+		super(MessageBoxManager, self).__init__()
+		self.__messageBox = dict()
+
+	def push(self, eventObj):
+		if not eventObj.hasArgEntry("to"):
+			raise MessageBoxManagerException("no 'to' arg")
+
+		if not eventObj.hasArgEntry("msg"):
+			raise MessageBoxManagerException("no 'msg' arg")
+
+		to = eventObj.getArgEntry("to")
+		msg = eventObj.getArgEntry("msg")
+
+		self.getMessageBox(to).append(msg)
+
+	def getMessageBox(self,boxname):
+		if not self.__messageBox.has_key(boxname):
+			self.__messageBox = list()
+		return self.__messageBox[boxname]
+
+	def getMessagesFor(self, boxname):
+		return self.getMessageBox(boxname)
+
 class CoreManager:
 	""" A python singleton """
 
