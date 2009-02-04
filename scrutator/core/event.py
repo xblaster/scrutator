@@ -60,6 +60,16 @@ class KickEvent(SimpleEvent):
 class BanEvent(SimpleEvent):
 	pass
 
+#specific message event
+class MessageBoxEvent(SimpleEvent):
+	def __init__(self, **arg):
+		super(MessageBoxEvent, self).__init__(**arg)
+		if not self.arg.has_key('to'):
+			raise Exception('not "to" arg in dict')
+		
+		if not isinstance(self.arg['msg'], SimpleEvent):
+			raise Exception('event "msg" is not an inherited SimpleEvent object')
+
 #definition of all common event
 
 class ConnectionMade(SimpleEvent):

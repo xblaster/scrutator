@@ -92,7 +92,7 @@ class MessageBoxManager(EventManager):
 
 	def getMessageBox(self,boxname):
 		if not self.__messageBox.has_key(boxname):
-			self.__messageBox = list()
+			self.__messageBox[boxname] = list()
 		return self.__messageBox[boxname]
 
 	def getMessagesFor(self, boxname):

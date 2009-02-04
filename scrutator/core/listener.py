@@ -27,9 +27,6 @@ class DispatcherListener(SimpleListener):
 		if self.dispatcher.has_key(to):
 			self.dispatcher[to].push(eventObj)
 
-class MessageBoxListenerException(Exception):
-	pass
-			
 		
 class GateListener(SimpleListener):
 	def __init__(self,evtMagr):

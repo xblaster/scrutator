@@ -89,7 +89,11 @@ class TestEventManager(unittest.TestCase):
 class TestMessageBoxManager(unittest.TestCase):
 	def testMessageBoxManager(self):
 		mboxMgr = MessageBoxManager()
-		self.fail("Not implemented")
+		sevent = SimpleEvent()
+		
+		mbox = MessageBoxEvent(to="coin", msg=sevent)
+		
+		mboxMgr.push(mbox)
 
 class TestAsyncManager(unittest.TestCase):
 	def testAsyncManager(self):
