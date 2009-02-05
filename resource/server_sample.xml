@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
+	
+	
 	<bean id="defaultLogListener" class="scrutator.core.listener.PrintListener"/>
 	<bean id="mainEventManager" class="scrutator.core.manager.EventManager"/>
 	<bean id="servicesObj" class="scrutator.core.network.SCRTServices">
@@ -7,10 +9,12 @@
 			<ref bean="mainEventManager"/>
 		</property>
 	</bean>
+	<bead id="botManager"  class="scrutator.core.manager.EventManager"/> 	
 	
 	<bean id="bot1" class="scrutator.core.network.XMLRPCClient">
 		<constructor-arg>
 			<value>http://localhost:7089</value>
+			<ref bean="botManager"/>
 		</constructor-arg>
 		<property name="source">
 			<value>bot1</value>
