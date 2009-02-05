@@ -9,12 +9,13 @@
 			<ref bean="mainEventManager"/>
 		</property>
 	</bean>
-	<bead id="botManager"  class="scrutator.core.manager.EventManager"/> 	
+	<bean id="mainEventManager2" class="scrutator.core.manager.EventManager"/>
+
 	
 	<bean id="bot1" class="scrutator.core.network.XMLRPCClient">
 		<constructor-arg>
 			<value>http://localhost:7089</value>
-			<ref bean="botManager"/>
+			<ref bean="mainEventManager2"/>
 		</constructor-arg>
 		<property name="source">
 			<value>bot1</value>
@@ -24,6 +25,7 @@
 	<bean id="bot2" class="scrutator.core.network.XMLRPCClient">
 		<constructor-arg>
 			<value>http://localhost:7089</value>
+			<ref bean="mainEventManager2"/>
 		</constructor-arg>
 		<property name="source">
 			<value>bot2</value>

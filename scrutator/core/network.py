@@ -108,9 +108,10 @@ class XMLRPCClient:
 	
 	source = "default"
 	
-	def __init__(self, serviceuri):
+	def __init__(self, serviceuri, eventMgr):
 		import xmlrpclib
 		self.xmlrpc_connect = Proxy(str(serviceuri))
+		self.manager = eventMgr
 
 
 
