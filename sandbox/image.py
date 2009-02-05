@@ -1,6 +1,9 @@
 from PIL import Image, ImageDraw
 import glob, os
 
+#this file is a short test for PIL programming 
+#@TODO remove that from the projects
+
 size = 1024, 1024
 im = Image.new('RGBA', size)
 mask = Image.new('RGBA', size,(0,0,0,0))
