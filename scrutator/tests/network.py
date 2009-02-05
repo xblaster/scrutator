@@ -19,7 +19,7 @@ class NetworkTest(unittest.TestCase):
 	def testAsync(self):
 
 		xmlbe = XMLBeanFactory('resource/server_sample.xml')
-		eventSender = CoreManager().getBean('eventSender')
+		eventSender = CoreManager().getBean('bot1')
 		event = SimpleEvent()
 		#reactor.callLater(1, print, "hello")
 

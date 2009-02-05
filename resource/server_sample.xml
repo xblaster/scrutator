@@ -8,13 +8,25 @@
 		</property>
 	</bean>
 	
-	<bean id="eventSender" class="scrutator.core.network.XMLRPCClient">
+	<bean id="bot1" class="scrutator.core.network.XMLRPCClient">
 		<constructor-arg>
 			<value>http://localhost:7089</value>
 		</constructor-arg>
+		<property name="source">
+			<value>bot1</value>
+		</property>
 	</bean>
 	
-	<bean id="eventReceiver" class="scrutator.core.network.XMLRPCServer">
+	<bean id="bot2" class="scrutator.core.network.XMLRPCClient">
+		<constructor-arg>
+			<value>http://localhost:7089</value>
+		</constructor-arg>
+		<property name="source">
+			<value>bot2</value>
+		</property>
+	</bean>
+	
+	<bean id="server" class="scrutator.core.network.XMLRPCServer">
 		<constructor-arg>
 			<ref bean="servicesObj"/>
 			<value>7089</value>
