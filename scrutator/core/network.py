@@ -3,6 +3,8 @@ from scrutator.core.event import *
 from twisted.internet import threads, reactor
 from twisted.web.xmlrpc import Proxy
 
+from scrutator.core.manager import *
+
 
 #from twisted.web import soap, server
 """
@@ -43,15 +45,17 @@ class SCRTServices(xmlrpc.XMLRPC):
 	"""An example object to be published."""
 
 	manager = 0
+	mboxManager = None
 	allowNone = True
 
 	def __init__(self):
+		self.mboxManager = MessageBoxManager()
 		pass
 	
 	def xmlrpc_push(self, obj_list, source):
 		"""Push event"""
-		self.push(obj_list, source)
-		return "XML RPC OK"
+		return self.push(obj_list, source)
+
 
 	def push(self, obj_list, source):
 		es = EventSerializer()
@@ -62,6 +66,12 @@ class SCRTServices(xmlrpc.XMLRPC):
 			self.manager.push(res)
 			#threads.deferToThread(self.manager.push, res)
 			#threads.deferToThread(True)
+		
+		result = list()
+		
+		for msg in self.mboxManager.getMessagesFor(source):
+			result.append(es.event2array(msg))
+		return result
 
 	def xmlrpc_pull(self, source):
 		"""Pull event to a destination"""
