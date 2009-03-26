@@ -17,7 +17,9 @@ class NetworkTestManagerListener(SimpleListener):
 class NetworkTest(unittest.TestCase):
 		
 	def testAsync(self):
-
+		
+		reactor.removeAll()
+		
 		xmlbe = XMLBeanFactory('resource/server_sample.xml')
 		eventSender = CoreManager().getBean('bot1')
 		event = SimpleEvent()
@@ -27,7 +29,12 @@ class NetworkTest(unittest.TestCase):
 		em = CoreManager().getBean('mainEventManager')
 		xeml.load('resource/test_bean_factory_trigger.xml', em)
 
+		reactor.callLater(10, reactor.stop)
+
 		reactor.callLater(0.01, eventSender.push, event)
-		reactor.run()
+		#reactor.run()
+		
+		
+		#reactor.wakeUp()
 
 		em.unbindAll()

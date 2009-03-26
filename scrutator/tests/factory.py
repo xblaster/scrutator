@@ -19,8 +19,10 @@ class TestXMLBeanFactory(unittest.TestCase):
 		
 		reactor.callLater(0.01, eventSender.push, event)
 		
-		self.fail("Need to reimplement")
+		#self.fail("Need to reimplement")
+		reactor.callLater(10, reactor.stop)
+		reactor.run()
 		
-		#reactor.run()
+		
 		
 		em.unbindAll()
