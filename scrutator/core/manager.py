@@ -120,7 +120,7 @@ class CoreManager:
 		def getBean(self, beanName):
 			if self.beans_list.has_key(beanName):
 				return self.beans_list[beanName]
-			raise Exception('This bean does not exist')
+			raise Exception('bean '+str(beanName)+' does not exist')
 	
 		def setBean(self, beanName, beanObj):
 			self.beans_list[beanName] = beanObj

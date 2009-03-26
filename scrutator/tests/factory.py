@@ -18,6 +18,9 @@ class TestXMLBeanFactory(unittest.TestCase):
 		xeml.load('resource/test_bean_factory_trigger.xml', em)
 		
 		reactor.callLater(0.01, eventSender.push, event)
-		reactor.run()
+		
+		self.fail("Need to reimplement")
+		
+		#reactor.run()
 		
 		em.unbindAll()

@@ -2,6 +2,7 @@
 <beans>
 	<bean id="defaultLogListener" class="scrutator.core.listener.PrintListener"/>
 	<bean id="mainEventManager" class="scrutator.core.manager.EventManager"/>
+	<bean id="managerSender" class="scrutator.core.manager.EventManager"/>
 	<bean id="servicesObj" class="scrutator.core.network.SCRTServices">
 		<property name="manager">
 			<ref bean="mainEventManager"/>
@@ -11,6 +12,7 @@
 	<bean id="eventSender" class="scrutator.core.network.XMLRPCClient">
 		<constructor-arg>
 			<value>http://localhost:7080</value>
+			<ref bean="managerSender"/>
 		</constructor-arg>
 	</bean>
 	
