@@ -6,6 +6,5 @@ from scrutator.tests.factory import *
 from scrutator.tests.network import *
 from scrutator.tests.helpers import *
 
-
-if __name__ == "__main__":
-    unittest.main()
+#if __name__ == "__main__":
+#    unittest.main()

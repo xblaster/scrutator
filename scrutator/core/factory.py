@@ -20,8 +20,13 @@ class AbstractBeanFactory:
 
 class XMLBeanFactory(AbstractBeanFactory):
 	def __init__(self, resource):
+		
+		
 		from xml.dom.minidom import parse
-		doc = parse(resource)
+		from sys import path
+		resource_name = path[0]+'/'+resource
+		#print resource_name
+		doc = parse(resource_name)
 		for bean in doc.getElementsByTagName('bean'):
 			self.loadBean(bean)
 	

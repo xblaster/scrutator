@@ -166,7 +166,10 @@ class XmlEventManagerLoader:
 	
 	def load(self, filename, eventManager):
 		from xml.dom.minidom import parse
-		doc = parse(filename)
+		from sys import path
+		resource_name = path[0]+'/'+filename
+		
+		doc = parse(resource_name)
 		for trigger in doc.getElementsByTagName('trigger'):
 			eventName = trigger.getAttribute('event')
 
