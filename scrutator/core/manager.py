@@ -12,9 +12,12 @@ def default_callback(value):
 class EventManager(object):
 	""" handle event in the application"""
 
-	def __init__(self):
+	def __init__(self, xml_bindings = None):
 		self.listeners_map = dict()
-		pass
+		if xml_bindings != None: #load xml bindings
+			xeml = XmlEventManagerLoader()
+			em = EventManager()
+			xeml.load('resource/sample.xml', em)
 		
 	def bind(self, eventName, listener):
 		if not isinstance(listener, SimpleListener):

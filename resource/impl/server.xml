@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+	<bean id="defaultLogListener" class="scrutator.core.listener.PrintListener"/>
+	<bean id="mainEventManager" class="scrutator.core.manager.EventManager"/>
+	<bean id="managerSender" class="scrutator.core.manager.EventManager"/>
+	<bean id="servicesObj" class="scrutator.core.network.SCRTServices">
+		<property name="manager">
+			<ref bean="mainEventManager"/>
+		</property>
+	</bean>
+	
+	<bean id="eventReceiver" class="scrutator.core.network.XMLRPCServer">
+		<constructor-arg>
+			<ref bean="servicesObj"/>
+			<value>7080</value>
+			<ref bean="mainEventManager"/>
+		</constructor-arg>
+	</bean>	
+</beans>
