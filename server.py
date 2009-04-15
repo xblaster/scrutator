@@ -3,14 +3,12 @@ from scrutator.core.factory import *
 
 if __name__ == '__main__':
 
-	xmlbe = XMLBeanFactory('resource/beans_sample.xml')
+	xmlbe = XMLBeanFactory('resource/impl/server.xml')
 	
-	xeml = XmlEventManagerLoader()
-	em = CoreManager().getBean('mainEventManager')
-	xeml.load('resource/sample_debug.xml', em)
-	
-	eventSender = CoreManager().getBean('eventSender')
+	eventSender = CoreManager().getBean('mainEventManager')
+	print eventSender
 	event = SimpleEvent()
+	eventSender.push(event)
 
 	reactor.run()
 	
