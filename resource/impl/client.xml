@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+<bean id="mainEventManager" class="scrutator.core.manager.EventManager"/>
+
+<bean id="eventSender" class="scrutator.core.network.XMLRPCClient">
+	<constructor-arg>
+		<value>http://localhost:7080</value>
+		<ref bean="mainEventManager"/>
+	</constructor-arg>
+	<property name="source">
+		<value>bot1</value>
+	</property>
+</bean>
+</beans>

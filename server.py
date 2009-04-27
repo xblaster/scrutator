@@ -8,7 +8,7 @@ if __name__ == '__main__':
 	eventSender = CoreManager().getBean('mainEventManager')
 	print eventSender
 	event = SimpleEvent()
-	eventSender.push(event)
+	reactor.callLater(3,eventSender.push, event)
 
 	reactor.run()
 	

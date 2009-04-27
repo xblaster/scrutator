@@ -16,8 +16,8 @@ class EventManager(object):
 		self.listeners_map = dict()
 		if xml_bindings != None: #load xml bindings
 			xeml = XmlEventManagerLoader()
-			em = EventManager()
-			xeml.load('resource/sample.xml', em)
+			em = self
+			xeml.load(xml_bindings, self)
 		
 	def bind(self, eventName, listener):
 		if not isinstance(listener, SimpleListener):

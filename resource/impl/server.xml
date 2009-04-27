@@ -2,7 +2,9 @@
 <beans>
 	<bean id="defaultLogListener" class="scrutator.core.listener.PrintListener"/>
 	<bean id="mainEventManager" class="scrutator.core.manager.EventManager">
-		<constructor-arg>resource/impl/server_map.xml</constructor-arg>
+		<constructor-arg>
+			<value>resource/impl/server_map.xml</value>
+		</constructor-arg>
 	</bean>
 	<bean id="servicesObj" class="scrutator.core.network.SCRTServices">
 		<property name="manager">
