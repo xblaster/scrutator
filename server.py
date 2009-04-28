@@ -7,6 +7,13 @@ if __name__ == '__main__':
 	
 	eventSender = CoreManager().getBean('mainEventManager')
 	print eventSender
+	 
+	eventReceiver = CoreManager().getBean('eventReceiver')
+	
+	msg = SimpleEvent(plop="plop")
+	
+	print eventReceiver.getMessageBoxManager().push(SimpleEvent(to='bot1', msg=msg))
+	
 	event = SimpleEvent()
 	reactor.callLater(3,eventSender.push, event)
 

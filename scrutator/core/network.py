@@ -47,6 +47,9 @@ class SCRTServices(xmlrpc.XMLRPC):
 	manager = 0
 	mboxManager = None
 	allowNone = True
+	
+	def getMessageBoxManager(self):
+		return self.mboxManager
 
 	def __init__(self):
 		self.mboxManager = MessageBoxManager()
@@ -81,7 +84,7 @@ class SCRTServices(xmlrpc.XMLRPC):
 		pass
 
 def printValue(value):
-	#print "YES !!! "+str(value)
+	print "YES !!! "+str(value)
 	pass
 
 def printError(value):
@@ -128,6 +131,9 @@ class XMLRPCClient:
 class XMLRPCServer:
 	def __init__(self, service, port, eventMgrObj):
 		from twisted.internet import reactor
-		r = service
-		reactor.listenTCP(port, server.Site(r))
+		self.service = service
+		reactor.listenTCP(port, server.Site(self.service))
+		
+	def getMessageBoxManager(self):
+		return self.service.getMessageBoxManager()
 
