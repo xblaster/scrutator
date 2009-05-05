@@ -109,7 +109,11 @@ class MainWindow(gtk.Window):
     def getMainList(self):
     	mainList = gtk.VBox(False,0)
     	for i in range(10):
-    		pass
+    		v = gtk.HBox(False,0)
+    		v.pack_start(gtk.Label('plop'+str(i)),True,False)
+    		v.pack_start(gtk.Button('plop'+str(i)),False, False)
+    		
+    		mainList.add(v)
     	return mainList
     	
 
