@@ -74,6 +74,9 @@ class MainWindow(gtk.Window):
 
     def __init__(self, parent=None):
         gtk.Window.__init__(self)
+        
+        self.set_default_size(640,480)
+        
         try:
             self.set_screen(parent.get_screen())
         except AttributeError:
@@ -110,8 +113,9 @@ class MainWindow(gtk.Window):
     	mainList = gtk.VBox(False,0)
     	for i in range(10):
     		v = gtk.HBox(False,0)
-    		v.pack_start(gtk.Label('plop'+str(i)),True,False)
-    		v.pack_start(gtk.Button('plop'+str(i)),False, False)
+    		v.pack_start(gtk.Label('plop'+str(i)),True,True)
+    		v.pack_start(gtk.Button('edit tags'),False, False)
+    		v.pack_start(gtk.Button('delete'),False, False)
     		
     		mainList.add(v)
     	return mainList
