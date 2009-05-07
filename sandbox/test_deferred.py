@@ -15,13 +15,13 @@ def printResult(result):
 	reactor.stop()
 
 def calc(number):
-	sleep(random.randint(0,3))
+	sleep(random.randint(0,10))
 	print "calc number "+str(number)	
-	return number*number
+	return number * number
 
 def massCalc():
 	defer_list = list()
-	for i in range(10):
+	for i in range(20):
 		d = threads.deferToThread(calc,i)
 		defer_list.append(d)
 	

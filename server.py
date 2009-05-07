@@ -1,14 +1,22 @@
+from twisted.internet import gtk2reactor # for gtk-2.0
+gtk2reactor.install()
+
 from scrutator.core.network import *
 from scrutator.core.factory import *
+
 
 if __name__ == '__main__':
 
 	xmlbe = XMLBeanFactory('resource/impl/server.xml')
 	
 	eventSender = CoreManager().getBean('mainEventManager')
-	print eventSender
 	 
 	eventReceiver = CoreManager().getBean('eventReceiver')
+	
+	#initiatie GTK
+	from scrutator.core.gtk_listener.gtk import *
+	debug_listener = GtkDebugListener(self.manager)
+	eventSender.bind('all', debug_listener)
 	
 	msg = SimpleEvent(plop="plop")
 	
