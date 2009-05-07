@@ -109,9 +109,12 @@ class MainWindow(gtk.Window):
         
         self.show_all()
     
+    def onClose(self):
+    	gtk.main_quit()
+    
     def getMainList(self):
     	mainList = gtk.VBox(False,0)
-    	for i in range(10):
+    	for i in range(100):
     		v = gtk.HBox(False,0)
     		v.pack_start(gtk.Label('plop'+str(i)),True,True)
     		v.pack_start(gtk.Button('edit tags'),False, False)

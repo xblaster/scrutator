@@ -21,7 +21,7 @@ def calc(number):
 
 def massCalc():
 	defer_list = list()
-	for i in range(1000):
+	for i in range(100):
 		d = threads.deferToThread(calc,i)
 		defer_list.append(d)
 	
