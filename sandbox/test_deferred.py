@@ -12,7 +12,7 @@ def printResult(result):
 		else:
 			print 'Failure:', value.getErrorMessage()
 	print "total: "+str(res)
-	#reactor.callLater(1,reactor.stop)
+	reactor.stop()
 
 def calc(number):
 	sleep(random.randint(0,3))
@@ -21,7 +21,7 @@ def calc(number):
 
 def massCalc():
 	defer_list = list()
-	for i in range(100):
+	for i in range(10):
 		d = threads.deferToThread(calc,i)
 		defer_list.append(d)
 	
