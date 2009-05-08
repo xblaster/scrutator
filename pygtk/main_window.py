@@ -104,11 +104,17 @@ class MainWindow(gtk.Window):
 
         box1.pack_start(ui.get_widget("/MenuBar"), False, False, 0)
         box1.pack_start(ui.get_widget("/ToolBar"), False, False, 0)
-        
-        box1.pack_start(self.getMainList())
+
+        self.mainList = self.getMainList()
+
+        box1.pack_start(self.mainList)
         
         self.show_all()
     
+	def onRefresh(self):
+		self.mainList = self.getMainList()
+		self.show_all()
+
     def onClose(self):
     	gtk.main_quit()
     

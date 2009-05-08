@@ -14,16 +14,18 @@ if __name__ == '__main__':
 	eventReceiver = CoreManager().getBean('eventReceiver')
 	
 	#initiatie GTK
-	from scrutator.core.gtk_listener.gtk import *
-	debug_listener = GtkDebugListener(self.manager)
+	from scrutator.core.gtk_listener.gtk_debug import *
+	debug_listener = GtkDebugListener()
 	eventSender.bind('all', debug_listener)
 	
 	msg = SimpleEvent(plop="plop")
 	
 	print eventReceiver.getMessageBoxManager().push(SimpleEvent(to='bot1', msg=msg))
 	
-	event = SimpleEvent()
-	reactor.callLater(3,eventSender.push, event)
+
+	for i in range(10):
+		event = SimpleEvent(frome="bidule", to="bidule")
+		reactor.callLater(i,eventSender.push, event)
 
 	reactor.run()
 	
