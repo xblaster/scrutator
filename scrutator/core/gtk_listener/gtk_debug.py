@@ -1,8 +1,9 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import gobject
 import gtk
-
+from twisted.internet import threads, reactor
 from scrutator.core.listener import *
 
 class GtkDebugListener(SimpleListener):
@@ -51,7 +52,7 @@ class GtkDebugWindow(gtk.Window):
 		  ( "ColorMenu", None, "_Color"	 ),			   # name, stock id, label
 		  ( "ShapeMenu", None, "_Shape" ),			   # name, stock id, label
 		  ( "HelpMenu", None, "_Help" ),			   # name, stock id, label
-		  ( "Refresh", gtk.STOCK_QUIT,					  # name, stock id
+		  ( "Refresh", gtk.STOCK_REFRESH,					  # name, stock id
 			"_Refresh","<control>R",					  # label, accelerator
 			"Refresh the list",								# tooltip
 			self.onRefresh ),
@@ -103,16 +104,18 @@ class GtkDebugWindow(gtk.Window):
 		
 		self.show_all()
 
+		reactor.callLater(0.5, self.onRefresh)
+
 	def onClose(self,action):
 		gtk.main_quit()
 
-	def onRefresh(self,action):
-		
+	def onRefresh(self,action = None):
 		for child in self.mainList.get_children():
 			self.mainList.remove(child)
 		
 		self.mainList.add(self.getMainList())
 		self.show_all()
+		reactor.callLater(0.2, self.onRefresh)
 
 	def getMainList(self):
 		mainList = gtk.VBox(False,0)
@@ -122,10 +125,3 @@ class GtkDebugWindow(gtk.Window):
 			mainList.add(v)
 		return mainList
 		
-
-def main():
-	MainWindow()
-	gtk.main()
-
-if __name__ == '__main__':
-	main()
