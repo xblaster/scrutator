@@ -15,7 +15,7 @@ class GtkDebugListener(SimpleListener):
 
 		
 	def action(self, eventObj, evtMgr):
-		self.debug_list.append(str(eventObj))
+		self.debug_list.insert(0,str(eventObj))
 	
 	def getDebugList(self):
 		return self.debug_list
