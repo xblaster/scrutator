@@ -72,7 +72,7 @@ class SCRTServices(xmlrpc.XMLRPC):
 		
 		result = list()
 		
-		for msg in self.mboxManager.getMessagesFor(source):
+		for msg in self.mboxManager.popMessagesFor(source):
 			result.append(es.event2array(msg))
 		return result
 
