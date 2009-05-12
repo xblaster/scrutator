@@ -29,16 +29,19 @@ class DispatcherListener(SimpleListener):
 
 		
 class GateListener(SimpleListener):
-	def __init__(self,evtMagr):
+	def __init__(self,evtMagr, callback = None):
 		#if not isinstance(evtMagr, EventManager):
 		#	raise Exception('gate link must be an inherited EventManager object')
 			
 		super(GateListener, self).__init__()
+		self.callback = callback
 		self.evtMgr = evtMagr
 	
 	def action(self, eventObj, evtMgr):
 		if (evtMgr == self.evtMgr):
 			raise Exception("Cycling gate. Aborting")
+		if self.callback:
+			eventObj = self.callback(eventObj)
 		self.evtMgr.push(eventObj)
 
 class LoggerListerner(SimpleListener):

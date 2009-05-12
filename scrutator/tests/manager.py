@@ -95,7 +95,20 @@ class TestMessageBoxManager(unittest.TestCase):
 		
 		mboxMgr.push(mbox)
 		
-		self.assertEqual(mboxMgr.getMessagesFor('coin').pop(), sevent)
+		self.assertEqual(mboxMgr.getMessagesFor('coin')[0], sevent)
+		self.assertEqual(mboxMgr.getMessagesFor('coin')[0], sevent)
+	
+	def testFlush(self):
+		mboxMgr = MessageBoxManager()
+		sevent = SimpleEvent()
+		
+		mbox = MessageBoxEvent(to="coin", msg=sevent)
+		
+		mboxMgr.push(mbox)
+		
+		self.assertEqual(mboxMgr.getMessagesFor('coin')[0], sevent)
+		mboxMgr.flushMessagesFor('coin')
+		self.assertEqual(mboxMgr.getMessagesFor('coin'), list())
 
 class TestAsyncManager(unittest.TestCase):
 	def testAsyncManager(self):

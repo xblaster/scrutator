@@ -100,6 +100,14 @@ class MessageBoxManager(EventManager):
 
 	def getMessagesFor(self, boxname):
 		return self.getMessageBox(boxname)
+	
+	def flushMessagesFor(self,boxname):
+		self.__messageBox[boxname] = list()
+	
+	def popMessagesFor(self, boxname):
+		mbox = self.getMessagesFor(boxname)
+		self.flushMessagesFor(boxname)
+		return mbox
 
 class CoreManager:
 	""" A python singleton """
