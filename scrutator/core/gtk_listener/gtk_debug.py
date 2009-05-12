@@ -98,10 +98,15 @@ class GtkDebugWindow(gtk.Window):
 		box1.pack_start(ui.get_widget("/ToolBar"), False, False, 0)
 		
 		self.mainList = self.getMainList()
+		scrolled_window = gtk.ScrolledWindow()
+		scrolled_window.add_with_viewport(self.mainList)
+		scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
 
-		self.mainList = gtk.VBox(False, 0)
-		box1.pack_start(self.mainList, False, False)
+
 		
+		box1.pack_start(scrolled_window, True, True)
+		
+
 		self.show_all()
 
 		reactor.callLater(0.5, self.onRefresh)

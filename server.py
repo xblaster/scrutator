@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from twisted.internet import gtk2reactor # for gtk-2.0
 gtk2reactor.install()
 
@@ -23,9 +24,9 @@ if __name__ == '__main__':
 	print eventReceiver.getMessageBoxManager().push(SimpleEvent(to='bot1', msg=msg))
 	
 
-	for i in range(10):
+	for i in range(100):
 		event = SimpleEvent(frome="bidule", to="bidule")
-		reactor.callLater(i,eventSender.push, event)
+		reactor.callLater(i/3,eventSender.push, event)
 
 	reactor.run()
 	
