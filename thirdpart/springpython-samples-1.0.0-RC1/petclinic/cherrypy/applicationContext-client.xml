@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://www.springframework.org/springpython/schema/pycontainer-components"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/springpython/schema/pycontainer-components
+       		http://springpython.webfactional.com/schema/context/spring-python-pycontainer-context-1.0.xsd">
+
+	<component id="controller" class="springpython.remoting.pyro.PyroProxyFactory">
+		<property name="service_url">"PYROLOC://localhost:7766/Controller"</property>
+	</component>
+		
+	<component id="root" class="view.PetClinicView">
+		<property name="controller" local="controller"/>
+	</component>
+
+	<component id="userDetailsService" class="springpython.remoting.pyro.PyroProxyFactory">
+		<property name="service_url">"PYROLOC://localhost:7766/UserDetails"</property>
+	</component>
+	
+	<component id="userDetailsService2" class="springpython.security.userdetails.InMemoryUserDetailsService">
+		<property name="user_dict">
+			{
+			"jcarter": ("password6", ["VET_ANY"], True),
+		  	}
+		</property>
+	</component>	
+	
+	<component id="userDetailsService3" class="springpython.security.userdetails.InMemoryUserDetailsService">
+		<property name="user_dict">
+			{
+			"jcoleman": ("password5", ["CUSTOMER_ANY"], True)
+		  	}
+		</property>
+	</component>	
+	
+	<component id="md5Encoder" class="springpython.security.providers.encoding.Md5PasswordEncoder"/>
+
+	<component id="shaEncoder" class="springpython.security.providers.encoding.ShaPasswordEncoder"/>
+
+	<component id="md5UserDetailsService" class="controller.PreencodingUserDetailsService">
+		<property name="wrappedUserDetailsService" local="userDetailsService2"/>
+		<property name="encoder" local="md5Encoder"/>
+	</component>
+
+	<component id="shaUserDetailsService" class="controller.PreencodingUserDetailsService">
+		<property name="wrappedUserDetailsService" local="userDetailsService3"/>
+		<property name="encoder" local="shaEncoder"/>
+	</component>
+
+	<component id="plainEncoder" class="springpython.security.providers.encoding.PlaintextPasswordEncoder"/>
+
+	<component id="plainAuthenticationProvider" class="springpython.security.providers.dao.DaoAuthenticationProvider">
+		<property name="user_details_service" local="userDetailsService"/>
+		<property name="password_encoder" local="plainEncoder"/>
+	</component>
+
+	<component id="md5AuthenticationProvider" class="springpython.security.providers.dao.DaoAuthenticationProvider">
+		<property name="user_details_service" local="md5UserDetailsService"/>
+		<property name="password_encoder" local="md5Encoder"/>
+	</component>
+
+	<component id="shaAuthenticationProvider" class="springpython.security.providers.dao.DaoAuthenticationProvider">
+		<property name="user_details_service" local="shaUserDetailsService"/>
+		<property name="password_encoder" local="shaEncoder"/>
+	</component>
+
+	<component id="authenticationManager" class="springpython.security.providers.AuthenticationManager">
+		<property name="auth_providers">
+			<list local="plainAuthenticationProvider"/>
+			<list local="md5AuthenticationProvider"/>
+			<list local="shaAuthenticationProvider"/>
+		</property>
+	</component>
+
+	<component id="vetRoleVoter" class="springpython.security.vote.RoleVoter">
+		<property name="role_prefix">"VET"</property>
+	</component>
+
+	<component id="customerRoleVoter" class="springpython.security.vote.RoleVoter">
+		<property name="role_prefix">"CUSTOMER"</property>
+	</component>
+
+	<component id="ownerVoter" class="controller.OwnerVoter">
+		<property name="controller" local="controller"/>
+	</component>
+
+	<component id="accessDecisionManager" class="springpython.security.vote.AffirmativeBased">
+		<property name="allow_if_all_abstain">False</property>
+		<property name="access_decision_voters">
+			<list local="vetRoleVoter"/>
+			<list local="customerRoleVoter"/>
+			<list local="ownerVoter"/>
+		</property>
+	</component>
+	
+	<component id="cherrypySessionStrategy" class="springpython.security.web.CherryPySessionStrategy"/>
+
+	<component id="redirectStrategy" class="springpython.security.web.RedirectStrategy"/>
+	
+	<component id="httpContextFilter" class="springpython.security.web.HttpSessionContextIntegrationFilter">
+		<property name="sessionStrategy" local="cherrypySessionStrategy"/>
+	</component>
+	
+	<component id="authenticationProcessingFilter" class="springpython.security.web.AuthenticationProcessingFilter">
+		<property name="auth_manager" local="authenticationManager"/>
+		<property name="alwaysReauthenticate">False</property>
+	</component>
+
+	<component id="filterSecurityInterceptor" class="springpython.security.web.FilterSecurityInterceptor">
+		<property name="validate_config_attributes">False</property>
+		<property name="auth_manager" local="authenticationManager"/>
+		<property name="access_decision_manager" local="accessDecisionManager"/>
+		<property name="sessionStrategy" local="cherrypySessionStrategy"/>
+		<property name="obj_def_source">
+		    	[
+				("/vets.*", ["VET_ANY"]),
+				("/editOwner.*", ["VET_ANY", "OWNER"]),
+				("/.*", ["VET_ANY", "CUSTOMER_ANY"])
+		      	]
+		</property>
+	</component>
+	
+	<component id="exceptionFilter" class="springpython.security.web.MiddlewareFilter">
+		<property name="clazz">"paste.evalexception.middleware.EvalException"</property>
+		<property name="appAttribute">"application"</property>
+	</component>
+	
+	<component id="authenticationProcessingFilterEntryPoint" class="springpython.security.web.AuthenticationProcessingFilterEntryPoint">
+		<property name="loginFormUrl">"/login"</property>
+		<property name="redirectStrategy" local="redirectStrategy"/>
+	</component>
+	
+	<component id="accessDeniedHandler" class="springpython.security.web.SimpleAccessDeniedHandler">
+		<property name="errorPage">"/accessDenied"</property>
+		<property name="redirectStrategy" local="redirectStrategy"/>
+	</component>
+		
+	<component id="exceptionTranslationFilter" class="springpython.security.web.ExceptionTranslationFilter">
+		<property name="authenticationEntryPoint" local="authenticationProcessingFilterEntryPoint"/>
+		<property name="accessDeniedHandler" local="accessDeniedHandler"/>
+	</component>
+	
+	<component id="filterChainProxy" class="springpython.security.web.FilterChainProxy">
+		<property name="filterInvocationDefinitionSource">
+			[
+			("/images.*", ["exceptionFilter", ]),
+			("/html.*", ["exceptionFilter", ]),
+			("/login.*", ["exceptionFilter", "httpContextFilter"]),
+			("/.*", ["exceptionFilter", "httpContextFilter", "exceptionTranslationFilter", "authenticationProcessingFilter", "filterSecurityInterceptor"])
+			]
+		</property>
+	</component>
+
+	<component id="loginForm" class="view.CherryPyAuthenticationForm">
+		<property name="filter" local="authenticationProcessingFilter"/>
+		<property name="controller" local="controller"/>
+		<property name="hashedUserDetailsServiceList">
+			<list local="md5UserDetailsService"/>
+			<list local="shaUserDetailsService"/>
+		</property>
+		<property name="authenticationManager" local="authenticationManager"/>
+		<property name="redirectStrategy" local="redirectStrategy"/>
+	</component>
+	
+</components>
