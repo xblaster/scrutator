@@ -16,6 +16,7 @@ class GtkDebugListener(SimpleListener):
 		
 	def action(self, eventObj, evtMgr):
 		self.debug_list.insert(0,str(eventObj))
+		self.window.onRefresh()
 	
 	def getDebugList(self):
 		return self.debug_list
@@ -109,7 +110,7 @@ class GtkDebugWindow(gtk.Window):
 
 		self.show_all()
 
-		reactor.callLater(0.5, self.onRefresh)
+		#reactor.callLater(0.5, self.onRefresh)
 
 	def onClose(self,action):
 		gtk.main_quit()
@@ -120,7 +121,7 @@ class GtkDebugWindow(gtk.Window):
 		
 		self.mainList.add(self.getMainList())
 		self.show_all()
-		reactor.callLater(0.2, self.onRefresh)
+		#reactor.callLater(0.2, self.onRefresh)
 
 	def getMainList(self):
 		mainList = gtk.VBox(False,0)

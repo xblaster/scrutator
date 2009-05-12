@@ -18,15 +18,19 @@ if __name__ == '__main__':
 	from scrutator.core.gtk_listener.gtk_debug import *
 	debug_listener = GtkDebugListener()
 	eventSender.bind('all', debug_listener)
+
+	debug_listener2 = GtkDebugListener()
+	eventSender.bind('scrutator.core.event.KickEvent', debug_listener2)
 	
 	msg = SimpleEvent(plop="plop")
 	
-	print eventReceiver.getMessageBoxManager().push(SimpleEvent(to='bot1', msg=msg))
+	#print eventReceiver.getMessageBoxManager().push(SimpleEvent(to='bot1', msg=msg))
 	
 
 	for i in range(100):
+		event = KickEvent(frome="bidule", to="bidule")
+		reactor.callLater(i/3,eventSender.push, event)
 		event = SimpleEvent(frome="bidule", to="bidule")
 		reactor.callLater(i/3,eventSender.push, event)
-
 	reactor.run()
 	
