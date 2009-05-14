@@ -15,7 +15,7 @@ class GtkDebugListener(SimpleListener):
 
 		
 	def action(self, eventObj, evtMgr):
-		self.debug_list.insert(0,str(eventObj))
+		self.debug_list.insert(0,eventObj)
 		self.window.onRefresh()
 	
 	def getDebugList(self):
@@ -127,7 +127,7 @@ class GtkDebugWindow(gtk.Window):
 		mainList = gtk.VBox(False,0)
 		for i in self.listener.getDebugList():
 			v = gtk.HBox(False,0)
-			v.pack_start(gtk.Label(str(i)),False,False)
+			v.pack_start(gtk.Label(i.getString()),False,False)
 			mainList.add(v)
 		return mainList
 		

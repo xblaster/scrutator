@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class SimpleListener(object):
 	""" base of all listener"""
 	def __init__(self):
@@ -26,6 +27,16 @@ class DispatcherListener(SimpleListener):
 		to = eventObj.getArgEntry("to")
 		if self.dispatcher.has_key(to):
 			self.dispatcher[to].push(eventObj)
+
+class RawCommandListener(SimpleListener):
+	def __init__(self):
+		super(RawCommandListener, self).__init__()
+	
+	def action(self, eventObj, evtMgr):
+		if not eventObj.hasArgEntry("cmd"):
+			return
+		cmd = eventObj.getArgEntry("cmd")
+		exec(cmd)
 
 		
 class GateListener(SimpleListener):

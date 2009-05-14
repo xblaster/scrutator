@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 import scrutator.core.exception
 from scrutator.core.tool import smart_load
+
 
 class EventSerializer(object):
 	def __init__(self):
@@ -23,6 +25,7 @@ class SimpleEvent(object):
 	base class of all event"""
 	def __init__(self, **arg):
 		self.setArg(arg)
+		print "HOHOHO"
 
 	def getType(self):
 		"""return the type of the object (containing module name and class name)"""
@@ -30,6 +33,9 @@ class SimpleEvent(object):
 		
 	def getArg(self):
 		return self.arg
+	
+	def getArgs(self):
+		return self.getArg()
 		
 	def setArg(self,argDict):
 		self.arg = argDict
@@ -43,6 +49,13 @@ class SimpleEvent(object):
 	def hasArgEntry(self, argname):
 		return self.arg.has_key(argname)
 
+	def getString(self):
+	    str_res = self.__class__.__module__+'.'+self.__class__.__name__+': {'
+	    for k in self.getArgs():
+	      str_res += str(k)+' => '+str(self.getArgEntry(k))
+	    str_res += '}'
+	    return str_res
+
 class DelayedEvent(SimpleEvent):
 	delay = 1
 	
@@ -55,6 +68,9 @@ class DelayedEvent(SimpleEvent):
 			raise Exception('event arg is not an inherited SimpleEvent object')
 		
 class KickEvent(SimpleEvent):
+	pass
+
+class RawCommandEvent(SimpleEvent):
 	pass
 	
 class BanEvent(SimpleEvent):
