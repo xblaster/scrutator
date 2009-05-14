@@ -10,10 +10,10 @@ if __name__ == '__main__':
 	
 	#eventSender.push(event)
 
-	cmd='from scrutator.core.tool import *'+"\n"
+	#cmd='from scrutator.core.tool import *'+"\n"
 	cmd='import scrutator.core.tool'+"\n"
-	cmd='print scrutator.core.tool'+"\n"
-	cmd+='_safeimport(scrutator.core.event.SimpleEvent)'+"\n"
+	#cmd='exec(scrutator.core.tool)'+"\n"
+	#cmd+='_safeimport(scrutator.core.event.SimpleEvent)'+"\n"
 	event = RawCommandEvent(cmd = cmd)
 	eventSender.push(event)
 

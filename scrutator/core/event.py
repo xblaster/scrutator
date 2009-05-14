@@ -25,7 +25,6 @@ class SimpleEvent(object):
 	base class of all event"""
 	def __init__(self, **arg):
 		self.setArg(arg)
-		print "HOHOHO"
 
 	def getType(self):
 		"""return the type of the object (containing module name and class name)"""
@@ -51,9 +50,10 @@ class SimpleEvent(object):
 
 	def getString(self):
 	    str_res = self.__class__.__module__+'.'+self.__class__.__name__+': {'
+	    keys = list()
 	    for k in self.getArgs():
-	      str_res += str(k)+' => '+str(self.getArgEntry(k))
-	    str_res += '}'
+	      keys.append(str(k)+' => '+str(self.getArgEntry(k)))
+	    str_res += ", ".join(keys)+"}"
 	    return str_res
 
 class DelayedEvent(SimpleEvent):
