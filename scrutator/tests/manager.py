@@ -123,6 +123,7 @@ class TestMessageBoxManager(unittest.TestCase):
 		self.assertEqual(mboxMgr.popMessagesFor('coin'), list())
 
 class TestAsyncManager(unittest.TestCase):
+	#DEPRECATED
 	def testAsyncManager(self):
 		asyncMgr = AsyncEventManager()
 		l = list()

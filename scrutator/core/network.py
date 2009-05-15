@@ -6,40 +6,6 @@ from twisted.web.xmlrpc import Proxy
 from scrutator.core.manager import *
 
 
-#from twisted.web import soap, server
-"""
-from twisted.web import soap
-import os
-
-def getQuote():
-    return "That beverage, sir, is off the hizzy."
-
-class Quoter(soap.SOAPPublisher):
-    Publish one method, 'quote'.
-
-    def soap_quote(self):
-        return getQuote()
-
-resource = Quoter()
-"""
-"""
-class SoapServices(soap.SOAPPublisher):
-
-	manager = 0
-
-	def __init__(self):
-		pass
-	
-	def soap_push(self, obj_list, source):
-		es = EventSerializer()
-		for obj in obj_list:
-			res = es.array2event(obj_list)
-			s_reconstruct = es.array2event(res)
-			manager.push(s_reconstruct)
-
-	def soap_pull(self, source):
-		return null
-"""
 
 class SCRTServices(xmlrpc.XMLRPC):
 	"""An example object to be published."""
@@ -59,7 +25,6 @@ class SCRTServices(xmlrpc.XMLRPC):
 		"""Push event"""
 		return self.push(obj_list, source)
 
-
 	def push(self, obj_list, source):
 		es = EventSerializer()
 		for obj in obj_list:
@@ -70,21 +35,22 @@ class SCRTServices(xmlrpc.XMLRPC):
 			#threads.deferToThread(self.manager.push, res)
 			#threads.deferToThread(True)
 		
-		result = list()
-		
-		for msg in self.mboxManager.popMessagesFor(source):
-			result.append(es.event2array(msg))
-		return result
+		return self.pull(source)
+
 
 	def xmlrpc_pull(self, source):
 		"""Pull event to a destination"""
 		return self.pull(source)
 	
 	def pull(self,source):
-		pass
+		result = list()
+		
+		for msg in self.mboxManager.popMessagesFor(source):
+			result.append(es.event2array(msg))
+		return result
 
 def printValue(value):
-	print "YES !!! "+str(value)
+	#print "YES !!! "+str(value)
 	pass
 
 def printError(value):
@@ -106,6 +72,15 @@ def printError(value):
 		self.soap_connect.callRemote(send_list).addCallbacks(printValue, printError)
 		#threads.deferToThread(self.xmlrpc_connect.push(send_list))
 """
+
+class XMLRPCServer:
+	def __init__(self, service, port, eventMgrObj):
+		from twisted.internet import reactor
+		self.service = service
+		reactor.listenTCP(port, server.Site(self.service))
+		
+	def getMessageBoxManager(self):
+		return self.service.getMessageBoxManager()
 		
 class XMLRPCClient:
 	
@@ -116,24 +91,61 @@ class XMLRPCClient:
 		self.xmlrpc_connect = Proxy(str(serviceuri))
 		self.manager = eventMgr
 
-
-
+	def reinject(self, msgList):
+		es = EventSerializer()
+		
+		for obj in msgList:
+			res = es.array2event(obj)
+			self.manager.push(res)
+	
+	def handleError(self, error):
+		#need to rework that
+		print "ERROR !!! "+str(error)
+		
 	def push(self, eventObj):
 		es = EventSerializer()
 		res = es.event2array(eventObj)
 		send_list = list()
 		send_list.append(res)
 		
-		self.xmlrpc_connect.callRemote('push',send_list, self.source).addCallbacks(printValue, printError)
+		return self.xmlrpc_connect.callRemote('push',send_list, self.source).addCallbacks(self.reinject, self.handleError)
 		#self.xmlrpc_connect.callRemote(send_list).addCallbacks(printValue, printError)
 		#threads.deferToThread(self.xmlrpc_connect.push(send_list))
 
-class XMLRPCServer:
-	def __init__(self, service, port, eventMgrObj):
-		from twisted.internet import reactor
-		self.service = service
-		reactor.listenTCP(port, server.Site(self.service))
-		
-	def getMessageBoxManager(self):
-		return self.service.getMessageBoxManager()
+		#from twisted.web import soap, server
+		"""
+		from twisted.web import soap
+		import os
+
+		def getQuote():
+		    return "That beverage, sir, is off the hizzy."
+
+		class Quoter(soap.SOAPPublisher):
+		    Publish one method, 'quote'.
+
+		    def soap_quote(self):
+		        return getQuote()
+
+		resource = Quoter()
+		"""
+		"""
+		class SoapServices(soap.SOAPPublisher):
+
+			manager = 0
+
+			def __init__(self):
+				pass
+
+			def soap_push(self, obj_list, source):
+				es = EventSerializer()
+				for obj in obj_list:
+					res = es.array2event(obj_list)
+					s_reconstruct = es.array2event(res)
+					manager.push(s_reconstruct)
+
+			def soap_pull(self, source):
+				return null
+		"""
+
+
 
