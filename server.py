@@ -24,7 +24,7 @@ if __name__ == '__main__':
 	
 	msg = SimpleEvent(plop="plop")
 	
-	#print eventReceiver.getMessageBoxManager().push(SimpleEvent(to='bot1', msg=msg))
+	eventReceiver.getMessageBoxManager().push(SimpleEvent(to='bot1', msg=msg))
 	
 
 	"""for i in range(100):

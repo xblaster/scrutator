@@ -44,7 +44,7 @@ class SCRTServices(xmlrpc.XMLRPC):
 	
 	def pull(self,source):
 		result = list()
-		
+		es = EventSerializer()
 		for msg in self.mboxManager.popMessagesFor(source):
 			result.append(es.event2array(msg))
 		return result
@@ -90,17 +90,25 @@ class XMLRPCClient:
 		import xmlrpclib
 		self.xmlrpc_connect = Proxy(str(serviceuri))
 		self.manager = eventMgr
+		
+		self.retryPullTimer = 5
+		
+		reactor.callLater(5, self.pull)
 
 	def reinject(self, msgList):
 		es = EventSerializer()
 		
 		for obj in msgList:
 			res = es.array2event(obj)
+			print "REINJECT" + str(res)
 			self.manager.push(res)
 	
 	def handleError(self, error):
 		#need to rework that
 		print "ERROR !!! "+str(error)
+	
+	def pull(self):
+		return self.xmlrpc_connect.callRemote('pull', self.source).addCallbacks(self.reinject, self.handleError)
 		
 	def push(self, eventObj):
 		es = EventSerializer()
