@@ -92,7 +92,8 @@ class XMLRPCClient:
 		self.manager = eventMgr
 		
 		self.retryPullTimer = 5
-		
+		self.maxPullTimer = 5
+				
 		reactor.callLater(5, self.pull)
 
 	def reinject(self, msgList):
@@ -107,8 +108,24 @@ class XMLRPCClient:
 		#need to rework that
 		print "ERROR !!! "+str(error)
 	
+	def preprocessResult(self, result):
+		
+		if (len(result) == 0):
+			self.retryPullTimer *= 1.5
+			if self.retryPullTimer < self.maxPullTimer:
+				self.retryPullTimer = self.maxPullTimer
+		else:
+			self.retryPullTimer = self.retryPullTimer/1.5
+		
+		reactor.callLater(self.retryPullTimer, self.pull)
+		
+		return result
+	
 	def pull(self):
-		return self.xmlrpc_connect.callRemote('pull', self.source).addCallbacks(self.reinject, self.handleError)
+		d = self.xmlrpc_connect.callRemote('pull', self.source).addCallback(self.preprocessResult)
+		d.addCallbacks(self.reinject, self.handleError)
+		
+		return d
 		
 	def push(self, eventObj):
 		es = EventSerializer()

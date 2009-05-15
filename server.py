@@ -27,10 +27,12 @@ if __name__ == '__main__':
 	eventReceiver.getMessageBoxManager().push(SimpleEvent(to='bot1', msg=msg))
 	
 
-	"""for i in range(100):
+	for i in range(100):
 		#event = KickEvent(frome="bidule", to="bidule")
+		evt = SimpleEvent(to='bot1', msg=msg)
+		reactor.callLater(i, eventReceiver.getMessageBoxManager().push, evt)
 		#reactor.callLater(i/3,eventSender.push, event)
 		#event = SimpleEvent(frome="bidule", to="bidule")
-		#reactor.callLater(i/3,eventSender.push, event)"""
+		#reactor.callLater(i/3,eventSender.push, event)
 	reactor.run()
 	
