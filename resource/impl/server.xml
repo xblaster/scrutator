@@ -2,7 +2,7 @@
 <beans>
 	<bean id="rawCommandListener" class="scrutator.core.listener.RawCommandListener"/>
 	<bean id="defaultLogListener" class="scrutator.core.listener.PrintListener"/>
-	<bean id="mainEventManager" class="scrutator.core.manager.EventManager">
+	<bean id="mainEventManager" class="scrutator.core.manager.AsyncEventManager">
 		<constructor-arg>
 			<value>resource/impl/server_map.xml</value>
 		</constructor-arg>

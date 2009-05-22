@@ -63,7 +63,7 @@ class AsyncEventManagerException(Exception):
 	pass
 
 class AsyncEventManager(EventManager):
-	def __init__(self):
+	def __init__(self,xml_bindings = None):
 		super(AsyncEventManager, self).__init__()
 		self.mboxMgr = MessageBoxManager()
 	
@@ -80,12 +80,22 @@ class AsyncEventManager(EventManager):
 			raise AsyncEventManagerException("Event must contain a source")
 
 		source = eventObj.getArgEntry('source')
+		
+		#create fake reply bus
+		fakeReplyBus = EventManager()
 
+		callback = AddArgCallback('to',source)
+
+		gate_listener = GateListener(self.mboxMgr, callback.callback)
+		
+		fakeReplyBus.bind('all', gate_listener)
+
+		#normal behaviour
 		for listener_obj in self.__getListenerMap(eventObj.getType()):
-			listener_obj.action(eventObj, self)
+			listener_obj.action(eventObj, fakeReplyBus)
 		
 		for listener_obj in self.__getListenerMap('all'):
-			listener_obj.action(eventObj, self)
+			listener_obj.action(eventObj, fakeReplyBus)
 			
 		return None
 		
