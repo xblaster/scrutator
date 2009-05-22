@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from scrutator.core.listener import *
 from scrutator.core.event import *
 
@@ -58,19 +59,36 @@ class EventManager(object):
 			self.listeners_map[mapname] = list()
 		return self.listeners_map[mapname]
 
+class AsyncEventManagerException(Exception):
+	pass
+
 class AsyncEventManager(EventManager):
 	def __init__(self):
 		super(AsyncEventManager, self).__init__()
-		self.buffer = list()
+		self.mboxMgr = MessageBoxManager()
 	
-	def push(self, eventObj):
-		self.buffer.append(eventObj)
-		
-	def getStoredEvent(self):
-		buf = self.buffer
-		self.buffer = list()
-		return buf
+	def getMessageBoxManager(self):
+		return self.mboxMgr
 
+	def push(self, eventObj):
+		""" This push an event and activate action listener
+		"""
+		if not isinstance(eventObj, SimpleEvent):
+			raise Exception("Not a SimpleEvent inherited object")
+
+		if not eventObj.hasArgEntry('source'):
+			raise AsyncEventManagerException("Event must contain a source")
+
+		source = eventObj.getArgEntry('source')
+
+		for listener_obj in self.__getListenerMap(eventObj.getType()):
+			listener_obj.action(eventObj, self)
+		
+		for listener_obj in self.__getListenerMap('all'):
+			listener_obj.action(eventObj, self)
+			
+		return None
+		
 class MessageBoxManagerException(Exception):
 	pass
 	

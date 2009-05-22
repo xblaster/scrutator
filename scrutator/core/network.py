@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from twisted.web import xmlrpc, server
 from scrutator.core.event import *
 from twisted.internet import threads, reactor
@@ -10,12 +11,12 @@ from scrutator.core.manager import *
 class SCRTServices(xmlrpc.XMLRPC):
 	"""An example object to be published."""
 
-	manager = 0
+	manager = None
 	mboxManager = None
 	allowNone = True
 	
 	def getMessageBoxManager(self):
-		return self.mboxManager
+		return self.manager.getMessageBoxManager()
 
 	def __init__(self):
 		self.mboxManager = MessageBoxManager()
