@@ -17,11 +17,11 @@ if __name__ == '__main__':
 	#event = RawCommandEvent(cmd = cmd)
 	#eventSender.push(event)
 
-	#event = RawCommandEvent(cmd='from tmp.scrutator.core.network import *')
+	event = RawCommandEvent(cmd='from tmp.scrutator.core.manager import EventManager')
 	#for i in range(10):
 	#  event = RawCommandEvent(cmd='print "'+str(i)+'"')
 	#  eventSender.push(event)
 	#event = RawCommandEvent(cmd='sys.exit(0)')
-	#eventSender.push(event)
+	eventSender.push(event)
 
 	reactor.run()

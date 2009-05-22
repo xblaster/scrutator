@@ -19,7 +19,6 @@ class SCRTServices(xmlrpc.XMLRPC):
 		return self.manager.getMessageBoxManager()
 
 	def __init__(self):
-		self.mboxManager = MessageBoxManager()
 		pass
 	
 	def xmlrpc_push(self, obj_list, source):
@@ -46,7 +45,7 @@ class SCRTServices(xmlrpc.XMLRPC):
 	def pull(self,source):
 		result = list()
 		es = EventSerializer()
-		for msg in self.mboxManager.popMessagesFor(source):
+		for msg in self.getMessageBoxManager().popMessagesFor(source):
 			result.append(es.event2array(msg))
 		return result
 

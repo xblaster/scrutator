@@ -58,6 +58,10 @@ class EventManager(object):
 		if not self.listeners_map.has_key(mapname):
 			self.listeners_map[mapname] = list()
 		return self.listeners_map[mapname]
+	
+	def getListenerMap(self, mapname):
+	    return self.__getListenerMap(mapname)
+
 
 class AsyncEventManagerException(Exception):
 	pass
@@ -83,18 +87,20 @@ class AsyncEventManager(EventManager):
 		
 		#create fake reply bus
 		fakeReplyBus = EventManager()
+    
+		from callback import ToMessageBoxManagerCallback
 
-		callback = AddArgCallback('to',source)
+		callback = ToMessageBoxManagerCallback(source)
 
 		gate_listener = GateListener(self.mboxMgr, callback.callback)
 		
 		fakeReplyBus.bind('all', gate_listener)
 
 		#normal behaviour
-		for listener_obj in self.__getListenerMap(eventObj.getType()):
+		for listener_obj in self.getListenerMap(eventObj.getType()):
 			listener_obj.action(eventObj, fakeReplyBus)
 		
-		for listener_obj in self.__getListenerMap('all'):
+		for listener_obj in self.getListenerMap('all'):
 			listener_obj.action(eventObj, fakeReplyBus)
 			
 		return None
