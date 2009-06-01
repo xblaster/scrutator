@@ -2,6 +2,8 @@
 from scrutator.core.network import *
 from scrutator.core.factory import *
 
+from scrutator.core.sync.event import *
+
 if __name__ == '__main__':
 	xmlbe = XMLBeanFactory('resource/impl/client.xml')
 	
@@ -17,7 +19,8 @@ if __name__ == '__main__':
 	#event = RawCommandEvent(cmd = cmd)
 	#eventSender.push(event)
 
-	event = RawCommandEvent(cmd='from tmp.scrutator.core.manager import EventManager')
+	#event = RawCommandEvent(cmd='from tmp.scrutator.core.manager import EventManager')
+	event = FileRequest(src='scrutator.core.listener')
 	#for i in range(10):
 	#  event = RawCommandEvent(cmd='print "'+str(i)+'"')
 	#  eventSender.push(event)

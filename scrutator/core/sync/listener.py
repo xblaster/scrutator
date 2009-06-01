@@ -1,12 +1,13 @@
 import scrutator.core.listener
 import scrutator.core.sync.event 
 
-class FileRequestListener(scrutator.core.listener):
+class FileRequestListener(scrutator.core.listener.SimpleListener):
 	""" base of all listener"""
 	def __init__(self):
 		pass
 
 	def action(self, eventObj, evtMgr):
+		print "ACTION !!!!"
 		try:
 			f = open(eventObj.src)
 		except IOError:

@@ -25,7 +25,7 @@ if __name__ == '__main__':
 	debug_listener = GtkDebugListener()
 	eventSender.bind('all', debug_listener)
 	
-	eventSender.bind('all', Reply())
+	#eventSender.bind('all', Reply())
 
 	#debug_listener2 = GtkDebugListener()
 	#eventSender.bind('scrutator.core.event.KickEvent', debug_listener2)

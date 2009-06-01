@@ -20,4 +20,6 @@
 			<ref bean="mainEventManager"/>
 		</constructor-arg>
 	</bean>	
+	
+	<bean id="requestListener" class="scrutator.core.sync.listener.FileRequestListener"/>
 </beans>

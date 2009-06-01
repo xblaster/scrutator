@@ -2,5 +2,6 @@
 <map>
 	<!--<trigger event="all" listener="scrutator.core.listener.PrintListener"></trigger>-->
 	<!--<trigger event="all" bean="defaultLogListener"></trigger>-->
-	<trigger event="scrutator.core.event.RawCommandEvent" bean="rawCommandListener"></trigger>-->
+	<!--<trigger event="scrutator.core.event.RawCommandEvent" bean="rawCommandListener"></trigger>-->
+	<trigger event="scrutator.core.sync.event.FileRequest" bean="requestListener"></trigger>
 </map>
