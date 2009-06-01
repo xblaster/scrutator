@@ -8,8 +8,9 @@ from scrutator.core.factory import *
 class Reply(SimpleListener):
 	
 	def action(self, eventObj, evtMgr):
-		event = KickEvent(plop='reply')
-		evtMgr.push(event)
+		#event = KickEvent(plop=eventObj)
+		evtMgr.push(eventObj)
+		reactor.callLater(10,evtMgr.push, eventObj)
 
 if __name__ == '__main__':
 
