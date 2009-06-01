@@ -31,11 +31,26 @@ def __fetch_object(objectSourceTree, basePath = None):
 	else:
 		return recusSearch
 
+
+__safeimport_dict = dict()
+
 def __safeimport(packageName):
 	"""this is a not so safe import for the moment"""
 	try:
 		exec(packageName)
+		#print "REPLICATE"
 	except NameError:
+		
+		global __safeimport_dict
+		
+		if not packageName in __safeimport_dict:
+			print "load "+packageName
+			__safeimport_dict[packageName] = __import__(packageName, globals())
+		return __safeimport_dict[packageName]
 		#exec("global "+packageName.split('.').pop(0))
-		__import__(packageName)
+			
+		#print "---------"
+		#print globals()
+		#for v in globals():
+			#print str(v)
 		
