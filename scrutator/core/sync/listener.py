@@ -7,15 +7,23 @@ class FileRequestListener(scrutator.core.listener.SimpleListener):
 		pass
 
 	def action(self, eventObj, evtMgr):
-		print "ACTION !!!!"
 		try:
-			f = open(eventObj.src)
+			f = open(eventObj.getArgEntry('file'))
 		except IOError:
 			return evtMgr.push(scrutator.core.sync.event.FileRequestError())
 		
 		event = scrutator.core.sync.event.FileContent()
-		event.content = f.read()
+		event.setArgEntry('content', f.read())
 		evtMgr.push(event)
 		
 		f.close()
 		
+		
+
+class FileContentListener(scrutator.core.listener.SimpleListener):
+	""" base of all listener"""
+	def __init__(self):
+		pass
+
+	def action(self, eventObj, evtMgr):
+		print eventObj.getArgs()

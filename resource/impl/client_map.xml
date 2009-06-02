@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+	<trigger event="scrutator.core.sync.event.FileContent" bean="fileContentListener"></trigger>
+</map>

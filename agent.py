@@ -20,7 +20,7 @@ if __name__ == '__main__':
 	#eventSender.push(event)
 
 	#event = RawCommandEvent(cmd='from tmp.scrutator.core.manager import EventManager')
-	event = FileRequest(src='scrutator.core.listener')
+	event = FileRequest(file='scrutator/core/listener.py')
 	#for i in range(10):
 	#  event = RawCommandEvent(cmd='print "'+str(i)+'"')
 	#  eventSender.push(event)

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-<bean id="mainEventManager" class="scrutator.core.manager.EventManager"/>
+<bean id="fileContentListener" class="scrutator.core.sync.listener.FileContentListener"/>	
+<bean id="mainEventManager" class="scrutator.core.manager.EventManager">
+	<constructor-arg>
+		<value>resource/impl/client_map.xml</value>
+	</constructor-arg>
+</bean>
 
 <bean id="eventSender" class="scrutator.core.network.XMLRPCClient">
 	<constructor-arg>
