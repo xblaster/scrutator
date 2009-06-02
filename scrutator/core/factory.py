@@ -25,7 +25,6 @@ class XMLBeanFactory(AbstractBeanFactory):
 		from xml.dom.minidom import parse
 		from sys import path
 		resource_name = path[0]+'/'+resource
-		#print resource_name
 		doc = parse(resource_name)
 		for bean in doc.getElementsByTagName('bean'):
 			self.loadBean(bean)
@@ -39,7 +38,6 @@ class XMLBeanFactory(AbstractBeanFactory):
 		
 		#fetch element in constructor arg
 		args = bean.getElementsByTagName('constructor-arg')
-		
 		#if we have params for constructor
 		if len(args) == 1:
 			arg = args[0]

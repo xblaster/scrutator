@@ -68,7 +68,7 @@ class AsyncEventManagerException(Exception):
 
 class AsyncEventManager(EventManager):
 	def __init__(self,xml_bindings = None):
-		super(AsyncEventManager, self).__init__()
+		super(AsyncEventManager, self).__init__(xml_bindings)
 		self.mboxMgr = MessageBoxManager()
 	
 	def getMessageBoxManager(self):
@@ -215,6 +215,7 @@ class XmlEventManagerLoader:
 		resource_name = path[0]+'/'+filename
 		
 		doc = parse(resource_name)
+		
 		for trigger in doc.getElementsByTagName('trigger'):
 			eventName = trigger.getAttribute('event')
 

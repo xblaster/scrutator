@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
+	<bean id="requestListener" class="scrutator.core.sync.listener.FileRequestListener"/>	
 	<bean id="rawCommandListener" class="scrutator.core.listener.RawCommandListener"/>
 	<bean id="defaultLogListener" class="scrutator.core.listener.PrintListener"/>
 	<bean id="mainEventManager" class="scrutator.core.manager.AsyncEventManager">
@@ -21,5 +22,4 @@
 		</constructor-arg>
 	</bean>	
 	
-	<bean id="requestListener" class="scrutator.core.sync.listener.FileRequestListener"/>
 </beans>

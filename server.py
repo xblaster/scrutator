@@ -23,7 +23,7 @@ if __name__ == '__main__':
 	#initiatie GTK
 	from scrutator.core.gtk_listener.gtk_debug import *
 	debug_listener = GtkDebugListener()
-	eventSender.bind('all', debug_listener)
+	#eventSender.bind('all', debug_listener)
 	
 	#eventSender.bind('all', Reply())
 
