@@ -1,9 +1,23 @@
 # -*- coding: utf-8 -*-
+__old_import__ = __import__
+
+def new_import(name, globals={}, locals={}, fromlist=[], level=-1):
+	print name
+	return __old_import(name, globals, locals, fromlist, level)
+
+__import__ = new_import
+
+
+
+print __import__
+
+
 from twisted.internet import gtk2reactor # for gtk-2.0
 gtk2reactor.install()
 
 from scrutator.core.network import *
 from scrutator.core.factory import *
+
 
 class Reply(SimpleListener):
 	
@@ -23,7 +37,7 @@ if __name__ == '__main__':
 	#initiatie GTK
 	from scrutator.core.gtk_listener.gtk_debug import *
 	debug_listener = GtkDebugListener()
-	#eventSender.bind('all', debug_listener)
+	eventSender.bind('all', debug_listener)
 	
 	#eventSender.bind('all', Reply())
 

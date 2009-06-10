@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
-from scrutator.core.listener import *
+from scrutator.core.tool import *
+
+
+smart_import('scrutator.core.listener')
+#from scrutator.core.listener import *
 from scrutator.core.event import *
 
-from scrutator.core.tool import *
+
 
 from twisted.internet import threads, reactor
 
@@ -21,8 +25,8 @@ class EventManager(object):
 			xeml.load(xml_bindings, self)
 		
 	def bind(self, eventName, listener):
-		if not isinstance(listener, SimpleListener):
-			raise Exception("Not a SimpleListener inherited object "+str(listener))
+		if not isinstance(listener, scrutator.core.listener.SimpleListener):
+			raise Exception("Not a scrutator.core.listener.SimpleListener inherited object "+str(listener))
 		self.__getListenerMap(str(eventName)).append(listener)
 	
 	def unbindAll(self):

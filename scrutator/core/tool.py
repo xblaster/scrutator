@@ -34,6 +34,9 @@ def __fetch_object(objectSourceTree, basePath = None):
 
 __safeimport_dict = dict()
 
+def smart_import(packageName):
+	return __safeimport(packageName)
+
 def __safeimport(packageName):
 	"""this is a not so safe import for the moment"""
 	try:
@@ -46,6 +49,8 @@ def __safeimport(packageName):
 		if not packageName in __safeimport_dict:
 			print "load "+packageName
 			__safeimport_dict[packageName] = __import__(packageName, globals())
+		
+		globals()[packageName] = __safeimport_dict[packageName]
 		return __safeimport_dict[packageName]
 		#exec("global "+packageName.split('.').pop(0))
 			

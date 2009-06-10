@@ -122,21 +122,21 @@ class TestMessageBoxManager(unittest.TestCase):
 		self.assertEqual(mboxMgr.popMessagesFor('coin')[0], sevent)
 		self.assertEqual(mboxMgr.popMessagesFor('coin'), list())
 
-class TestAsyncManager(unittest.TestCase):
+"""class TestAsyncManager(unittest.TestCase):
 	#DEPRECATED
 	def testAsyncManager(self):
 		asyncMgr = AsyncEventManager()
 		l = list()
 		
-		l.append(BanEvent())
-		l.append(KickEvent())
-		l.append(KickEvent(chan="#funradio"))
+		l.append(BanEvent(source="bot1"))
+		l.append(KickEvent(source="bot1"))
+		l.append(KickEvent(chan="#funradio", source="bot1"))
 		
 		for evt in l:
 			asyncMgr.push(evt)
 
 		self.assertEquals(asyncMgr.getStoredEvent(), l)
-		self.assertEquals(asyncMgr.getStoredEvent(), list())
+		self.assertEquals(asyncMgr.getStoredEvent(), list())"""
 		
 class TestCoreManager(unittest.TestCase):
 	def testSingleton(self):
