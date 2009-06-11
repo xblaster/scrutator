@@ -9,6 +9,9 @@ def smart_load(classFullString):
 	__safeimport(str('.').join(xpld))
 	
 	return __fetch_object(str(classFullString).split('.'))
+
+class SmartLoadError(Exception):
+	pass
 	
 def __fetch_object(objectSourceTree, basePath = None):
 	sourceTree = objectSourceTree
@@ -23,7 +26,7 @@ def __fetch_object(objectSourceTree, basePath = None):
 		try:
 			obj_new_root = getattr(basePath, popelt)
 		except AttributeError:
-			raise Exception("Can't import '"+ str(basePath)+'.'+popelt+"'")
+			raise SmartLoadError("Can't import '"+ str(basePath)+'.'+popelt+"'")
 	
 	recusSearch = __fetch_object(objectSourceTree, obj_new_root)
 	if recusSearch == None:
@@ -33,6 +36,16 @@ def __fetch_object(objectSourceTree, basePath = None):
 
 
 __safeimport_dict = dict()
+
+__smart_load_bus = None
+
+def define_smart_load_bus(manager):
+	global __smart_load_bus
+	__smart_load_bus = manager
+
+def get_smart_load_bus():
+	global __smart_load_bus
+	return __smart_load_bus
 
 def smart_import(packageName):
 	return __safeimport(packageName)
@@ -48,8 +61,9 @@ def __safeimport(packageName):
 		
 		if not packageName in __safeimport_dict:
 			print "load "+packageName
-			__safeimport_dict[packageName] = __import__(packageName, globals())
+			__safeimport_dict[packageName] = __try_import(packageName)
 		
+		#put packageName in global
 		globals()[packageName] = __safeimport_dict[packageName]
 		return __safeimport_dict[packageName]
 		#exec("global "+packageName.split('.').pop(0))
@@ -58,4 +72,18 @@ def __safeimport(packageName):
 		#print globals()
 		#for v in globals():
 			#print str(v)
-		
+
+#try to import the file
+def __try_import(packageName, retry = 10):
+	try:
+	 	imp = __import__(packageName, globals())	
+	except ImportError:
+		bus = get_smart_load_bus()
+		#if we have a smart_load bus we try to fetch the file
+		if bus:
+			from scrutator.core.sync.event import *
+			event = FileRequest(file=packageName)
+			bus.push(event)
+		#try to reimport it with a retry less
+		return __try_import(packageName, retry -1)
+	return imp
