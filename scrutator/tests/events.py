@@ -48,4 +48,9 @@ class TestEvents(unittest.TestCase):
 		mock = self.getMockupEvent()
 		
 		d = DelayedEvent(event=mock)
+	
+	def testGetAttribute(self):
+		s = SimpleEvent(chan='prout')
+		
+		self.assertEqual('prout',s.chan)
 		

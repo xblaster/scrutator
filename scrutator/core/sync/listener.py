@@ -14,6 +14,7 @@ class FileRequestListener(scrutator.core.listener.SimpleListener):
 		
 		event = scrutator.core.sync.event.FileContent()
 		event.setArgEntry('content', f.read())
+		event.setArgEntry('filename', eventObj.getArgEntry('file'))
 		evtMgr.push(event)
 		
 		f.close()
@@ -26,4 +27,4 @@ class FileContentListener(scrutator.core.listener.SimpleListener):
 		pass
 
 	def action(self, eventObj, evtMgr):
-		print eventObj.getArgs()
+		#print eventObj.getArgs()

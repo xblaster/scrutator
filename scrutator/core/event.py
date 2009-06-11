@@ -20,6 +20,9 @@ class EventSerializer(object):
 		
 		return recons
 
+class EventAttributeError(AttributeError):
+	pass
+
 class SimpleEvent(object):
 	"""simple event
 	base class of all event"""
@@ -55,6 +58,15 @@ class SimpleEvent(object):
 	      keys.append(str(k)+' => '+str(self.getArgEntry(k)))
 	    str_res += ", ".join(keys)+"}"
 	    return str_res
+	
+	def __getattribute__(self,name):
+		try:
+			return super(SimpleEvent, self).__getattribute__(name)
+		except AttributeError:
+			pass
+		if self.hasArgEntry(name):
+			return self.getArgEntry(name)
+		raise EventAttributeError(name+' does not appear to be an attribute of '+str(self)+' event')
 
 class DelayedEvent(SimpleEvent):
 	delay = 1
