@@ -54,3 +54,10 @@ class TestEvents(unittest.TestCase):
 		
 		self.assertEqual('prout',s.chan)
 		
+	def testWrongGetAttribute(self):
+		s = SimpleEvent(chan='prout')
+		try:
+			s.prim
+		except EventAttributeError:
+			return
+		self.fail('EventAttributeError exception expected')
