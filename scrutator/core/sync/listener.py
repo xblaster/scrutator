@@ -24,7 +24,22 @@ class FileRequestListener(scrutator.core.listener.SimpleListener):
 class FileContentListener(scrutator.core.listener.SimpleListener):
 	""" base of all listener"""
 	def __init__(self):
+		self.upload_dir = "upload/"
 		pass
 
 	def action(self, eventObj, evtMgr):
-		#print eventObj.getArgs()
+		#create dirs
+		xpld = eventObj.filename.split('.')
+		pyfile = xpld.pop()
+		directory = str('.').join(xpld)
+		
+		#create uploaded file
+		import os
+		try:
+			os.makedirs(self.upload_dir+directory)
+		except:
+			pass
+		
+		f = open(self.upload_dir+eventObj.filename,'w+')
+		f.write(eventObj.content)
+		f.close()

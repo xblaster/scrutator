@@ -2,8 +2,8 @@
 from scrutator.core.tool import *
 
 
-smart_import('scrutator.core.listener')
-#from scrutator.core.listener import *
+#smart_import('scrutator.core.listener')
+from scrutator.core.listener import *
 from scrutator.core.event import *
 
 
