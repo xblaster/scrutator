@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
+import time
+
 
 def smart_load(classFullString):
 	"""load automatically a class with this name (include package)"""
@@ -61,7 +63,7 @@ def __safeimport(packageName):
 		global __safeimport_dict
 		
 		if not packageName in __safeimport_dict:
-			print "load "+packageName
+			print "try loading "+packageName
 			__safeimport_dict[packageName] = __try_import(packageName)
 		
 		#put packageName in global
@@ -76,16 +78,18 @@ def __safeimport(packageName):
 
 #try to import the file
 def __try_import(packageName, retry = 10):
-	if retry <= 0:
-	    raise Exception("too many recursion for package "+str(packageName))
+	#print "try left "+str(retry)+" for package "+str(packageName)
+	if retry ==0:
+		raise Exception("Retry exceed for smart_load import of '"+packageName+"'")
 	try:
 	 	imp = __import__(packageName, globals())	
 	except ImportError:
 		bus = get_smart_load_bus()
 		#if we have a smart_load bus we try to fetch the file
 		if bus:
-			from scrutator.core.sync.event import *
-			event = FileRequest(file=packageName)
+			import scrutator.core.sync.event
+			event = scrutator.core.sync.event.FileRequest(file=(packageName.replace('.','/')+'.py'))
+			print "push "+str(event)+' to '+str(bus)
 			bus.push(event)
 			
 			from twisted.internet import reactor
