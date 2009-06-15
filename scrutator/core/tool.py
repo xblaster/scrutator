@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 
 def smart_load(classFullString):
@@ -75,6 +76,8 @@ def __safeimport(packageName):
 
 #try to import the file
 def __try_import(packageName, retry = 10):
+	if retry <= 0:
+	    raise Exception("too many recursion for package "+str(packageName))
 	try:
 	 	imp = __import__(packageName, globals())	
 	except ImportError:
@@ -84,6 +87,11 @@ def __try_import(packageName, retry = 10):
 			from scrutator.core.sync.event import *
 			event = FileRequest(file=packageName)
 			bus.push(event)
+			
+			from twisted.internet import reactor
+			import time
+			reactor.iterate(10)
+			time.sleep(0.5)
 		#try to reimport it with a retry less
 		return __try_import(packageName, retry -1)
 	return imp
