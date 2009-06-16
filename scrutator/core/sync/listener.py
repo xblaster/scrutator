@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
 import scrutator.core.listener
 import scrutator.core.sync.event 
+
+import sys
+sys.path.append('upload/')
 
 class FileRequestListener(scrutator.core.listener.SimpleListener):
 	""" base of all listener"""

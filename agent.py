@@ -27,7 +27,7 @@ if __name__ == '__main__':
 	#  event = RawCommandEvent(cmd='print "'+str(i)+'"')
 	#  eventSender.push(event)
 	#event = RawCommandEvent(cmd='sys.exit(0)')
-	reactor.callLater(1, smart_import, 'scrutator.core.listener')
+	reactor.callLater(1, smart_import, 'plop')
 	#eventSender.push(event)
 
 	reactor.run()

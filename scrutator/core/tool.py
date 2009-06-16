@@ -85,13 +85,15 @@ def __try_import(packageName, retry = 10):
 		#if we have a smart_load bus we try to fetch the file
 		if bus:
 			from scrutator.core.sync.event import *
-			event = FileRequest(file=packageName)
+			packageFile = packageName.replace('.','/')+str('.py')
+
+			event = FileRequest(file=packageFile)
 			bus.push(event)
 			
 			from twisted.internet import reactor
 			import time
 			reactor.iterate(10)
-			time.sleep(0.5)
+			time.sleep(2)
 		#try to reimport it with a retry less
 		return __try_import(packageName, retry -1)
 	return imp
