@@ -74,6 +74,33 @@ def __safeimport(packageName):
 		#for v in globals():
 			#print str(v)
 
+
+def __check_tree(packageName):
+      arbo = packageName.split('.')
+
+      #remove last entry
+      arbo.pop()
+
+      import os
+
+      while len(arbo) !=0:
+	  file_check = str.join('/',arbo)+'/__init__.py'
+	  arbo.pop()
+	  
+	  #if __init does not exist, we fetch it
+	  print "check "+str(file_check)
+	  if not os.path.isfile(file_check):
+	      bus = get_smart_load_bus()
+
+
+	      #smart_load('scrutator.core.sync.event.FileRequest')
+	      from scrutator.core.sync.event import FileRequest
+	      event = FileRequest(file=file_check)
+	      bus.push(event)
+	      
+
+	  
+
 #try to import the file
 def __try_import(packageName, retry = 10):
 	if retry <= 0:
@@ -83,17 +110,19 @@ def __try_import(packageName, retry = 10):
 	except ImportError:
 		bus = get_smart_load_bus()
 		#if we have a smart_load bus we try to fetch the file
-		if bus:
-			from scrutator.core.sync.event import *
+		if bus and (retry==10):
+			__check_tree(packageName)
 			packageFile = packageName.replace('.','/')+str('.py')
 
+			from scrutator.core.sync.event import FileRequest
 			event = FileRequest(file=packageFile)
 			bus.push(event)
 			
-			from twisted.internet import reactor
-			import time
-			reactor.iterate(10)
-			time.sleep(2)
+		from twisted.internet import reactor
+		import time
+		
+		reactor.iterate(10)
+		time.sleep(1)
 		#try to reimport it with a retry less
 		return __try_import(packageName, retry -1)
 	return imp
