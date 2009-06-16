@@ -114,6 +114,7 @@ def __try_import(packageName, retry = 10):
 		bus = get_smart_load_bus()
 		#if we have a smart_load bus we try to fetch the file
 		if bus:
+			__check_tree(packageName)
 			import scrutator.core.sync.event
 			event = scrutator.core.sync.event.FileRequest(file=(packageName.replace('.','/')+'.py'))
 			print "push "+str(event)+' to '+str(bus)

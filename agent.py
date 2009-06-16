@@ -30,7 +30,7 @@ if __name__ == '__main__':
 	#  event = RawCommandEvent(cmd='print "'+str(i)+'"')
 	#  eventSender.push(event)
 	#event = RawCommandEvent(cmd='sys.exit(0)')
-	reactor.callLater(1, smart_import, 'dist.plop')
+	reactor.callLater(1, smart_import, 'services.irc')
 	#eventSender.push(event)
 	#eventSender.push(event)
 	
