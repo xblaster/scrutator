@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-import sys
-import time
+import sys, time, os
 
+from twisted.internet import threads, reactor
+from twisted.python import log
 
 def smart_load(classFullString):
 	"""load automatically a class with this name (include package)"""
@@ -93,38 +94,54 @@ def __check_tree(packageName):
 	  print "check "+str(file_check)
 	  if not os.path.isfile(file_check):
 	      bus = get_smart_load_bus()
-
-
-	      #smart_load('scrutator.core.sync.event.FileRequest')
 	      from scrutator.core.sync.event import FileRequest
 	      event = FileRequest(file=file_check)
 	      bus.push(event)
-	      
+	      #from twisted.internet import reactor
+	      #reactor.iterate()
 
+def packagename_to_packagefile(packageName):
+	return (packageName.replace('.','/')+'.py')
 	  
+#asynchronously import a file
+def __async_import(packageName):
+	bus = get_smart_load_bus()
+	#if we have a smart_load bus we try to fetch the file
+	if bus:
+		__check_tree(packageName)
+		import scrutator.core.sync.event
+		event = scrutator.core.sync.event.FileRequest(file=packagename_to_packagefile(packageName))
+		print "push "+str(event)+' to '+str(bus)
+		bus.push(event)
 
 #try to import the file
-def __try_import(packageName, retry = 10):
-	#print "try left "+str(retry)+" for package "+str(packageName)
-	if retry ==0:
-		raise Exception("Retry exceed for smart_load import of '"+packageName+"'")
-	try:
-	 	imp = __import__(packageName, globals())	
-	except ImportError:
-		bus = get_smart_load_bus()
-		#if we have a smart_load bus we try to fetch the file
-		if bus:
-			__check_tree(packageName)
-			import scrutator.core.sync.event
-			event = scrutator.core.sync.event.FileRequest(file=(packageName.replace('.','/')+'.py'))
-			print "push "+str(event)+' to '+str(bus)
-			bus.push(event)
+def __try_import(packageName):
+	#print "try left "+str(retry)+" for package "+str(packageName)		
+	imp = None
+	async_call = False
+	
+	while imp == None:
+		packageFile = packagename_to_packagefile(packageName)
+		#log.msg("Loop")
+				
+		#if source file does not exist
+		if not (os.path.isfile('upload/'+packageFile) or os.path.isfile(packageFile)):
+			print "file does not exist: "+'upload/'+packageFile
+			#require it at first call
+			if not async_call:
+				log.msg("Launch async call for "+str(packageName))
+				threads.deferToThread(__async_import, packageName)
+				async_call = True
+			reactor.iterate(4)
+		else:
+			try:
+				imp = __import__(packageName)
+			except ImportError:
+				log.err()
+				return None
 			
-		from twisted.internet import reactor
-		import time
 		
-		reactor.iterate(10)
-		time.sleep(1)
+
 		#try to reimport it with a retry less
-		return __try_import(packageName, retry -1)
+		#return __try_import(packageName, retry -1)
 	return imp

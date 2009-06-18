@@ -6,7 +6,7 @@ from scrutator.core.tool import *
 from scrutator.core.listener import *
 from scrutator.core.event import *
 
-
+from twisted.python import log
 
 from twisted.internet import threads, reactor
 
@@ -43,6 +43,7 @@ class EventManager(object):
 	def push(self, eventObj):
 		""" This push an event and activate action listener
 		"""
+		log.msg('push '+str(eventObj)+' on '+str(self))
 		if not isinstance(eventObj, SimpleEvent):
 			raise Exception("Not a SimpleEvent inherited object")
 		for listener_obj in self.__getListenerMap(eventObj.getType()):

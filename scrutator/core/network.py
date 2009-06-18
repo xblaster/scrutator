@@ -6,6 +6,8 @@ from twisted.web.xmlrpc import Proxy
 
 from scrutator.core.manager import *
 
+from twisted.python import log
+
 
 
 class SCRTServices(xmlrpc.XMLRPC):
@@ -88,6 +90,7 @@ class XMLRPCClient:
 	
 	def __init__(self, serviceuri, eventMgr):
 		import xmlrpclib
+		self.serviceuri = str(serviceuri)
 		self.xmlrpc_connect = Proxy(str(serviceuri))
 		self.manager = eventMgr
 		
@@ -122,6 +125,7 @@ class XMLRPCClient:
 		return result
 	
 	def pull(self):
+		log.msg('pull '+ str(self.serviceuri))
 		d = self.xmlrpc_connect.callRemote('pull', self.source).addCallback(self.preprocessResult)
 		d.addCallbacks(self.reinject, self.handleError)
 		
