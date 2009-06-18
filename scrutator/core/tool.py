@@ -64,7 +64,7 @@ def __safeimport(packageName):
 		global __safeimport_dict
 		
 		if not packageName in __safeimport_dict:
-			print "try loading "+packageName
+			log.msg("__safeimport "+packageName)
 			__safeimport_dict[packageName] = __try_import(packageName)
 		
 		#put packageName in global
@@ -96,6 +96,7 @@ def __check_tree(packageName):
 	      bus = get_smart_load_bus()
 	      from scrutator.core.sync.event import FileRequest
 	      event = FileRequest(file=file_check)
+	      log.msg("Launch async call for "+str(packageName))
 	      bus.push(event)
 	      #from twisted.internet import reactor
 	      #reactor.iterate()
@@ -126,7 +127,6 @@ def __try_import(packageName):
 				
 		#if source file does not exist
 		if not (os.path.isfile('upload/'+packageFile) or os.path.isfile(packageFile)):
-			print "file does not exist: "+'upload/'+packageFile
 			#require it at first call
 			if not async_call:
 				log.msg("Launch async call for "+str(packageName))

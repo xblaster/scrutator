@@ -96,7 +96,6 @@ class XMLRPCClient:
 		
 		self.retryPullTimer = 5
 		self.maxPullTimer = 5
-				
 		reactor.callLater(5, self.pull)
 
 	def reinject(self, msgList):
@@ -136,6 +135,9 @@ class XMLRPCClient:
 		res = es.event2array(eventObj)
 		send_list = list()
 		send_list.append(res)
+		
+		#reduce retry when you push
+		self.retryPullTimer = self.retryPullTimer/1.5
 		
 		return self.xmlrpc_connect.callRemote('push',send_list, self.source).addCallbacks(self.reinject, self.handleError)
 		#self.xmlrpc_connect.callRemote(send_list).addCallbacks(printValue, printError)
