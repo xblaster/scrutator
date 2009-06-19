@@ -10,9 +10,6 @@ if __name__ == '__main__':
 	xmlbe = XMLBeanFactory('resource/impl/client.xml')
 	
 	eventSender = CoreManager().getBean('eventSender')
-	
-	define_smart_load_bus(eventSender)
-	
 	#event = KickEvent()
 	define_smart_load_bus(eventSender)
 	#eventSender.push(event)
@@ -25,15 +22,12 @@ if __name__ == '__main__':
 	#eventSender.push(event)
 
 	#event = RawCommandEvent(cmd='from tmp.scrutator.core.manager import EventManager')
-	#event = FileRequest(file='scrutator/core/manager.py')
+	#event = FileRequest(file='scrutator/core/listener.py')
 	#for i in range(10):
 	#  event = RawCommandEvent(cmd='print "'+str(i)+'"')
 	#  eventSender.push(event)
 	#event = RawCommandEvent(cmd='sys.exit(0)')
 	reactor.callLater(1, smart_import, 'services.irc')
 	#eventSender.push(event)
-	#eventSender.push(event)
-	
-	#reactor.callLater(3,smart_import, 'scrutator.prout')
 	
 	reactor.run()
