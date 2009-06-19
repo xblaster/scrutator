@@ -10,8 +10,6 @@ import ihooks
 
 class SyncHook(ihooks.ModuleImporter):
     def import_module(self, name, globals=None, locals=None, fromlist=None, level = -1):
-		if fromlist:
-			print 'syncHOOK '+name+' '+str(fromlist)
 		try:
 			imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
 		except:
@@ -24,5 +22,3 @@ class SyncHook(ihooks.ModuleImporter):
 
 print 'Install sync_hook'
 SyncHook().install()
-
-import sys
