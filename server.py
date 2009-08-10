@@ -39,6 +39,10 @@ if __name__ == '__main__':
 	debug_listener = GtkDebugListener()
 	eventSender.bind('all', debug_listener)
 	
+	from scrutator.core.log.listener import *
+	listener = SQLLogListener()
+	eventSender.bind('all',listener)
+	
 	#eventSender.bind('all', Reply())
 
 	#debug_listener2 = GtkDebugListener()

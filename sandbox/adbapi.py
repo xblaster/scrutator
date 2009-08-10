@@ -6,9 +6,9 @@ import MySQLdb
 import MySQLdb.cursors
 
 dbpool = adbapi.ConnectionPool("MySQLdb", 
-			       host='127.0.0.1', 
-			       user='root', 
-			       passwd='blah', 
+			       host='srv.lo2k.net', 
+			       user='scrutator', 
+			       passwd='scrut4t0r', 
 			       db="scrutator",
 			       cursorclass = MySQLdb.cursors.DictCursor
 )
@@ -25,8 +25,14 @@ def printResult(l):
 def shutdown(result):
     reactor.stop()
 
+def err(l):
+	print l
+
 d = getServers()
 d.addCallback(printResult)
+d.addErrback(err)
 d.addBoth(shutdown)
+
+print "launch"
 
 reactor.run()
