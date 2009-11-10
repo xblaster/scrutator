@@ -20,6 +20,6 @@
 			<value>7080</value>
 			<ref bean="mainEventManager"/>
 		</constructor-arg>
-	</bean>	
+	</bean>
 	
 </beans>

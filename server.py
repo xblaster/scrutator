@@ -12,8 +12,8 @@ __import__ = new_import
 print __import__
 
 
-from twisted.internet import gtk2reactor # for gtk-2.0
-gtk2reactor.install()
+#from twisted.internet import gtk2reactor # for gtk-2.0
+#gtk2reactor.install()
 
 from scrutator.core.network import *
 from scrutator.core.factory import *
@@ -35,13 +35,13 @@ if __name__ == '__main__':
 	eventReceiver = CoreManager().getBean('eventReceiver')
 	
 	#initiatie GTK
-	from scrutator.core.gtk_listener.gtk_debug import *
-	debug_listener = GtkDebugListener()
-	eventSender.bind('all', debug_listener)
+	#from scrutator.core.gtk_listener.gtk_debug import *
+	#debug_listener = GtkDebugListener()
+	#eventSender.bind('all', debug_listener)
 	
-	from scrutator.core.log.listener import *
-	listener = SQLLogListener()
-	eventSender.bind('all',listener)
+	#from scrutator.core.log.listener import *
+	#listener = SQLLogListener()
+	#eventSender.bind('all',listener)
 	
 	#eventSender.bind('all', Reply())
 
