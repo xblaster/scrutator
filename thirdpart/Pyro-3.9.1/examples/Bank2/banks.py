@@ -14,24 +14,24 @@ class BankError(Exception): pass
 
 # Unrestricted account.
 class Account(Pyro.core.ObjBase):
-	def __init__(self,name,owner):
+	def __init__(self, name, owner):
 		Pyro.core.ObjBase.__init__(self)
-		self.balance=0.0
-		self.name=name
-		self.bank=owner
+		self.balance = 0.0
+		self.name = name
+		self.bank = owner
 	def _gotReaped(self):
-		print 'Account reaped, sorry your cash is lost:',self.name,self.balance 
+		print 'Account reaped, sorry your cash is lost:', self.name, self.balance 
 		self.bank._gotReaped(self)
 	def withdraw(self, amount):
-		self.balance-=amount
-	def deposit(self,amount):
-		self.balance+=amount
+		self.balance -= amount
+	def deposit(self, amount):
+		self.balance += amount
 
 # Restricted withdrawal account.
 class RestrictedAccount(Account):
 	def withdraw(s, amount):
-		if amount<=s.balance:
-			s.balance=s.balance-amount
+		if amount <= s.balance:
+			s.balance = s.balance - amount
 		else:
 			raise BankError('insufficent balance')
 
@@ -39,12 +39,12 @@ class RestrictedAccount(Account):
 class Bank(Pyro.core.ObjBase):
 	def __init__(s):
 		Pyro.core.ObjBase.__init__(s)
-		s.accounts={}
+		s.accounts = {}
 	def createAccount(s, name):
 		pass # must override this!
 	def _gotReaped(self, account):
 		del self.accounts[account.name]
-		print 'Bank removed reaped account',account.name
+		print 'Bank removed reaped account', account.name
 	def deleteAccount(s, name):
 		try:
 			# find account, disconnect from daemon, delete it
@@ -74,14 +74,14 @@ class Rabobank(Bank):
 	def __init__(s):
 		Bank.__init__(s)
 		s.name = 'Rabobank'
-	def createAccount(s,name):
+	def createAccount(s, name):
 		if s.accounts.has_key(name):
 			raise BankError('Account already exists')
 		# create account object, connect to daemon, return proxy for it
-		acc = Account(name,s)
+		acc = Account(name, s)
 		acc_URI = s.getDaemon().connect(acc)
-		s.accounts[name]=acc
-		print 'created account',name
+		s.accounts[name] = acc
+		print 'created account', name
 		return acc.getAttrProxy()
 
 
@@ -90,13 +90,13 @@ class VSB(Bank):
 	def __init__(s):
 		Bank.__init__(s)
 		s.name = 'VSB bank'
-	def createAccount(s,name):
+	def createAccount(s, name):
 		if s.accounts.has_key(name):
 			raise BankError('Account already exists')
 		# create account object, connect to daemon, return proxy for it
-		acc = RestrictedAccount(name,s)
+		acc = RestrictedAccount(name, s)
 		acc_URI = s.getDaemon().connect(acc)
-		s.accounts[name]=acc
-		print 'created account',name
+		s.accounts[name] = acc
+		print 'created account', name
 		return acc.getAttrProxy()
 

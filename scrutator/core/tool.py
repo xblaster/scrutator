@@ -17,7 +17,7 @@ def smart_load(classFullString):
 class SmartLoadError(Exception):
 	pass
 	
-def __fetch_object(objectSourceTree, basePath = None):
+def __fetch_object(objectSourceTree, basePath=None):
 	sourceTree = objectSourceTree
 	
 	if len(sourceTree) == 0:
@@ -30,7 +30,7 @@ def __fetch_object(objectSourceTree, basePath = None):
 		try:
 			obj_new_root = getattr(basePath, popelt)
 		except AttributeError:
-			raise SmartLoadError("Can't import '"+ str(basePath)+'.'+popelt+"'")
+			raise SmartLoadError("Can't import '" + str(basePath) + '.' + popelt + "'")
 	
 	recusSearch = __fetch_object(objectSourceTree, obj_new_root)
 	if recusSearch == None:
@@ -64,7 +64,7 @@ def __safeimport(packageName):
 		global __safeimport_dict
 		
 		if not packageName in __safeimport_dict:
-			log.msg("__safeimport "+packageName)
+			log.msg("__safeimport " + packageName)
 			__safeimport_dict[packageName] = __try_import(packageName)
 		
 		#put packageName in global
@@ -86,23 +86,23 @@ def __check_tree(packageName):
 
       import os
 
-      while len(arbo) !=0:
-	  file_check = str.join('/',arbo)+'/__init__.py'
+      while len(arbo) != 0:
+	  file_check = str.join('/', arbo) + '/__init__.py'
 	  arbo.pop()
 	  
 	  #if __init does not exist, we fetch it
-	  print "check "+str(file_check)
+	  print "check " + str(file_check)
 	  if not os.path.isfile(file_check):
 	      bus = get_smart_load_bus()
 	      from scrutator.core.sync.event import FileRequest
 	      event = FileRequest(file=file_check)
-	      log.msg("Launch async call for "+str(packageName))
+	      log.msg("Launch async call for " + str(packageName))
 	      bus.push(event)
 	      #from twisted.internet import reactor
 	      #reactor.iterate()
 
 def packagename_to_packagefile(packageName):
-	return (packageName.replace('.','/')+'.py')
+	return (packageName.replace('.', '/') + '.py')
 	  
 #asynchronously import a file
 def __async_import(packageName):
@@ -112,7 +112,7 @@ def __async_import(packageName):
 		__check_tree(packageName)
 		import scrutator.core.sync.event
 		event = scrutator.core.sync.event.FileRequest(file=packagename_to_packagefile(packageName))
-		print "push "+str(event)+' to '+str(bus)
+		print "push " + str(event) + ' to ' + str(bus)
 		bus.push(event)
 
 #try to import the file
@@ -126,10 +126,10 @@ def __try_import(packageName):
 		#log.msg("Loop")
 				
 		#if source file does not exist
-		if not (os.path.isfile('upload/'+packageFile) or os.path.isfile(packageFile)):
+		if not (os.path.isfile('upload/' + packageFile) or os.path.isfile(packageFile)):
 			#require it at first call
 			if not async_call:
-				log.msg("Launch async call for "+str(packageName))
+				log.msg("Launch async call for " + str(packageName))
 				threads.deferToThread(__async_import, packageName)
 				async_call = True
 			reactor.iterate(4)

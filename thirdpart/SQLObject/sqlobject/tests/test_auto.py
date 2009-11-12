@@ -34,7 +34,7 @@ class TestPeople:
             Phone(phone=p)
 
     def test_defaultOrder(self):
-        assert (list(Person.select('all')) ==
+        assert (list(Person.select('all')) == 
                 list(Person.select('all', orderBy=Person.sqlmeta.defaultOrder)))
 
     def test_dynamicColumn(self):
@@ -178,17 +178,17 @@ class TestAuto:
                         age=10,
                         created=now(),
                         wannahavefun=False,
-                        longField='x'*1000)
+                        longField='x' * 1000)
         jane = AutoTest(firstName='jane',
                         lastName='doe',
                         happy='N',
                         created=now(),
                         wannahavefun=True,
-                        longField='x'*1000)
+                        longField='x' * 1000)
         assert not john.wannahavefun
         assert jane.wannahavefun
-        assert john.longField == 'x'*1000
-        assert jane.longField == 'x'*1000
+        assert john.longField == 'x' * 1000
+        assert jane.longField == 'x' * 1000
         del classregistry.registry(
             AutoTest.sqlmeta.registry).classes['AutoTest']
 

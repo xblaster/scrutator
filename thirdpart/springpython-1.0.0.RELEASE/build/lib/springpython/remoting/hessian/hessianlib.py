@@ -84,7 +84,7 @@ class ProtocolError(Error):
 
     def __repr__(self):
 	return (
-	    "<ProtocolError for %s: %s %s>" %
+	    "<ProtocolError for %s: %s %s>" % 
 	    (self.url, self.code, self.message)
 	    )
 
@@ -105,7 +105,7 @@ class Fault(Error):
 # Boolean -- use the True or False constants
 #
 class Boolean:
-    def __init__(self, value = 0):
+    def __init__(self, value=0):
 	self.value = (value != 0)
 
     def _hessian_write(self, out):
@@ -132,11 +132,11 @@ True, False = Boolean(1), Boolean(0)
 # Date - wraps a time value in seconds
 #
 class Date:
-    def __init__(self, value = 0):
+    def __init__(self, value=0):
 	self.value = value
 
     def __repr__(self):
-	return ("<Date %s at %x>" %
+	return ("<Date %s at %x>" % 
                 (time.asctime(time.localtime(self.value)), id(self)))
 
     def _hessian_write(self, out):
@@ -377,7 +377,7 @@ class HessianParser:
 	code = self.read(1);
 	if code != 'l':
 	  self._peek = code
-	  return -1;
+	  return - 1;
 	len = unpack('>l', f.read(4))
 	return len
 

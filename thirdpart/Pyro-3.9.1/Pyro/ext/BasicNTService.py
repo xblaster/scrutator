@@ -91,8 +91,8 @@ class BasicNTService(win32serviceutil.ServiceFramework, object):
 		args = raw_input("Enter command line arguments for %s: " % cls._svc_name_)
 		try:
 			createRegistryParameters(cls._svc_name_, args.strip())
-		except Exception,x:
-			print "Error occured when setting command line args in the registry: ",x
+		except Exception, x:
+			print "Error occured when setting command line args in the registry: ", x
 		try:
 			cls._svc_description_
 		except LookupError:
@@ -114,7 +114,7 @@ class BasicNTService(win32serviceutil.ServiceFramework, object):
 			print "\nYou can configure the command line arguments in the Registry."
 			print "The key is: HKLM\\System\\CurrentControlSet\\Services\\%s" % cls._svc_name_
 			print "The value under that key is:  ", pyroArgsRegkeyName
-			args=getRegistryParameters(cls._svc_name_)
+			args = getRegistryParameters(cls._svc_name_)
 			if args:
 				print "(it is currently set to:  '%s')" % args
 			else:
@@ -128,10 +128,10 @@ pyroArgsRegkeyName = "PyroServiceArguments"
 
 
 def getRegistryParameters(servicename):
-	key=win32api.RegOpenKey(win32con.HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\"+servicename)
+	key = win32api.RegOpenKey(win32con.HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\" + servicename)
 	try:
 		try:
-			(commandLine, regtype) = win32api.RegQueryValueEx(key,pyroArgsRegkeyName)
+			(commandLine, regtype) = win32api.RegQueryValueEx(key, pyroArgsRegkeyName)
 			return commandLine
 		except:
 			pass
@@ -143,7 +143,7 @@ def getRegistryParameters(servicename):
 
 
 def createRegistryParameters(servicename, parameters):
-	newkey=win32api.RegOpenKeyEx(win32con.HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\"+servicename,0,win32con.KEY_ALL_ACCESS)
+	newkey = win32api.RegOpenKeyEx(win32con.HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\" + servicename, 0, win32con.KEY_ALL_ACCESS)
 	try:
 		win32api.RegSetValueEx(newkey, pyroArgsRegkeyName, 0, win32con.REG_SZ, parameters)
 	finally:

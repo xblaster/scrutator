@@ -31,43 +31,43 @@ def activate_action(action):
     print 'Action "%s" activated' % action.get_name()
 
 entries = (
-  ( "FileMenu", None, "_File" ),               # name, stock id, label
-  ( "PreferencesMenu", None, "_Preferences" ), # name, stock id, label
-  ( "ColorMenu", None, "_Color"  ),            # name, stock id, label
-  ( "ShapeMenu", None, "_Shape" ),             # name, stock id, label
-  ( "HelpMenu", None, "_Help" ),               # name, stock id, label
-  ( "New", gtk.STOCK_NEW,                      # name, stock id
-    "_New", "<control>N",                      # label, accelerator
-    "Create a new file",                       # tooltip
-    activate_action ),
-  ( "Open", gtk.STOCK_OPEN,                    # name, stock id
-    "_Open","<control>O",                      # label, accelerator
-    "Open a file",                             # tooltip
-    activate_action ),
-    ( "Import", gtk.STOCK_OPEN,                    # name, stock id
-    "_Import","<control>I",                      # label, accelerator
-    "Import a CSV",                             # tooltip
-    activate_action ),
-  ( "Save", gtk.STOCK_SAVE,                    # name, stock id
-    "_Save","<control>S",                      # label, accelerator
-    "Save current file",                       # tooltip
-    activate_action ),
-  ( "SaveAs", gtk.STOCK_SAVE,                  # name, stock id
-    "Save _As...", None,                       # label, accelerator
-    "Save to a file",                          # tooltip
-    activate_action ),
-  ( "Quit", gtk.STOCK_QUIT,                    # name, stock id
-    "_Quit", "<control>Q",                     # label, accelerator
-    "Quit",                                    # tooltip
-    activate_action ),
-  ( "About", None,                             # name, stock id
-    "_About", "<control>A",                    # label, accelerator
-    "About",                                   # tooltip
-    activate_action ),
-  ( "Logo", "demo-gtk-logo",                   # name, stock id
-     None, None,                               # label, accelerator
-    "GTK+",                                    # tooltip
-    activate_action ),
+  ("FileMenu", None, "_File"), # name, stock id, label
+  ("PreferencesMenu", None, "_Preferences"), # name, stock id, label
+  ("ColorMenu", None, "_Color"), # name, stock id, label
+  ("ShapeMenu", None, "_Shape"), # name, stock id, label
+  ("HelpMenu", None, "_Help"), # name, stock id, label
+  ("New", gtk.STOCK_NEW, # name, stock id
+    "_New", "<control>N", # label, accelerator
+    "Create a new file", # tooltip
+    activate_action),
+  ("Open", gtk.STOCK_OPEN, # name, stock id
+    "_Open", "<control>O", # label, accelerator
+    "Open a file", # tooltip
+    activate_action),
+    ("Import", gtk.STOCK_OPEN, # name, stock id
+    "_Import", "<control>I", # label, accelerator
+    "Import a CSV", # tooltip
+    activate_action),
+  ("Save", gtk.STOCK_SAVE, # name, stock id
+    "_Save", "<control>S", # label, accelerator
+    "Save current file", # tooltip
+    activate_action),
+  ("SaveAs", gtk.STOCK_SAVE, # name, stock id
+    "Save _As...", None, # label, accelerator
+    "Save to a file", # tooltip
+    activate_action),
+  ("Quit", gtk.STOCK_QUIT, # name, stock id
+    "_Quit", "<control>Q", # label, accelerator
+    "Quit", # tooltip
+    activate_action),
+  ("About", None, # name, stock id
+    "_About", "<control>A", # label, accelerator
+    "About", # tooltip
+    activate_action),
+  ("Logo", "demo-gtk-logo", # name, stock id
+     None, None, # label, accelerator
+    "GTK+", # tooltip
+    activate_action),
 )
 
 class MainWindow(gtk.Window):
@@ -75,12 +75,12 @@ class MainWindow(gtk.Window):
     def __init__(self, parent=None):
         gtk.Window.__init__(self)
         
-        self.set_default_size(640,480)
+        self.set_default_size(640, 480)
         
         try:
             self.set_screen(parent.get_screen())
         except AttributeError:
-            self.connect('destroy', lambda *w: gtk.main_quit())
+            self.connect('destroy', lambda * w: gtk.main_quit())
         self.set_title(self.__class__.__name__)
         self.set_border_width(0)
 
@@ -119,12 +119,12 @@ class MainWindow(gtk.Window):
     	gtk.main_quit()
     
     def getMainList(self):
-    	mainList = gtk.VBox(False,0)
+    	mainList = gtk.VBox(False, 0)
     	for i in range(100):
-    		v = gtk.HBox(False,0)
-    		v.pack_start(gtk.Label('plop'+str(i)),True,True)
-    		v.pack_start(gtk.Button('edit tags'),False, False)
-    		v.pack_start(gtk.Button('delete'),False, False)
+    		v = gtk.HBox(False, 0)
+    		v.pack_start(gtk.Label('plop' + str(i)), True, True)
+    		v.pack_start(gtk.Button('edit tags'), False, False)
+    		v.pack_start(gtk.Button('delete'), False, False)
     		
     		mainList.add(v)
     	return mainList

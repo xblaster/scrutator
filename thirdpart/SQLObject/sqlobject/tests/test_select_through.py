@@ -8,7 +8,7 @@ import py
 
 class SRThrough1(SQLObject):
     three = ForeignKey('SRThrough3')
-    twos  = SQLMultipleJoin('SRThrough2', joinColumn='oneID')
+    twos = SQLMultipleJoin('SRThrough2', joinColumn='oneID')
 
 class SRThrough2(SQLObject):
     one = ForeignKey('SRThrough1')
@@ -23,19 +23,19 @@ class SRThrough3(SQLObject):
 def setup_module(mod):
     setupClass([mod.SRThrough3, mod.SRThrough1, mod.SRThrough2])
     threes = inserts(mod.SRThrough3,
-                     [('a',),('b',),('c',)],
+                     [('a',), ('b',), ('c',)],
                      'name')
     ones = inserts(mod.SRThrough1,
-                     [(threes[0].id,),(threes[0].id,),(threes[2].id,)],
+                     [(threes[0].id,), (threes[0].id,), (threes[2].id,)],
                      'threeID')
     twos = inserts(mod.SRThrough2,
-                     [(ones[0].id,),(ones[1].id,),(ones[2].id,)],
+                     [(ones[0].id,), (ones[1].id,), (ones[2].id,)],
                      'oneID')
     twos[0].addThree(threes[0])
     twos[0].addThree(threes[1])
     mod.threes = threes
-    mod.twos   = twos
-    mod.ones   = ones
+    mod.twos = twos
+    mod.ones = ones
 
 def testBadRef():
     py.test.raises(AttributeError, 'threes[0].throughTo.four')
@@ -48,7 +48,7 @@ def testThroughMultipleJoin():
     
 def testThroughRelatedJoin():
     assert list(threes[0].twos.throughTo.threes) == [threes[0], threes[1]]
-    assert list(SRThrough3.select(SRThrough3.q.id==threes[0].id).throughTo.twos) == list(threes[0].twos)
+    assert list(SRThrough3.select(SRThrough3.q.id == threes[0].id).throughTo.twos) == list(threes[0].twos)
 
 def testThroughFKAndJoin():
     assert list(threes[0].ones.throughTo.three.throughTo.twos) == [twos[0]]

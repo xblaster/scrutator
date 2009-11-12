@@ -4,11 +4,11 @@ import Pyro.core
 Pyro.core.initClient()
 
 def sendMsg(obj):
-	message="Irmen de Jong is a space alien"
+	message = "Irmen de Jong is a space alien"
 	print
-	print 'Sending secret message ('+message+')...'
-	reply=obj.passSecretMessage(message)
-	print 'I got a secret reply: ',reply
+	print 'Sending secret message (' + message + ')...'
+	reply = obj.passSecretMessage(message)
+	print 'I got a secret reply: ', reply
 	print
 
 print "First, connect using the Name Server (PYRONAME://)"
@@ -16,7 +16,7 @@ test = Pyro.core.getProxyForURI("PYRONAME://:test.ssl")
 sendMsg(test)
 
 print "Next, connect without using the Name Server (PYROLOCSSL://)"
-host=raw_input("Enter the hostname where the SSL server is running: ")
-test = Pyro.core.getProxyForURI("PYROLOCSSL://"+host+"/ssl")
+host = raw_input("Enter the hostname where the SSL server is running: ")
+test = Pyro.core.getProxyForURI("PYROLOCSSL://" + host + "/ssl")
 sendMsg(test)
 

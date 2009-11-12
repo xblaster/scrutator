@@ -53,7 +53,7 @@ class DatabaseUserDetailsService(UserDetailsService):
         def map_row(self, row):
             return self.role_prefix + row[1]
     
-    def __init__(self, dataSource = None):
+    def __init__(self, dataSource=None):
         super(DatabaseUserDetailsService, self).__init__()
         self.users_by_username_query = self.DEF_USERS_BY_USERNAME_QUERY
         self.auth_by_username_query = self.DEF_AUTHORITIES_BY_USERNAME_QUERY

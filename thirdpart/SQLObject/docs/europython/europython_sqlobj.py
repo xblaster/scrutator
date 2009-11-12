@@ -57,7 +57,7 @@ class Person(SQLObject):
 		  Bullet("SQLObject will map TableName to table_name and columnName to column_name"),
 	      Bullet("In the above example, class Person becomes table person with columns first_name, middle_initial and last_name")),
 	Slide("Creating and Dropping Tables",
-		  Bullet("Use the createTable class method to create the table, and two optional keyword arguments",SubBullet(
+		  Bullet("Use the createTable class method to create the table, and two optional keyword arguments", SubBullet(
 	Bullet("ifNotExists: only try to create the table if it doesn't exist"),
 	Bullet("createJoinTables: will create the intermediate tables for many-to-many relationships"))),
 		  Bullet("Conversely, use dropTable, passing in optional ifExists and dropJoinTables keyword arguments")),

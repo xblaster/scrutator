@@ -7,17 +7,17 @@
 import sys
 import Pyro.naming
 import Pyro.core
-from Pyro.errors import PyroError,NamingError
+from Pyro.errors import PyroError, NamingError
 import banks
 
 group = ':banks1'   # the namespace group for all test servers
 
 # avoid network port trouble with the VSB bank server
-Pyro.config.PYRO_PORT=Pyro.config.PYRO_PORT+1
+Pyro.config.PYRO_PORT = Pyro.config.PYRO_PORT + 1
 
 # initialize the server and set the default namespace group
 Pyro.core.initServer()
-Pyro.config.PYRO_NS_DEFAULTGROUP=group
+Pyro.config.PYRO_NS_DEFAULTGROUP = group
 
 
 # locate the NS
@@ -43,12 +43,12 @@ except NamingError:
 	pass
 
 # use Delegation approach for object implementation
-obj1=Pyro.core.ObjBase()
+obj1 = Pyro.core.ObjBase()
 obj1.delegateTo(banks.Rabobank())
-daemon.connect(obj1,'Rabobank')
-obj2=Pyro.core.ObjBase()
+daemon.connect(obj1, 'Rabobank')
+obj2 = Pyro.core.ObjBase()
 obj2.delegateTo(banks.VSB())
-daemon.connect(obj2,'VSB')
+daemon.connect(obj2, 'VSB')
 
 # enter the service loop.
 print 'Banks are ready for customers.'

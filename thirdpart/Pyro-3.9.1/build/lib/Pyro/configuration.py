@@ -28,20 +28,20 @@ except ImportError:
 
 # Special characters are '$CURDIR' (current directory, absolute) and
 # $STORAGE which is replaced by the PYRO_STORAGE path.
-_defaults= {
-	'PYRO_STORAGE':			'$CURDIR',	# current dir (abs)
+_defaults = {
+	'PYRO_STORAGE':			'$CURDIR', 	# current dir (abs)
 	'PYRO_HOST':			'',
 	'PYRO_PUBLISHHOST':		None,
 	'PYRO_PORT':			7766,
 	'PYRO_PORT_RANGE':		100,
 	'PYRO_NS_HOSTNAME':		None,
-	'PYRO_NS_PORT':			9090,	# tcp
+	'PYRO_NS_PORT':			9090, 	# tcp
 	'PYRO_NS_BC_ADDR':		None,
-	'PYRO_NS_BC_PORT':		9090,	# udp
+	'PYRO_NS_BC_PORT':		9090, 	# udp
 	'PYRO_NS2_HOSTNAME':	None,
-	'PYRO_NS2_PORT':		9091,	# tcp
+	'PYRO_NS2_PORT':		9091, 	# tcp
 	'PYRO_NS2_BC_ADDR':		None,
-	'PYRO_NS2_BC_PORT':		9091,	# udp
+	'PYRO_NS2_BC_PORT':		9091, 	# udp
 	'PYRO_NS_URIFILE':		'$STORAGE/Pyro_NS_URI', # (abs)
 	'PYRO_NS_DEFAULTGROUP': ':Default',
 	'PYRO_BC_RETRIES':		1,
@@ -51,14 +51,14 @@ _defaults= {
 	'PYRO_GNOSIS_PARANOIA': 0,
 	'PYRO_TRACELEVEL':		0,
 	'PYRO_USER_TRACELEVEL':	0,
-	'PYRO_LOGFILE':			'$STORAGE/Pyro_log',		# (abs)
-	'PYRO_USER_LOGFILE':	'$STORAGE/Pyro_userlog',	# (abs)
+	'PYRO_LOGFILE':			'$STORAGE/Pyro_log', 		# (abs)
+	'PYRO_USER_LOGFILE':	'$STORAGE/Pyro_userlog', 	# (abs)
 	'PYRO_STDLOGGING':		0,
 	'PYRO_STDLOGGING_CFGFILE': 'logging.cfg',
 	'PYRO_MAXCONNECTIONS':	200,
 	'PYRO_TCP_LISTEN_BACKLOG':   200,
 	'PYRO_BROKEN_MSGWAITALL':   0,
-	'PYRO_MULTITHREADED':	1,							# assume 1
+	'PYRO_MULTITHREADED':	1, 							# assume 1
 	'PYRO_COMPRESSION':		0,
 	'PYRO_MOBILE_CODE':		0,
 	'PYRO_DNS_URI':			0,
@@ -68,7 +68,7 @@ _defaults= {
 	'PYRO_ES_BLOCKQUEUE':	1,
 	'PYRO_DETAILED_TRACEBACK': 0,
 	'PYRO_ONEWAY_THREADED': 1,
-	'PYROSSL_CERTDIR':		'$STORAGE/certs',			# (abs)
+	'PYROSSL_CERTDIR':		'$STORAGE/certs', 			# (abs)
 	'PYROSSL_CA_CERT':		'ca.pem',
 	'PYROSSL_SERVER_CERT':	'server.pem',
 	'PYROSSL_CLIENT_CERT':	'client.pem',
@@ -81,15 +81,15 @@ _defaults= {
 class Config:
 
 	def __init__(self):
-		_defaults['PYRO_MULTITHREADED']=Pyro.util2.supports_multithreading()
+		_defaults['PYRO_MULTITHREADED'] = Pyro.util2.supports_multithreading()
 		self.__dict__[Pyro.constants.CFGITEM_PYRO_INITIALIZED] = 0
 
 	def setup(self, configFile):
 		reader = ConfigReader(_defaults)
 		try:
 			reader.parse(configFile)
-		except EnvironmentError,x:
-			raise PyroError("Error reading config file: "+configFile+"; "+str(x));
+		except EnvironmentError, x:
+			raise PyroError("Error reading config file: " + configFile + "; " + str(x));
 		self.__dict__.update(reader.items)
 		if configFile:
 			self.__dict__['PYRO_CONFIG_FILE'] = os.path.abspath(configFile)
@@ -114,22 +114,22 @@ class Config:
 				os.mkdir(self.PYRO_STORAGE)
 			# see if we have permission there, in a thread-safe fashion.
 			if not os.path.isdir(self.PYRO_STORAGE):
-				raise IOError('PYRO_STORAGE is not a directory ['+self.PYRO_STORAGE+']')
+				raise IOError('PYRO_STORAGE is not a directory [' + self.PYRO_STORAGE + ']')
 				
 			try:
-				if os.name=='java':
+				if os.name == 'java':
 					# jython doesn't have suitable TemporaryFile implementation (lacks dir param)
-					javatestfile=os.path.join(self.PYRO_STORAGE,'_pyro_'+str(random.random())+".tmp")
-					f=open(javatestfile,"w")
+					javatestfile = os.path.join(self.PYRO_STORAGE, '_pyro_' + str(random.random()) + ".tmp")
+					f = open(javatestfile, "w")
 				else:
 					# use tempfile to safely create a unique temporary file even on multi-cpu nodes
-					f=tempfile.TemporaryFile(dir=self.PYRO_STORAGE, suffix='.tmp', prefix='_pyro_')
-			except Exception,x:
+					f = tempfile.TemporaryFile(dir=self.PYRO_STORAGE, suffix='.tmp', prefix='_pyro_')
+			except Exception, x:
 				print x
-				raise IOError('no write access to PYRO_STORAGE ['+self.PYRO_STORAGE+']')
+				raise IOError('no write access to PYRO_STORAGE [' + self.PYRO_STORAGE + ']')
 			else:
 				f.close()
-				if os.name=='java':
+				if os.name == 'java':
 					os.remove(javatestfile)
 
 #	def __getattr__(self,name):
@@ -139,24 +139,24 @@ class Config:
 
 class ConfigReader:
 	def __init__(self, defaults):
-		self.matcher=re.compile(r'^(\w+)\s*=\s*(\S*)')
-		self.items=defaults.copy()
+		self.matcher = re.compile(r'^(\w+)\s*=\s*(\S*)')
+		self.items = defaults.copy()
 
 	def _check(self, filename):
 		print "ConfigReader: checking file", filename
-		items=[]
+		items = []
 		for l in open(filename).readlines():
-			l=l.rstrip()
+			l = l.rstrip()
 			if not l or l.startswith('#'):  
 				continue     # skip empty line or comment
-			match=self.matcher.match(l)
+			match = self.matcher.match(l)
 			if match:
 				items.append(match.group(1))
-		allitems=self.items.keys()
+		allitems = self.items.keys()
 		allitems.sort()
 		for item in allitems:
 			if item not in items:
-				print "MISSING item: ",item
+				print "MISSING item: ", item
 			try:
 				items.remove(item)
 			except ValueError:
@@ -168,14 +168,14 @@ class ConfigReader:
 
 
 	def parse(self, filename):
-		linenum=0
+		linenum = 0
 		if filename:
 			for l in open(filename).readlines():
-				l=l.rstrip()
-				linenum=linenum+1
+				l = l.rstrip()
+				linenum = linenum + 1
 				if not l or l.startswith('#'):  
 					continue     # skip empty line or comment
-				match=self.matcher.match(l)
+				match = self.matcher.match(l)
 				if match:
 					if match.group(1) in _defaults.keys():
 						if match.group(2):
@@ -183,7 +183,7 @@ class ConfigReader:
 					else:
 						raise KeyError('Unknown config item in configfile (line %d): %s' % (linenum, match.group(1)))
 				else:
-					raise ValueError('Syntax error in config file, line '+str(linenum))
+					raise ValueError('Syntax error in config file, line ' + str(linenum))
 
 		# Parse the environment variables (they override the config file)
 		self.items.update(self.processEnv(_defaults.keys()))
@@ -194,16 +194,16 @@ class ConfigReader:
 		for i in self.items.keys():
 			newVal = self.treatSpecial(self.items[i])
 			if i in ('PYRO_STORAGE', 'PYRO_LOGFILE', 'PYRO_USER_LOGFILE', 'PYRO_NS_URIFILE'):
-				newVal=os.path.abspath(newVal)
+				newVal = os.path.abspath(newVal)
 			# fix the variable type if it's an integer or float
 			if type(_defaults[i]) == type(42):
 				newVal = int(newVal)
 			if type(_defaults[i]) == type(0.1):
 				newVal = float(newVal)
-			self.items[i]= newVal
+			self.items[i] = newVal
 
 	def processEnv(self, keys):
-		env={}
+		env = {}
 		for key in keys:
 			try: env[key] = os.environ[key]
 			except KeyError: pass
@@ -211,27 +211,27 @@ class ConfigReader:
 
 	def treatSpecial(self, value):
 		# treat special escape strings
-		if type(value)==type(""):
-			if value=='$CURDIR':
+		if type(value) == type(""):
+			if value == '$CURDIR':
 				return os.curdir
 			elif value.startswith('$STORAGE/'):
 				return os.path.join(self.items['PYRO_STORAGE'], value[9:])
 		return value
 
 # easy config diagnostic with python -m
-if __name__=="__main__":
-	print "Pyro version:",Pyro.constants.VERSION
-	r=ConfigReader(_defaults)
+if __name__ == "__main__":
+	print "Pyro version:", Pyro.constants.VERSION
+	r = ConfigReader(_defaults)
 	if os.path.exists("Pyro.conf"):
 		r._check("Pyro.conf")
-	x=Config()
+	x = Config()
 	if os.path.exists("Pyro.conf"):
 		x.setup("Pyro.conf")
 	else:
 		x.setup(None)
 	x.finalizeConfig_Server(1)
-	items=vars(x).items()
+	items = vars(x).items()
 	items.sort()
 	print "Active configuration settings:"
-	for item,value in items:
-		print item+"="+str(value)
+	for item, value in items:
+		print item + "=" + str(value)

@@ -33,5 +33,5 @@ try:
 except KeyError:
 	confFile = ''
 if not confFile and os.path.isfile('Pyro.conf'):
-	confFile='Pyro.conf'
+	confFile = 'Pyro.conf'
 config.setup(confFile)

@@ -515,7 +515,7 @@ class sqlmeta(object):
         meth = join.joinMethodName
 
         sqlmeta.joins.append(join)
-        index = len(sqlmeta.joins)-1
+        index = len(sqlmeta.joins) - 1
         if joinDef not in sqlmeta.joinDefinitions:
             sqlmeta.joinDefinitions.append(joinDef)
 
@@ -1298,10 +1298,10 @@ class SQLObject(object):
             value = (value,)
         if len(name) != len(value):
             raise ValueError, "'column' and 'value' tuples must be of the same size"
-        condition = sqlbuilder.AND(*[getattr(cls.q, n)==v for n,v in zip(name, value)])
+        condition = sqlbuilder.AND(*[getattr(cls.q, n) == v for n, v in zip(name, value)])
         return (connection or cls._connection)._SO_selectOneAlt(
             cls,
-            [cls.sqlmeta.idName] +
+            [cls.sqlmeta.idName] + 
             [column.dbName for column in cls.sqlmeta.columnList],
             condition), None
     _findAlternateID = classmethod(_findAlternateID)
@@ -1550,7 +1550,7 @@ class SQLObject(object):
                     # matching records on the related table
                     raise SQLObjectIntegrityError, (
                         "Tried to delete %s::%s but "
-                        "table %s has a restriction against it" %
+                        "table %s has a restriction against it" % 
                         (klass.__name__, self.id, k.__name__))
             else:
                 for row in results:

@@ -11,21 +11,21 @@ class TestEvents(unittest.TestCase):
 	
 	def testSimpleEvent(self):
 		s = SimpleEvent()
-		self.assertEqual( s.getType(), "scrutator.core.event.SimpleEvent")
+		self.assertEqual(s.getType(), "scrutator.core.event.SimpleEvent")
 		
 	def testInheritedEvent(self):
 		s = KickEvent()
-		self.assertEqual( s.getType(), "scrutator.core.event.KickEvent")
+		self.assertEqual(s.getType(), "scrutator.core.event.KickEvent")
 
 	
 	def testEventArgs(self):
 		s = self.getMockupEvent()
-		self.assertEqual(s.getArgEntry('channel'),"#funradio")
+		self.assertEqual(s.getArgEntry('channel'), "#funradio")
 		
-		s.setArgEntry('count',4)
-		self.assertEqual(s.getArgEntry('count'),4)
+		s.setArgEntry('count', 4)
+		self.assertEqual(s.getArgEntry('count'), 4)
 		
-		self.assertEqual(s.hasArgEntry('channel'),True)
+		self.assertEqual(s.hasArgEntry('channel'), True)
 		
 	def testEventSerializerEvent2Arr(self):
 		s = self.getMockupEvent()
@@ -52,7 +52,7 @@ class TestEvents(unittest.TestCase):
 	def testGetAttribute(self):
 		s = SimpleEvent(chan='prout')
 		
-		self.assertEqual('prout',s.chan)
+		self.assertEqual('prout', s.chan)
 		
 	def testWrongGetAttribute(self):
 		s = SimpleEvent(chan='prout')

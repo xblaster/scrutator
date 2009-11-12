@@ -20,30 +20,30 @@ class Subscriber(Pyro.core.CallbackObjBase):
 		Pyro.core.initClient()
 		daemon = Pyro.core.Daemon()
 		if esURI:
-			check=Pyro.core.PyroURI(esURI)
-			self.ES_uri=esURI
+			check = Pyro.core.PyroURI(esURI)
+			self.ES_uri = esURI
 		else:		
 			locator = Pyro.naming.NameServerLocator(identification=ident)
 			self.NS = locator.getNS(host=Pyro.config.PYRO_NS_HOSTNAME)
 			daemon.useNameServer(self.NS)
 			self.ES_uri = self.NS.resolve(Pyro.constants.EVENTSERVER_NAME)
 		daemon.connect(self)  #  will also set self.daemon...
-		self.ES_ident=ident
-		self.abortListen=0
-		self.daemon=daemon	# make sure daemon doesn't get garbage collected now
+		self.ES_ident = ident
+		self.abortListen = 0
+		self.daemon = daemon	# make sure daemon doesn't get garbage collected now
 
 	def getES(self):
 		# we get a fresh proxy to the ES because of threading issues.
 		# (proxies can not be reused across multiple threads)
-		eventservice=Pyro.core.getProxyForURI(self.ES_uri)
+		eventservice = Pyro.core.getProxyForURI(self.ES_uri)
 		eventservice._setIdentification(self.ES_ident)
 		return eventservice
 
-	def subscribe(self,subjects):
+	def subscribe(self, subjects):
 		# Subscribe to one or more subjects.
 		# It is safe to call this multiple times.
 		self.getES().subscribe(subjects, self.getProxy())
-	def subscribeMatch(self,subjectPatterns):
+	def subscribeMatch(self, subjectPatterns):
 		# Subscribe to one or more subjects (by pattern)
 		# It is safe to call this multiple times.
 		self.getES().subscribeMatch(subjectPatterns, self.getProxy())
@@ -52,10 +52,10 @@ class Subscriber(Pyro.core.CallbackObjBase):
 		self.getES().unsubscribe(subjects, self.getProxy())
 
 	def abort(self):
-		self.abortListen=1
+		self.abortListen = 1
 
 	def setThreading(self, threaded):
-		self.getDaemon().threaded=threaded
+		self.getDaemon().threaded = threaded
 
 	def listen(self):
 		self.getDaemon().requestLoop(lambda s=self: not s.abortListen)
@@ -68,8 +68,8 @@ class Publisher:
 	def __init__(self, ident=None, esURI=None):
 		Pyro.core.initClient()
 		if esURI:
-			check=Pyro.core.PyroURI(esURI)
-			self.ES_uri=esURI
+			check = Pyro.core.PyroURI(esURI)
+			self.ES_uri = esURI
 		else:
 			locator = Pyro.naming.NameServerLocator(identification=ident)
 			ns = locator.getNS(host=Pyro.config.PYRO_NS_HOSTNAME)
@@ -80,12 +80,12 @@ class Publisher:
 	def getES(self):
 		# we get a fresh proxy to the ES because of threading issues.
 		# (proxies can not be reused across multiple threads)
-		eventservice=Pyro.core.getProxyForURI(self.ES_uri)
+		eventservice = Pyro.core.getProxyForURI(self.ES_uri)
 		eventservice._setIdentification(self.ES_ident)
 		return eventservice
 
 	def publish(self, subjects, msg):
-		es=self.getES()
-		es.publish(subjects,msg)
+		es = self.getES()
+		es.publish(subjects, msg)
 		es._release()   # be very sure to release the socket
 

@@ -323,10 +323,10 @@ class DBAPI(DBConnection):
             sep = '->'
             s = repr(s)
         n = self._connectionNumbers[id(conn)]
-        spaces = ' '*(8-len(name))
+        spaces = ' ' * (8 - len(name))
         if self.debugThreading:
             threadName = threading.currentThread().getName()
-            threadName = (':' + threadName + ' '*(8-len(threadName)))
+            threadName = (':' + threadName + ' ' * (8 - len(threadName)))
         else:
             threadName = ''
         msg = '%(n)2i%(threadName)s/%(name)s%(spaces)s%(sep)s %(s)s' % locals()
@@ -389,7 +389,7 @@ class DBAPI(DBConnection):
         return self._runWithConnection(self._queryOne, s)
 
     def _insertSQL(self, table, names, values):
-        return ("INSERT INTO %s (%s) VALUES (%s)" %
+        return ("INSERT INTO %s (%s) VALUES (%s)" % 
                 (table, ', '.join(names),
                  ', '.join([self.sqlrepr(v) for v in values])))
 
@@ -421,7 +421,7 @@ class DBAPI(DBConnection):
         self.query(self._SO_createJoinTableSQL(join))
 
     def _SO_createJoinTableSQL(self, join):
-        return ('CREATE TABLE %s (\n%s %s,\n%s %s\n)' %
+        return ('CREATE TABLE %s (\n%s %s,\n%s %s\n)' % 
                 (join.intermediateTable,
                  join.joinColumn,
                  self.joinSQLType(join),
@@ -455,8 +455,8 @@ class DBAPI(DBConnection):
     def createSQL(self, soClass):
         tableCreateSQLs = getattr(soClass.sqlmeta, 'createSQL', None)
         if tableCreateSQLs:
-            assert isinstance(tableCreateSQLs,(str,list,dict,tuple)), (
-                '%s.sqlmeta.createSQL must be a str, list, dict or tuple.' %
+            assert isinstance(tableCreateSQLs, (str, list, dict, tuple)), (
+                '%s.sqlmeta.createSQL must be a str, list, dict or tuple.' % 
                 (soClass.__name__))
             if isinstance(tableCreateSQLs, dict):
                 tableCreateSQLs = tableCreateSQLs.get(soClass._connection.dbName, [])
@@ -464,15 +464,15 @@ class DBAPI(DBConnection):
                 tableCreateSQLs = [tableCreateSQLs]
             if isinstance(tableCreateSQLs, tuple):
                 tableCreateSQLs = list(tableCreateSQLs)
-            assert isinstance(tableCreateSQLs,list), (
-                'Unable to create a list from %s.sqlmeta.createSQL' %
+            assert isinstance(tableCreateSQLs, list), (
+                'Unable to create a list from %s.sqlmeta.createSQL' % 
                 (soClass.__name__))
         return tableCreateSQLs or []
 
     def createTableSQL(self, soClass):
         constraints = self.createReferenceConstraints(soClass)
         extraSQL = self.createSQL(soClass)
-        createSql = ('CREATE TABLE %s (\n%s\n)' %
+        createSql = ('CREATE TABLE %s (\n%s\n)' % 
                 (soClass.sqlmeta.table, self.createColumns(soClass)))
         return createSql, constraints + extraSQL
 
@@ -512,7 +512,7 @@ class DBAPI(DBConnection):
     # in the SQLObject class.
 
     def _SO_update(self, so, values):
-        self.query("UPDATE %s SET %s WHERE %s = (%s)" %
+        self.query("UPDATE %s SET %s WHERE %s = (%s)" % 
                    (so.sqlmeta.table,
                     ", ".join(["%s = (%s)" % (dbName, self.sqlrepr(value))
                                for dbName, value in values]),
@@ -520,7 +520,7 @@ class DBAPI(DBConnection):
                     self.sqlrepr(so.id)))
 
     def _SO_selectOne(self, so, columnNames):
-        return self._SO_selectOneAlt(so, columnNames, so.q.id==so.id)
+        return self._SO_selectOneAlt(so, columnNames, so.q.id == so.id)
 
 
     def _SO_selectOneAlt(self, so, columnNames, condition):
@@ -533,20 +533,20 @@ class DBAPI(DBConnection):
                                                             clause=condition)))
 
     def _SO_delete(self, so):
-        self.query("DELETE FROM %s WHERE %s = (%s)" %
+        self.query("DELETE FROM %s WHERE %s = (%s)" % 
                    (so.sqlmeta.table,
                     so.sqlmeta.idName,
                     self.sqlrepr(so.id)))
 
     def _SO_selectJoin(self, soClass, column, value):
-        return self.queryAll("SELECT %s FROM %s WHERE %s = (%s)" %
+        return self.queryAll("SELECT %s FROM %s WHERE %s = (%s)" % 
                              (soClass.sqlmeta.idName,
                               soClass.sqlmeta.table,
                               column,
                               self.sqlrepr(value)))
 
     def _SO_intermediateJoin(self, table, getColumn, joinColumn, value):
-        return self.queryAll("SELECT %s FROM %s WHERE %s = (%s)" %
+        return self.queryAll("SELECT %s FROM %s WHERE %s = (%s)" % 
                              (getColumn,
                               table,
                               joinColumn,
@@ -554,7 +554,7 @@ class DBAPI(DBConnection):
 
     def _SO_intermediateDelete(self, table, firstColumn, firstValue,
                                secondColumn, secondValue):
-        self.query("DELETE FROM %s WHERE %s = (%s) AND %s = (%s)" %
+        self.query("DELETE FROM %s WHERE %s = (%s) AND %s = (%s)" % 
                    (table,
                     firstColumn,
                     self.sqlrepr(firstValue),
@@ -563,7 +563,7 @@ class DBAPI(DBConnection):
 
     def _SO_intermediateInsert(self, table, firstColumn, firstValue,
                                secondColumn, secondValue):
-        self.query("INSERT INTO %s (%s, %s) VALUES (%s, %s)" %
+        self.query("INSERT INTO %s (%s, %s) VALUES (%s, %s)" % 
                    (table,
                     firstColumn,
                     secondColumn,
@@ -591,7 +591,7 @@ class DBAPI(DBConnection):
         if not data:
             return None
         return ' AND '.join(
-            ['%s %s %s' %
+            ['%s %s %s' % 
              (dbName, ops.get(value, "="), self.sqlrepr(value))
              for dbName, value
              in data.items()])

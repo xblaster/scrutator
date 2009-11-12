@@ -22,10 +22,10 @@ class TestUriHelper(unittest.TestCase):
 		
 	def testCommentDetection(self):
 		to_catch = "salut, j'ai trouvé une super url    => http://www.lo2k.net"
-		self.assertEqual("salut, j'ai trouvé une super url",url.get_comment(to_catch))
+		self.assertEqual("salut, j'ai trouvé une super url", url.get_comment(to_catch))
 		
 		to_catch = "salut, j'ai trouvé une super url <= http://www.lo2k.net"
-		self.assertEqual("salut, j'ai trouvé une super url",url.get_comment(to_catch))
+		self.assertEqual("salut, j'ai trouvé une super url", url.get_comment(to_catch))
 		
 		to_catch = "http://bashfr.org"
-		self.assertEqual(None,url.get_comment(to_catch))
+		self.assertEqual(None, url.get_comment(to_catch))

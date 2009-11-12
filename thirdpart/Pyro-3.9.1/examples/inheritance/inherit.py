@@ -13,13 +13,13 @@ class base2:
 	def meth3(self):
 		return 'base2.meth3'
 
-class sub(base1,base2):
+class sub(base1, base2):
 	def meth2(self):
 		return 'sub.meth2 (overridden)'
 	def meth4(self):
 		return 'sub.meth4'
 
-class Fsub(base1,base2,FTP):
+class Fsub(base1, base2, FTP):
 	def meth2(self):
 		return 'Fsub.meth2 (overridden)'
 	def meth4(self):

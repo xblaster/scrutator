@@ -29,7 +29,7 @@ class TestXMLBeanFactory(unittest.TestCase):
 		def fail_func():
 			self.fail("FAIL !!")
 		
-		d.addCallback(em.unbindAll,fail_func)
+		d.addCallback(em.unbindAll, fail_func)
 		
 		#self.fail("Need to reimplement")
 		#reactor.callLater(10, reactor.stop)

@@ -30,7 +30,7 @@ class ObjectDef(object):
     a handle for the actual ObjectFactory that should be used to utilize this information when
     creating an instance of a object.
     """
-    def __init__(self, id, props = None, factory = None, scope = scope.SINGLETON, lazy_init = False):
+    def __init__(self, id, props=None, factory=None, scope=scope.SINGLETON, lazy_init=False):
         super(ObjectDef, self).__init__()
         self.id = id
         self.factory = factory
@@ -98,7 +98,7 @@ class ValueDef(object):
         if value == "True":
             self.value = True
         elif value == "False":
-            self.value= False
+            self.value = False
         else:
             self.value = value
         self.logger = logging.getLogger("springpython.config.ValueDef")
@@ -532,7 +532,7 @@ class XMLConfig(Config):
                     s.add(self._convert_inner_object(element, id, "%s.set(%s)" % (name, len(s))))
                 elif element.localName in ["dict", "tuple", "set", "frozenset", "list"]:
                     self.logger.debug("This set has child elements of type %s." % element.localName)
-                    s.add(self._convert_value(element, id, "%s.set(%s)" % (name,len(s)))) 
+                    s.add(self._convert_value(element, id, "%s.set(%s)" % (name, len(s)))) 
                 else:
                     self.logger.debug("set: Don't know how to handle %s" % element.localName)
         return SetDef(name, s)
@@ -609,7 +609,7 @@ _pythonConfigMethods = [name for (name, method) in inspect.getmembers(PythonConf
 
 _object_context = {}
 
-def Object(theScope = scope.SINGLETON):
+def Object(theScope=scope.SINGLETON):
     """
     This function is a wrapper around the real decorator. It decides, based on scope
     and lazy-init, which decorator to return.

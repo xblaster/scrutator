@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys, os
 
-sys.path.insert(0,os.pardir)	# to find testserver.py
+sys.path.insert(0, os.pardir)	# to find testserver.py
 
 import testserver
 

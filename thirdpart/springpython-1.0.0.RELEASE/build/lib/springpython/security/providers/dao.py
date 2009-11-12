@@ -124,7 +124,7 @@ class AbstractUserDetailsAuthenticationProvider(AuthenticationProvider):
         return result
 
 class DaoAuthenticationProvider(AbstractUserDetailsAuthenticationProvider):
-    def __init__(self, user_details_service = None, password_encoder = PlaintextPasswordEncoder()):
+    def __init__(self, user_details_service=None, password_encoder=PlaintextPasswordEncoder()):
         super(DaoAuthenticationProvider, self).__init__()
         self.password_encoder = password_encoder
         self.salt_source = None
@@ -169,7 +169,7 @@ class SystemWideSaltSource(SaltSource):
     password will still have the same digested password. Of benefit is the digested passwords will at least be more protected than if stored without any salt.
     """
     
-    def __init__(self, system_wide_salt = ""):
+    def __init__(self, system_wide_salt=""):
         super(SystemWideSaltSource, self).__init__()
         self.system_wide_salt = system_wide_salt
         
@@ -185,7 +185,7 @@ class ReflectionSaltSource(SaltSource):
     Do not use username if it is likely to change.
     """
     
-    def __init__(self, user_prop_to_use = ""):
+    def __init__(self, user_prop_to_use=""):
         super(ReflectionSaltSource, self).__init__()
         self.user_prop_to_use = user_prop_to_use
         

@@ -5,7 +5,7 @@ class Filter(object):
 
 class AddArgFilter(Filter):
 
-	def __init__(self,arg, value):
+	def __init__(self, arg, value):
 		super(AddArgFilter, self).__init__()
 		self.arg = arg
 		self.value = value

@@ -20,11 +20,11 @@ import Pyro.util
 
 true, false = 1, 0
 
-verbose            = false
-pyro_daemon        = None
+verbose = false
+pyro_daemon = None
 client_initialized = false
 server_initialized = false
-daemon_objects     = []
+daemon_objects = []
 
 from Pyro.protocol import ProtocolError
 
@@ -42,7 +42,7 @@ def get_server_object(objectName, hostname , portnum):
         print 'Binding object %s' % objectName
 
     try:
-        URI = 'PYROLOC://%s:%d/%s' % (hostname,portnum,objectName)
+        URI = 'PYROLOC://%s:%d/%s' % (hostname, portnum, objectName)
         if verbose:
             print 'URI:', URI
 
@@ -51,7 +51,7 @@ def get_server_object(objectName, hostname , portnum):
     except Pyro.core.PyroError, x:
         raise Pyro.core.PyroError("Couldn't bind object, Pyro says:", x)
 
-def provide_server_object(obj, name = None, hostname = '', portnum = None):
+def provide_server_object(obj, name=None, hostname='', portnum=None):
     global server_initialized, pyro_daemon
     proxy_class = Pyro.core.DynamicProxyWithAttrs
 
@@ -60,7 +60,7 @@ def provide_server_object(obj, name = None, hostname = '', portnum = None):
         server_initialized = true
 
     if pyro_daemon is None:
-        pyro_daemon = Pyro.core.Daemon(host = hostname, port = portnum)
+        pyro_daemon = Pyro.core.Daemon(host=hostname, port=portnum)
 
 
     if not isinstance(obj, Pyro.core.ObjBase):
@@ -83,11 +83,11 @@ def interrupt(*args):
 	global abort
 	abort = true
 
-if hasattr(signal,'SIGINT'): signal.signal(signal.SIGINT, interrupt)
+if hasattr(signal, 'SIGINT'): signal.signal(signal.SIGINT, interrupt)
 #if hasattr(signal,'SIGHUP'): signal.signal(signal.SIGHUP, interrupt)
 #if hasattr(signal,'SIGQUIT'): signal.signal(signal.SIGQUIT, interrupt)
 
-def handle_requests(wait_time = None, callback = None):
+def handle_requests(wait_time=None, callback=None):
     global abort
     
     abort = false

@@ -32,7 +32,7 @@ class SCRTServices(xmlrpc.XMLRPC):
 		for obj in obj_list:
 			res = es.array2event(obj)
 			#print "RES "+str(res)
-			res.setArgEntry('source',source)
+			res.setArgEntry('source', source)
 			self.manager.push(res)
 			#threads.deferToThread(self.manager.push, res)
 			#threads.deferToThread(True)
@@ -44,7 +44,7 @@ class SCRTServices(xmlrpc.XMLRPC):
 		"""Pull event to a destination"""
 		return self.pull(source)
 	
-	def pull(self,source):
+	def pull(self, source):
 		result = list()
 		es = EventSerializer()
 		for msg in self.getMessageBoxManager().popMessagesFor(source):
@@ -56,7 +56,7 @@ def printValue(value):
 	pass
 
 def printError(value):
-	print "ERROR !!! "+str(value)
+	print "ERROR !!! " + str(value)
 	#pass
 
 """class SoapClient:
@@ -108,7 +108,7 @@ class XMLRPCClient:
 	
 	def handleError(self, error):
 		#need to rework that
-		print "ERROR !!! "+str(error)
+		print "ERROR !!! " + str(error)
 	
 	def preprocessResult(self, result):
 		
@@ -117,14 +117,14 @@ class XMLRPCClient:
 			if self.retryPullTimer < self.maxPullTimer:
 				self.retryPullTimer = self.maxPullTimer
 		else:
-			self.retryPullTimer = self.retryPullTimer/1.5
+			self.retryPullTimer = self.retryPullTimer / 1.5
 		
 		reactor.callLater(self.retryPullTimer, self.pull)
 		
 		return result
 	
 	def pull(self):
-		log.msg('pull '+ str(self.serviceuri))
+		log.msg('pull ' + str(self.serviceuri))
 		d = self.xmlrpc_connect.callRemote('pull', self.source).addCallback(self.preprocessResult)
 		d.addCallbacks(self.reinject, self.handleError)
 		
@@ -137,9 +137,9 @@ class XMLRPCClient:
 		send_list.append(res)
 		
 		#reduce retry when you push
-		self.retryPullTimer = self.retryPullTimer/1.5
+		self.retryPullTimer = self.retryPullTimer / 1.5
 		
-		return self.xmlrpc_connect.callRemote('push',send_list, self.source).addCallbacks(self.reinject, self.handleError)
+		return self.xmlrpc_connect.callRemote('push', send_list, self.source).addCallbacks(self.reinject, self.handleError)
 		#self.xmlrpc_connect.callRemote(send_list).addCallbacks(printValue, printError)
 		#threads.deferToThread(self.xmlrpc_connect.push(send_list))
 

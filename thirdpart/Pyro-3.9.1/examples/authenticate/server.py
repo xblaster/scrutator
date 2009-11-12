@@ -2,13 +2,13 @@
 import sys
 import Pyro.naming
 import Pyro.core
-from Pyro.errors import PyroError,NamingError
+from Pyro.errors import PyroError, NamingError
 
 class testobject(Pyro.core.ObjBase):
 	def __init__(self):
 		Pyro.core.ObjBase.__init__(self)
-	def method(self,arg):
-		print 'Method called with',arg
+	def method(self, arg):
+		print 'Method called with', arg
 		return 'An interesting result'
 
 
@@ -30,7 +30,7 @@ daemon.useNameServer(ns)
 daemon.setAllowedIdentifications(['s3cr3t'])
 
 # connect new instance, but using persistent mode
-daemon.connectPersistent(testobject(),':test.authentication')
+daemon.connectPersistent(testobject(), ':test.authentication')
 
 # enter the service loop.
 print 'Server started.'

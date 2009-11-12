@@ -15,7 +15,7 @@ class PhoneCall(SQLObject):
 class ViewPhoneCall(ViewSQLObject):
     class sqlmeta:
         idName = PhoneCall.q.id
-        clause = PhoneCall.q.phoneNumberID==PhoneNumber.q.id
+        clause = PhoneCall.q.phoneNumberID == PhoneNumber.q.id
     
     minutes = IntCol(dbName=PhoneCall.q.minutes)
     number = StringCol(dbName=PhoneNumber.q.number)
@@ -25,7 +25,7 @@ class ViewPhoneCall(ViewSQLObject):
 class ViewPhone(ViewSQLObject):
     class sqlmeta:
         idName = PhoneNumber.q.id
-        clause = PhoneCall.q.phoneNumberID==PhoneNumber.q.id
+        clause = PhoneCall.q.phoneNumberID == PhoneNumber.q.id
     
     minutes = IntCol(dbName=func.SUM(PhoneCall.q.minutes))
     numberOfCalls = IntCol(dbName=func.COUNT(PhoneCall.q.phoneNumberID))
@@ -43,7 +43,7 @@ class ViewPhoneMore(ViewSQLObject):
     number = StringCol(dbName=ViewPhone.q.number)
     timesCalled = IntCol(dbName=func.COUNT(PhoneCall.q.toID))
     timesCalledLong = IntCol(dbName=func.COUNT(PhoneCall.q.toID))
-    timesCalledLong.aggregateClause = PhoneCall.q.minutes>10
+    timesCalledLong.aggregateClause = PhoneCall.q.minutes > 10
     minutesCalled = IntCol(dbName=func.SUM(PhoneCall.q.minutes))
 
 class ViewPhoneMore2(ViewPhoneMore):
@@ -52,10 +52,10 @@ class ViewPhoneMore2(ViewPhoneMore):
     
 
 class ViewPhoneInnerAggregate(ViewPhone):
-    twiceMinutes = IntCol(dbName=func.SUM(PhoneCall.q.minutes)*2)
+    twiceMinutes = IntCol(dbName=func.SUM(PhoneCall.q.minutes) * 2)
 
 def setup_module(mod):
-    setupClass([mod.PhoneNumber,mod.PhoneCall])
+    setupClass([mod.PhoneNumber, mod.PhoneCall])
     mod.ViewPhoneCall._connection = mod.PhoneNumber._connection
     mod.ViewPhone._connection = mod.PhoneNumber._connection
     mod.ViewPhoneMore._connection = mod.PhoneNumber._connection
@@ -106,7 +106,7 @@ def testGetVPM():
     checkAttr(ViewPhoneMore, phones[0].id, 'number', phones[0].number)
     checkAttr(ViewPhoneMore, phones[0].id, 'minutesCalled', phones[0].incoming.sum(PhoneCall.q.minutes))
     checkAttr(ViewPhoneMore, phones[0].id, 'timesCalled', phones[0].incoming.count())
-    checkAttr(ViewPhoneMore, phones[0].id, 'timesCalledLong', phones[0].incoming.filter(PhoneCall.q.minutes>10).count())
+    checkAttr(ViewPhoneMore, phones[0].id, 'timesCalledLong', phones[0].incoming.filter(PhoneCall.q.minutes > 10).count())
 
 def testJoinView():
     p = ViewPhone.get(phones[0].id)
@@ -115,7 +115,7 @@ def testJoinView():
     assert p.vCalls[0] == ViewPhoneCall.get(calls[0].id)
 
 def testInnerAggregate():
-    checkAttr(ViewPhoneInnerAggregate, phones[0].id, 'twiceMinutes', phones[0].calls.sum(PhoneCall.q.minutes)*2)
+    checkAttr(ViewPhoneInnerAggregate, phones[0].id, 'twiceMinutes', phones[0].calls.sum(PhoneCall.q.minutes) * 2)
 
 def testSelect():
     s = ViewPhone.select()
@@ -124,7 +124,7 @@ def testSelect():
     assert s.count() == len(calls)
     
 def testSelect2():
-    s = ViewPhone.select(ViewPhone.q.number==phones[0].number)
+    s = ViewPhone.select(ViewPhone.q.number == phones[0].number)
     assert s.getOne().phoneNumber == phones[0]
     
 def testDistinctCount():

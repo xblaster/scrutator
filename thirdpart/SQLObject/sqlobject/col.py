@@ -290,7 +290,7 @@ class SOCol(object):
     def _sqlType(self):
         if self.customSQLType is None:
             raise ValueError, ("Col %s (%s) cannot be used for automatic "
-                               "schema creation (too abstract)" %
+                               "schema creation (too abstract)" % 
                                (self.name, self.__class__))
         else:
             return self.customSQLType
@@ -368,7 +368,7 @@ class SOCol(object):
 
     def __set__(self, obj, value):
         if self.immutable:
-            raise AttributeError("The column %s.%s is immutable" %
+            raise AttributeError("The column %s.%s is immutable" % 
                                  (obj.__class__.__name__,
                                   self.name))
         obj.sqlmeta.setColumn(self, value)
@@ -792,7 +792,7 @@ class SOForeignKey(SOKeyCol):
         constraint = ('CONSTRAINT %(colName)s_exists '
                       #'FOREIGN KEY(%(colName)s) '
                       'REFERENCES %(tName)s(%(idName)s) '
-                      '%(action)s' %
+                      '%(action)s' % 
                       {'tName': tName,
                        'colName': self.dbName,
                        'idName': idName,
@@ -821,7 +821,7 @@ class SOForeignKey(SOKeyCol):
         constraint = ('ALTER TABLE %(sTName)s ADD CONSTRAINT %(colName)s_exists '
                       'FOREIGN KEY (%(colName)s) '
                       'REFERENCES %(tName)s (%(idName)s) '
-                      '%(action)s' %
+                      '%(action)s' % 
                       {'tName': tName,
                        'colName': self.dbName,
                        'idName': idName,
@@ -846,7 +846,7 @@ class SOForeignKey(SOKeyCol):
         constraint = ('ALTER TABLE %(sTName)s ADD CONSTRAINT %(sTName)s_%(colName)s_exists '
                       'FOREIGN KEY (%(colName)s) '
                       'REFERENCES %(tName)s (%(idName)s) '
-                      '%(action)s' %
+                      '%(action)s' % 
                       {'tName': tName,
                        'colName': self.dbName,
                        'idName': idName,
@@ -862,7 +862,7 @@ class SOForeignKey(SOKeyCol):
         other = findClass(self.foreignKey, self.soClass.sqlmeta.registry)
         tName = other.sqlmeta.table
         idName = other.sqlmeta.idName
-        reference = ('REFERENCES %(tName)s(%(idName)s) ' %
+        reference = ('REFERENCES %(tName)s(%(idName)s) ' % 
                      {'tName':tName,
                       'idName':idName})
         sql = ' '.join([sql, reference])
@@ -877,7 +877,7 @@ class SOForeignKey(SOKeyCol):
         other = findClass(self.foreignKey, self.soClass.sqlmeta.registry)
         tName = other.sqlmeta.table
         idName = other.sqlmeta.idName
-        reference = ('REFERENCES %(tName)s(%(idName)s) ' %
+        reference = ('REFERENCES %(tName)s(%(idName)s) ' % 
                      {'tName':tName,
                       'idName':idName})
         sql = ' '.join([sql, reference])
@@ -893,9 +893,9 @@ class SOForeignKey(SOKeyCol):
         #I assume that foreign key name is identical to the id of the reference table
         sql = ' '.join([fidName, self._maxdbType()])
         tName = other.sqlmeta.table
-        idName  = other.sqlmeta.idName
-        sql=sql + ',' + '\n'
-        sql=sql + 'FOREIGN KEY (%s) REFERENCES %s(%s)'%(fidName,tName,idName)
+        idName = other.sqlmeta.idName
+        sql = sql + ',' + '\n'
+        sql = sql + 'FOREIGN KEY (%s) REFERENCES %s(%s)' % (fidName, tName, idName)
         return sql
 
     def maxdbCreateReferenceConstraint(self):
@@ -936,8 +936,8 @@ class SOEnumCol(SOCol):
         return [consts.isString, consts.InList(self.enumValues)]
 
     def createValidators(self):
-        return [EnumValidator(name = self.name, enumValues = self.enumValues,
-                              notNone = self.notNone)] + \
+        return [EnumValidator(name=self.name, enumValues=self.enumValues,
+                              notNone=self.notNone)] + \
             super(SOEnumCol, self).createValidators()
 
     def _mysqlType(self):
@@ -1013,7 +1013,7 @@ class SOSetCol(SOCol):
         return [consts.isString, consts.InList(self.setValues)]
 
     def createValidators(self):
-        return [SetValidator(name = self.name, setValues = self.setValues)] + \
+        return [SetValidator(name=self.name, setValues=self.setValues)] + \
             super(SOSetCol, self).createValidators()
 
     def _mysqlType(self):
@@ -1212,7 +1212,7 @@ class TimeValidator(DateTimeValidator):
         if isinstance(value, datetime.timedelta):
             if value.days:
                 raise validators.Invalid(
-                    "the value for the TimeCol '%s' must has days=0, it has days=%d" %
+                    "the value for the TimeCol '%s' must has days=0, it has days=%d" % 
                         (self.name, value.days), value, state)
             return datetime.time(*time.gmtime(value.seconds)[3:6])
         value = super(TimeValidator, self).to_python(value, state)
@@ -1307,7 +1307,7 @@ class DecimalValidator(validators.Validator):
             try:
                 return Decimal(value)
             except:
-                raise validators.Invalid("can not parse Decimal value '%s' in the DecimalCol from '%s'" %
+                raise validators.Invalid("can not parse Decimal value '%s' in the DecimalCol from '%s'" % 
                     (value, getattr(state, 'soObject', '(unknown)')), value, state)
         if not isinstance(value, (int, long, Decimal, sqlbuilder.SQLExpression)):
             raise validators.Invalid("expected a decimal in the DecimalCol '%s', got %s %r instead" % \
@@ -1442,11 +1442,11 @@ class SOBLOBCol(SOStringCol):
     def _mysqlType(self):
         length = self.length
         varchar = self.varchar
-        if length >= 2**24:
+        if length >= 2 ** 24:
             return varchar and "LONGTEXT" or "LONGBLOB"
-        if length >= 2**16:
+        if length >= 2 ** 16:
             return varchar and "MEDIUMTEXT" or "MEDIUMBLOB"
-        if length >= 2**8:
+        if length >= 2 ** 8:
             return varchar and "TEXT" or "BLOB"
         return varchar and "TINYTEXT" or "TINYBLOB"
 
@@ -1503,9 +1503,9 @@ class SOPickleCol(SOBLOBCol):
 
     def _mysqlType(self):
         length = self.length
-        if length >= 2**24:
+        if length >= 2 ** 24:
             return "LONGBLOB"
-        if length >= 2**16:
+        if length >= 2 ** 16:
             return "MEDIUMBLOB"
         return "BLOB"
 

@@ -71,10 +71,10 @@ def test_none():
     assert sqlrepr(None) == "NULL"
 
 def test_list():
-    assert sqlrepr(['one','two','three'], 'postgres') == "('one', 'two', 'three')"
+    assert sqlrepr(['one', 'two', 'three'], 'postgres') == "('one', 'two', 'three')"
 
 def test_tuple():
-    assert sqlrepr(('one','two','three'), 'postgres') == "('one', 'two', 'three')"
+    assert sqlrepr(('one', 'two', 'three'), 'postgres') == "('one', 'two', 'three')"
 
 def test_bool():
     assert sqlrepr(True, 'postgres') == "'t'"

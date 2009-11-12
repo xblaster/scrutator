@@ -7,7 +7,7 @@ from Pyro.errors import *
 from threading import Thread
 import bouncer
 
-abort=0
+abort = 0
 
 def PyroLoop(daemon):
 	global abort
@@ -30,18 +30,18 @@ def main():
 	server = NS.resolve(':test.bouncer').getProxy()
 
 	# create a thread that handles callback requests
-	thread=Thread(target=PyroLoop, args=(daemon,))
+	thread = Thread(target=PyroLoop, args=(daemon,))
 	thread.start()
 
 	print 'Calling server from main (a single call)...'
 	result = server.process(["hello"], bounceObj.getProxy())
-	print 'Result=',result
+	print 'Result=', result
 
-	abort=1
+	abort = 1
 	thread.join()
 	print 'Exiting.'
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
 	main()
 

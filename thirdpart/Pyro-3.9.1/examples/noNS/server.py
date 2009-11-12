@@ -13,8 +13,8 @@ class QuoteGen(Pyro.core.ObjBase):
 		Pyro.core.ObjBase.__init__(self)
 	def quote(self):
 		try:
-			quote=os.popen('fortune').read()
-			if len(quote)>0:
+			quote = os.popen('fortune').read()
+			if len(quote) > 0:
 				return quote
 			return "This system cannot provide you a good fortune, install it"	
 		except:		
@@ -26,18 +26,18 @@ Pyro.core.initServer()
 
 daemon = Pyro.core.Daemon()
 print
-print 'The Pyro Deamon is running on ',daemon.hostname+':'+str(daemon.port)
+print 'The Pyro Deamon is running on ', daemon.hostname + ':' + str(daemon.port)
 print '(you may need this info for the client to connect to)'
 print
 
-objectName='QuoteGenerator'
+objectName = 'QuoteGenerator'
 
-uri=daemon.connect(QuoteGen(),objectName)
+uri = daemon.connect(QuoteGen(), objectName)
 
 # enter the service loop.
 print 'QuoteGen is ready for customers. I am not using the Name Server.'
-print 'Object name is:',objectName
-print 'The URI is: ',uri
+print 'Object name is:', objectName
+print 'The URI is: ', uri
 
 daemon.requestLoop()
 

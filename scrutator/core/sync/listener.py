@@ -40,10 +40,10 @@ class FileContentListener(scrutator.core.listener.SimpleListener):
 		#create uploaded file
 		import os
 		try:
-			os.makedirs(self.upload_dir+directory)
+			os.makedirs(self.upload_dir + directory)
 		except:
 			pass
 		
-		f = open(self.upload_dir+eventObj.filename,'w+')
+		f = open(self.upload_dir + eventObj.filename, 'w+')
 		f.write(eventObj.content)
 		f.close()

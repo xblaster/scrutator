@@ -46,7 +46,7 @@ class InterceptorStatusToken(object):
     AbstractSecurityInterceptor.after_invocation(InterceptorStatusToken, Object) can tidy up correctly.
     """
     
-    def __init__(self, authentication = None, attr = None, secure_obj = None):
+    def __init__(self, authentication=None, attr=None, secure_obj=None):
         self.authentication = authentication
         self.attr = attr
         self.secure_obj = secure_obj
@@ -84,7 +84,7 @@ class AbstractSecurityInterceptor(object):
           subclass will then return that result or exception to the original caller.
     """
     
-    def __init__(self, auth_manager = None, access_decision_mgr = None, obj_def_source = None):
+    def __init__(self, auth_manager=None, access_decision_mgr=None, obj_def_source=None):
         self.auth_manager = auth_manager
         self.access_decision_mgr = access_decision_mgr
         self.obj_def_source = obj_def_source

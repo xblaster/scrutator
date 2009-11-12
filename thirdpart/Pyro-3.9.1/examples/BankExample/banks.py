@@ -4,26 +4,26 @@ class BankError(Exception): pass
 # Unrestricted account.
 class Account:
 	def __init__(s):
-		s._balance=0.0
+		s._balance = 0.0
 	def withdraw(s, amount):
-		s._balance=s._balance-amount
-	def deposit(s,amount):
-		s._balance=s._balance+amount
+		s._balance = s._balance - amount
+	def deposit(s, amount):
+		s._balance = s._balance + amount
 	def balance(s):
 		return s._balance
 
 # Restricted withdrawal account.
 class RestrictedAccount(Account):
 	def withdraw(s, amount):
-		if amount<=s._balance:
-			s._balance=s._balance-amount
+		if amount <= s._balance:
+			s._balance = s._balance - amount
 		else:
 			raise BankError('insufficent balance')
 
 # Abstract bank.
 class Bank:
 	def __init__(s):
-		s.accounts={}
+		s.accounts = {}
 	def name(s):
 		pass # must override this!
 	def createAccount(s, name):
@@ -59,18 +59,18 @@ class Bank:
 class Rabobank(Bank):
 	def name(s):
 		return 'Rabobank'
-	def createAccount(s,name):
+	def createAccount(s, name):
 		if s.accounts.has_key(name):
 			raise BankError('Account already exists')
-		s.accounts[name]=Account()
+		s.accounts[name] = Account()
 
 
 # Special bank: VSB. It has restricted accounts.
 class VSB(Bank):
 	def name(s):
 		return 'VSB bank'
-	def createAccount(s,name):
+	def createAccount(s, name):
 		if s.accounts.has_key(name):
 			raise BankError('Account already exists')
-		s.accounts[name]=RestrictedAccount()
+		s.accounts[name] = RestrictedAccount()
 

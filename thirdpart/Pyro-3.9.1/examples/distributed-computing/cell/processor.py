@@ -1,9 +1,9 @@
 import Pyro.core
 import Pyro.naming
 import Pyro.errors
-import sys,os
+import sys, os
 
-Pyro.config.PYRO_MOBILE_CODE=1		# Enable mobile code (for the tasks)
+Pyro.config.PYRO_MOBILE_CODE = 1		# Enable mobile code (for the tasks)
 
 
 #
@@ -20,25 +20,25 @@ Pyro.config.PYRO_MOBILE_CODE=1		# Enable mobile code (for the tasks)
 class Cell(Pyro.core.ObjBase):
     def __init__(self):
         Pyro.core.ObjBase.__init__(self)
-        self.finished=False
-    def receivetask(self,task):
-        self.finished=False
-        self.task=task
-        print "received task: "+str(task)
+        self.finished = False
+    def receivetask(self, task):
+        self.finished = False
+        self.task = task
+        print "received task: " + str(task)
     def process(self):  
         print "running task..."
         self.task.run()
         print "task finished."
-        self.finished=True
+        self.finished = True
     def abort(self):
         print "ABORT!"
-        self.task.abort=True
+        self.task.abort = True
  
 #
 # Initialize the environment
 #   
 Pyro.core.initServer()
-ns=Pyro.naming.NameServerLocator().getNS()
+ns = Pyro.naming.NameServerLocator().getNS()
 try:
     ns.createGroup(":Distributed")
 except Pyro.errors.NamingError:
@@ -47,7 +47,7 @@ try:
     ns.createGroup(":Distributed.Cells")
 except Pyro.errors.NamingError:
     pass
-daemon=Pyro.core.Daemon()
+daemon = Pyro.core.Daemon()
 daemon.useNameServer(ns)
 Pyro.config.PYRO_NS_DEFAULTGROUP = ":Distributed.Cells"
 
@@ -58,13 +58,13 @@ Pyro.config.PYRO_NS_DEFAULTGROUP = ":Distributed.Cells"
 # The dispatcher looks in the Pyro namespace to find
 # us and the other available cells.
 #
-i=1
+i = 1
 object = Cell()
 while True:
     try:
-        name="processor%d" % i
-        uri=daemon.connect( object ,name)
-        print "Connected",ns.fullName(name)
+        name = "processor%d" % i
+        uri = daemon.connect(object , name)
+        print "Connected", ns.fullName(name)
         print "Cell ready."
         try:
             daemon.requestLoop()
@@ -76,5 +76,5 @@ while True:
             except Pyro.errors.NamingError:
                 pass
             break
-    except Pyro.errors.NamingError,x:
-        i+=1
+    except Pyro.errors.NamingError, x:
+        i += 1

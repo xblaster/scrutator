@@ -103,7 +103,7 @@ class SecurityInterceptorFilter(AbstractSecurityInterceptor, cherrypy.Tool):
     """
     SPRINGPYTHON_FILTER_SECURITY_INTERCEPTOR_KEY = "SPRINGPYTHON_FILTER_SECURITY_INTERCEPTOR_KEY"
 
-    def __init__(self, authenticationManager = None, accessDecisionManager = None, objectDefinitionSource = None):
+    def __init__(self, authenticationManager=None, accessDecisionManager=None, objectDefinitionSource=None):
         AbstractSecurityInterceptor.__init__(self, authenticationManager, accessDecisionManager, objectDefinitionSource)
         cherrypy.Tool.__init__(self, "'before_handler'", self._do_before)
         self.objectDefinitionSource = objectDefinitionSource

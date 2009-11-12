@@ -8,7 +8,7 @@ class TestMockupException(Exception):
 
 class ListenerMockup(SimpleListener):
 	"""docstring for EventMockup"""
-	def __init__(self, arg = []):
+	def __init__(self, arg=[]):
 		self.arg = arg
 	def action(self, obj, evtMgr):
 		raise TestMockupException("ACTION !!!")
@@ -17,7 +17,7 @@ class ListenerMockup(SimpleListener):
 class TestEventManager(unittest.TestCase):
 	def setUp(self):
 		self.manager = EventManager()
-		self.listenermock  = ListenerMockup()
+		self.listenermock = ListenerMockup()
 		
 	def testSimpleBindAndUnbind(self):
 		self.manager.bind('all', self.listenermock)
@@ -37,7 +37,7 @@ class TestEventManager(unittest.TestCase):
 		
 	def testGatePush(self):
 		self.manager = EventManager()
-		self.listenermock  = ListenerMockup()
+		self.listenermock = ListenerMockup()
 		
 		initialManager = EventManager()
 		gate = GateListener(self.manager)
@@ -59,7 +59,7 @@ class TestEventManager(unittest.TestCase):
 		
 	def testDispatcherPush(self):
 		self.manager = EventManager()
-		self.listenermock  = ListenerMockup()
+		self.listenermock = ListenerMockup()
 
 		initialManager = EventManager()
 		dispatcher = DispatcherListener()
@@ -140,7 +140,7 @@ class TestMessageBoxManager(unittest.TestCase):
 		
 class TestCoreManager(unittest.TestCase):
 	def testSingleton(self):
-		self.assertEquals(id(CoreManager()),id(CoreManager()))
+		self.assertEquals(id(CoreManager()), id(CoreManager()))
 
 class TestXml(unittest.TestCase):
 	def testLoad(self):

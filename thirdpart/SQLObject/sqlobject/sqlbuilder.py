@@ -279,7 +279,7 @@ class SQLPrefix(SQLExpression):
         if prefix == "+":
             return expr
         elif prefix == "-":
-            return -expr
+            return - expr
         elif prefix.upper() == "NOT":
             return not expr
 
@@ -398,7 +398,7 @@ class SQLObjectTable(Table):
                 return self._getattrFromUnicodeColumn(column, attr)
             else:
                 return self._getattrFromColumn(column, attr)
-        elif attr+'ID' in [k for (k, v) in self.soClass.sqlmeta.columns.items() if v.foreignKey]:
+        elif attr + 'ID' in [k for (k, v) in self.soClass.sqlmeta.columns.items() if v.foreignKey]:
             attr += 'ID'
             column = self.soClass.sqlmeta.columns[attr]
             return self._getattrFromColumn(column, attr)
@@ -417,8 +417,8 @@ class SQLObjectTable(Table):
 class SQLObjectTableWithJoins(SQLObjectTable):
 
     def __getattr__(self, attr):
-        if attr+'ID' in [k for (k,v) in self.soClass.sqlmeta.columns.items() if v.foreignKey]:
-            column = self.soClass.sqlmeta.columns[attr+'ID']
+        if attr + 'ID' in [k for (k, v) in self.soClass.sqlmeta.columns.items() if v.foreignKey]:
+            column = self.soClass.sqlmeta.columns[attr + 'ID']
             return self._getattrFromForeignKey(column, attr)
         elif attr in [x.joinMethodName for x in self.soClass.sqlmeta.joins]:
             join = [x for x in self.soClass.sqlmeta.joins if x.joinMethodName == attr][0]
@@ -427,8 +427,8 @@ class SQLObjectTableWithJoins(SQLObjectTable):
             return SQLObjectTable.__getattr__(self, attr)
 
     def _getattrFromForeignKey(self, column, attr):
-        ret =  getattr(self, column.name) == \
-              getattr(self.soClass, '_SO_class_'+column.foreignKey).q.id
+        ret = getattr(self, column.name) == \
+              getattr(self.soClass, '_SO_class_' + column.foreignKey).q.id
         return ret
 
     def _getattrFromJoin(self, join, attr):
@@ -436,7 +436,7 @@ class SQLObjectTableWithJoins(SQLObjectTable):
             return AND(join.otherClass.q.id == Field(join.intermediateTable, join.otherColumn),
                             Field(join.intermediateTable, join.joinColumn) == self.soClass.q.id)
         else:
-            return getattr(join.otherClass.q, join.joinColumn)==self.soClass.q.id
+            return getattr(join.otherClass.q, join.joinColumn) == self.soClass.q.id
 
 class TableSpace:
     TableClass = Table
@@ -482,7 +482,7 @@ class AliasTable(Table):
     def __init__(self, table, alias=None):
         if hasattr(table, "sqlmeta"):
             tableName = SQLConstant(table.sqlmeta.table)
-        elif isinstance(table, (Select,Union)):
+        elif isinstance(table, (Select, Union)):
             assert alias is not None, "Alias name cannot be constructed from Select instances, please provide 'alias' kw."
             tableName = Subquery('', table)
             table = None
@@ -562,7 +562,7 @@ class Select(SQLExpression):
         self.ops['having'] = having
         self.ops['orderBy'] = orderBy
         self.ops['limit'] = limit
-        self.ops['join']  = join
+        self.ops['join'] = join
         self.ops['lazyColumns'] = lazyColumns
         self.ops['distinct'] = distinct
         self.ops['distinctOn'] = distinctOn
@@ -1242,7 +1242,7 @@ class ImportProxy(SQLExpression):
         self.sqlmeta = _Delay_proxy(table=_DelayClass(self, clsName))
         self.q = self
         self.soClass = None
-        classregistry.registry(registry).addClassCallback(clsName,lambda foreign, me: setattr(me, 'soClass', foreign), self)
+        classregistry.registry(registry).addClassCallback(clsName, lambda foreign, me: setattr(me, 'soClass', foreign), self)
 
     def __nonzero__(self):
         return True

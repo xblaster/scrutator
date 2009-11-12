@@ -2,7 +2,7 @@
 import Pyro.naming
 import Pyro.core
 import chain
-from Pyro.errors import PyroError,NamingError
+from Pyro.errors import PyroError, NamingError
 
 Pyro.core.initServer()
 
@@ -14,12 +14,12 @@ except NamingError:
     pass
 daemon.useNameServer(ns)
 
-objName='B'
-nextName='C'
+objName = 'B'
+nextName = 'C'
 
-daemon.connect(chain.Chain(objName,nextName),':test.chain_'+objName)
+daemon.connect(chain.Chain(objName, nextName), ':test.chain_' + objName)
 
 # enter the service loop.
-print 'Server started obj',objName
+print 'Server started obj', objName
 daemon.requestLoop()
 

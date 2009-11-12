@@ -52,7 +52,7 @@ class MSSQLConnection(DBAPI):
             self.make_conn_str = lambda keys:  \
                    ["", keys.user, keys.password, keys.host, keys.db]
 
-        self.autoCommit=int(autoCommit)
+        self.autoCommit = int(autoCommit)
         self.host = host
         self.db = db
         self.user = user
@@ -80,7 +80,7 @@ class MSSQLConnection(DBAPI):
         return c.fetchone()[0]
 
     def makeConnection(self):
-        con = self.dbconnection( *self.make_conn_str(self) )
+        con = self.dbconnection(*self.make_conn_str(self))
         cur = con.cursor()
         cur.execute('SET ANSI_NULLS ON')
         cur.execute("SELECT CAST('12345.21' AS DECIMAL(10, 2))")
@@ -117,7 +117,7 @@ class MSSQLConnection(DBAPI):
             values = [id] + values
         elif has_identity and idName in names:
             try:
-                i = names.index( idName )
+                i = names.index(idName)
                 if i:
                     del names[i]
                     del values[i]
@@ -170,7 +170,7 @@ class MSSQLConnection(DBAPI):
     def joinSQLType(self, join):
         return 'INT NOT NULL'
 
-    SHOW_TABLES="SELECT name FROM sysobjects WHERE type='U'"
+    SHOW_TABLES = "SELECT name FROM sysobjects WHERE type='U'"
     def tableExists(self, tableName):
         for (table,) in self.queryAll(self.SHOW_TABLES):
             if table.lower() == tableName.lower():
@@ -178,7 +178,7 @@ class MSSQLConnection(DBAPI):
         return False
 
     def addColumn(self, tableName, column):
-        self.query('ALTER TABLE %s ADD %s' %
+        self.query('ALTER TABLE %s ADD %s' % 
                    (tableName,
                     column.mssqlCreateSQL(self)))
 

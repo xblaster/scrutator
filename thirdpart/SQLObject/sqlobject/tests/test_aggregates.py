@@ -28,11 +28,11 @@ def test_integer():
 
 
 def floatcmp(f1, f2):
-    if abs(f1-f2) < 0.1:
+    if abs(f1 - f2) < 0.1:
         return 0
     if f1 < f2:
         return 1
-    return -1
+    return - 1
 
 def test_float():
     setupClass(FloatAccumulator)

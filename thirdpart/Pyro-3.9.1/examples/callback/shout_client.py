@@ -10,14 +10,14 @@ class Listener(Pyro.core.ObjBase):
 	def __init__(self):
 		Pyro.core.ObjBase.__init__(self)
 	def callback(self, message):
-		print 'GOT CALLBACK: ',message
+		print 'GOT CALLBACK: ', message
 
 
-abort=0
+abort = 0
 
 def shouter(objectURI):
 	global abort
-	object=objectURI.getProxy()  # we get our own proxy object because we're running in our own thread.
+	object = objectURI.getProxy()  # we get our own proxy object because we're running in our own thread.
 	print 'Shouter thread is running.'
 	while not abort:
 		print 'Shouting something'
@@ -34,13 +34,13 @@ def main():
 	locator = Pyro.naming.NameServerLocator()
 	NS = locator.getNS()
 	daemon.useNameServer(NS)
-	listener=Listener()
+	listener = Listener()
 	daemon.connect(listener)
-	serverURI=NS.resolve(':test.callback')
+	serverURI = NS.resolve(':test.callback')
 	server = serverURI.getProxy()
 	server.register(listener.getProxy())
 
-	thread=Thread(target=shouter, args=(serverURI,))
+	thread = Thread(target=shouter, args=(serverURI,))
 	thread.start()
 
 	while not abort:
@@ -48,10 +48,10 @@ def main():
 		try:
 			daemon.handleRequests()
 		except KeyboardInterrupt:
-			abort=1
+			abort = 1
 			thread.join()
 	print 'Exiting.'		
 
-if __name__=='__main__':
+if __name__ == '__main__':
 	main()
 

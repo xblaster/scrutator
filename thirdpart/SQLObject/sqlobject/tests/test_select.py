@@ -56,7 +56,7 @@ def test_04_indexed_ended_by_exception():
     try:
         while 1:
             test = all[count]
-            count = count+1
+            count = count + 1
             # Stop the test if it's gone on too long
             if count > len(names):
                 break
@@ -82,7 +82,7 @@ def test_select_getOne():
     a = IterTest(name='a')
     b = IterTest(name='b')
     assert IterTest.selectBy(name='a').getOne() == a
-    assert IterTest.select(IterTest.q.name=='b').getOne() == b
+    assert IterTest.select(IterTest.q.name == 'b').getOne() == b
     assert IterTest.selectBy(name='c').getOne(None) is None
     raises(SQLObjectNotFound, 'IterTest.selectBy(name="c").getOne()')
     b2 = IterTest(name='b')
@@ -123,11 +123,11 @@ class TestSelect:
         assert func([c.n1 for c in counters]) == value
 
     def test_1(self):
-        self.accumulateEqual(sum,Counter2.select(orderBy='n1'),
+        self.accumulateEqual(sum, Counter2.select(orderBy='n1'),
                              sum(range(10)) * 10)
 
     def test_2(self):
-        self.accumulateEqual(len,Counter2.select('all'), 100)
+        self.accumulateEqual(len, Counter2.select('all'), 100)
 
 def test_select_LIKE():
     setupClass(IterTest)

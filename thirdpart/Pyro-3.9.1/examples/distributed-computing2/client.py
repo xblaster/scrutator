@@ -22,21 +22,21 @@ def main():
 	dispatcher = Pyro.core.getProxyForURI("PYRONAME://:Distributed2.dispatcher")
 	print "placing work items into dispatcher queue."
 	for i in range(NUMBER_OF_ITEMS):
-		number=random.randint(3211, 5000)*random.randint(177,3000)*37
+		number = random.randint(3211, 5000) * random.randint(177, 3000) * 37
 		numbers[number] = None
-		item = Workitem(i+1, number)
+		item = Workitem(i + 1, number)
 		dispatcher.putWork(item)
 	print "getting results from dispatcher queue."
-	resultCount=0
-	while resultCount<NUMBER_OF_ITEMS:
+	resultCount = 0
+	while resultCount < NUMBER_OF_ITEMS:
 		try:
 			item = dispatcher.getResult()
 			processResult(item)
-			resultCount+=1
+			resultCount += 1
 		except Queue.Empty:
-			print "No results available yet. Work queue size:",dispatcher.workQueueSize()
+			print "No results available yet. Work queue size:", dispatcher.workQueueSize()
 	
-	if dispatcher.resultQueueSize()>0:
+	if dispatcher.resultQueueSize() > 0:
 		print "removing leftover results from the dispatcher"
 		while True:
 			try:
@@ -47,7 +47,7 @@ def main():
 
 	print "\nComputed Prime Factorials follow:"
 	for (number, factorials) in numbers.items():
-		print number,"-->",factorials
+		print number, "-->", factorials
 
-if __name__=="__main__":
+if __name__ == "__main__":
 	main()

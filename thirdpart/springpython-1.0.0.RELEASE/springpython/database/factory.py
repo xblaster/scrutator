@@ -54,7 +54,7 @@ class ConnectionFactory(object):
         return re.sub(pattern="\?", repl="%s", string=sql_query)
 
 class MySQLConnectionFactory(ConnectionFactory):
-    def __init__(self, username = None, password = None, hostname = None, db = None):
+    def __init__(self, username=None, password=None, hostname=None, db=None):
         ConnectionFactory.__init__(self, [types.TupleType])
         self.username = username
         self.password = password
@@ -73,7 +73,7 @@ class MySQLConnectionFactory(ConnectionFactory):
         return types.LongType
 
 class PgdbConnectionFactory(ConnectionFactory):
-    def __init__(self, user = None, password = None, host = None, database = None):
+    def __init__(self, user=None, password=None, host=None, database=None):
         ConnectionFactory.__init__(self, [types.TupleType])
         self.user = user
         self.password = password
@@ -92,7 +92,7 @@ class PgdbConnectionFactory(ConnectionFactory):
         return types.LongType
 
 class Sqlite3ConnectionFactory(ConnectionFactory):
-    def __init__(self, db = None):
+    def __init__(self, db=None):
         ConnectionFactory.__init__(self, [types.TupleType])
         self.db = db
         self.using_sqlite3 = True
@@ -122,7 +122,7 @@ class Sqlite3ConnectionFactory(ConnectionFactory):
             return re.sub(pattern="\?", repl="%s", string=sql_query)
 
 class cxoraConnectionFactory(ConnectionFactory):
-    def __init__(self, username = None, password = None, hostname = None, db = None):
+    def __init__(self, username=None, password=None, hostname=None, db=None):
         ConnectionFactory.__init__(self, [types.DictType])
         self.username = username
         self.password = password

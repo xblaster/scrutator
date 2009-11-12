@@ -118,7 +118,7 @@ class ConnectionFactoryTransactionManager(PlatformTransactionManager):
             pass
 
 class TransactionDefinition(object):
-    def __init__(self, isolation = None, name = None, propagation = None, timeout = None, read_only = None):
+    def __init__(self, isolation=None, name=None, propagation=None, timeout=None, read_only=None):
         self.isolation = isolation
         self.name = name
         self.propagation = propagation
@@ -126,7 +126,7 @@ class TransactionDefinition(object):
         self.read_only = read_only
 
 class DefaultTransactionDefinition(TransactionDefinition):
-    def __init__(self, isolation = "ISOLATION_DEFAULT", name = "", propagation = "PROPAGATION_REQUIRED", timeout = "TIMEOUT_DEFAULT", read_only = False):
+    def __init__(self, isolation="ISOLATION_DEFAULT", name="", propagation="PROPAGATION_REQUIRED", timeout="TIMEOUT_DEFAULT", read_only=False):
         TransactionDefinition.__init__(self, isolation, name, propagation, timeout, read_only)
 
 class TransactionTemplate(DefaultTransactionDefinition):
@@ -224,7 +224,7 @@ class TransactionProxyFactoryObject(ProxyFactoryObject):
         self.logger = logging.getLogger("springpython.database.transaction.TransactionProxyFactoryObject")
         ProxyFactoryObject.__init__(self, target, TransactionalInterceptor(tx_manager, tx_attributes))
 
-def transactional(tx_attributes = None):
+def transactional(tx_attributes=None):
     """
     This decorator is actually a utility function that returns an embedded decorator, in order
     to handle whether it was called in any of the following ways:

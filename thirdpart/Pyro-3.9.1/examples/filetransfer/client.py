@@ -14,7 +14,7 @@
 #
 
 import Pyro.core
-import sys,time
+import sys, time
 
 class FileClient:
 	def __init__(self):
@@ -27,14 +27,14 @@ class FileClient:
 	def cli(self):
 		while True:
 			self.menu()
-			cmd=raw_input("?>")
-			if cmd=="ls":
+			cmd = raw_input("?>")
+			if cmd == "ls":
 				self.ls()
 			elif cmd.startswith("r "):
 				self.retrieveAtOnce(cmd[2:])
 			elif cmd.startswith("c "):
 				self.retrieveChunks(cmd[2:])
-			elif cmd=="q":
+			elif cmd == "q":
 				return
 			else:
 				print "invalid command"
@@ -46,49 +46,49 @@ class FileClient:
 		for f in files:
 			print f
 
-	def retrieveAtOnce(self,file):
-		print "Retrieving",file,"..."
-		starttime=time.time()
+	def retrieveAtOnce(self, file):
+		print "Retrieving", file, "..."
+		starttime = time.time()
 		try:
-			data=self.fileserver.retrieveAtOnce(file)
-		except IOError,x:
-			print "error: ",x
+			data = self.fileserver.retrieveAtOnce(file)
+		except IOError, x:
+			print "error: ", x
 		else:
-			duration=time.time()-starttime
-			print len(data),"bytes received in",int(duration),"seconds =",int(len(data)/duration/1024.0),"kb/sec"
-			open(file,"wb").write(data)
-			print "saved to",file
+			duration = time.time() - starttime
+			print len(data), "bytes received in", int(duration), "seconds =", int(len(data) / duration / 1024.0), "kb/sec"
+			open(file, "wb").write(data)
+			print "saved to", file
 			
-	def retrieveChunks(self,file):
-		print "Retrieving",file,"..."
-		starttime=time.time()
+	def retrieveChunks(self, file):
+		print "Retrieving", file, "..."
+		starttime = time.time()
 		try:
 			size = self.fileserver.openFile(file)
-		except IOError,x:
-			print "error: ",x
+		except IOError, x:
+			print "error: ", x
 		else:
-			print "Filesize=",size
-			total=0
-			file=open(file,"wb")
+			print "Filesize=", size
+			total = 0
+			file = open(file, "wb")
 			while True:
-				chunk=self.fileserver.retrieveNextChunk()
+				chunk = self.fileserver.retrieveNextChunk()
 				sys.stdout.write(".")
 				sys.stdout.flush()
 				if chunk:
 					file.write(chunk)
-					total+=len(chunk)
+					total += len(chunk)
 				else:
 					break
 			self.fileserver.closeFile()
 			file.close()
-			duration=time.time()-starttime
-			print total,"bytes received in",int(duration),"seconds =",int(total/duration/1024.0),"kb/sec"
+			duration = time.time() - starttime
+			print total, "bytes received in", int(duration), "seconds =", int(total / duration / 1024.0), "kb/sec"
 		
 
 def main(args):
 	Pyro.core.initClient()
-	client=FileClient()
+	client = FileClient()
 	client.cli()
 
-if __name__=="__main__":
+if __name__ == "__main__":
 	main(sys.argv)

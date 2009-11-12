@@ -10,7 +10,7 @@ class EventSerializer(object):
 	def event2array(self, obj):
 		if not isinstance(obj, SimpleEvent):
 			raise scrutator.core.exception.BadTypeException("Not a SimpleEvent")
-		return dict(type = obj.getType(), arg = obj.getArg())
+		return dict(type=obj.getType(), arg=obj.getArg())
 		
 	def array2event(self, refDict):
 		if not refDict.has_key('type'):
@@ -31,7 +31,7 @@ class SimpleEvent(object):
 
 	def getType(self):
 		"""return the type of the object (containing module name and class name)"""
-		return self.__class__.__module__+'.'+self.__class__.__name__
+		return self.__class__.__module__ + '.' + self.__class__.__name__
 		
 	def getArg(self):
 		return self.arg
@@ -39,7 +39,7 @@ class SimpleEvent(object):
 	def getArgs(self):
 		return self.getArg()
 		
-	def setArg(self,argDict):
+	def setArg(self, argDict):
 		self.arg = argDict
 	
 	def getArgEntry(self, entry):
@@ -52,21 +52,21 @@ class SimpleEvent(object):
 		return self.arg.has_key(argname)
 
 	def getString(self):
-	    str_res = self.__class__.__module__+'.'+self.__class__.__name__+': {'
+	    str_res = self.__class__.__module__ + '.' + self.__class__.__name__ + ': {'
 	    keys = list()
 	    for k in self.getArgs():
-	      keys.append(str(k)+' => '+str(self.getArgEntry(k)))
-	    str_res += ", ".join(keys)+"}"
+	      keys.append(str(k) + ' => ' + str(self.getArgEntry(k)))
+	    str_res += ", ".join(keys) + "}"
 	    return str_res
 	
-	def __getattribute__(self,name):
+	def __getattribute__(self, name):
 		try:
 			return super(SimpleEvent, self).__getattribute__(name)
 		except AttributeError:
 			pass
 		if self.hasArgEntry(name):
 			return self.getArgEntry(name)
-		raise EventAttributeError(name+' does not appear to be an attribute of '+str(self)+' event')
+		raise EventAttributeError(name + ' does not appear to be an attribute of ' + str(self) + ' event')
 
 class DelayedEvent(SimpleEvent):
 	delay = 1

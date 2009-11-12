@@ -22,8 +22,8 @@ Usage (from the commandline):
 
 """
 
-__author__   = "Jan Finell"
-__date__     = "$Date: 2009/03/27 14:30:29 $"
+__author__ = "Jan Finell"
+__date__ = "$Date: 2009/03/27 14:30:29 $"
 __revision__ = "$Revision: 1.10.2.6 $"
 
 #
@@ -41,14 +41,14 @@ import wx
 # Pyro modules
 #
 from Pyro.naming import NameServerLocator
-from Pyro.errors import NamingError, ConnectionClosedError,\
+from Pyro.errors import NamingError, ConnectionClosedError, \
                         ConnectionDeniedError
 import Pyro.core
 
 #----------------------------------------------------------------------#
 # Module constants
 DEFAULT_GROUPNAME = ':Default'
-PROTECTED_GROUPS  = [DEFAULT_GROUPNAME, ':Pyro']
+PROTECTED_GROUPS = [DEFAULT_GROUPNAME, ':Pyro']
 
 GROUP_XPM = [
 "16 16 9 1",
@@ -78,7 +78,7 @@ GROUP_XPM = [
 "         ++#+$++",
 "           ++++ "]
 
-GROUP_OPEN_XPM =[
+GROUP_OPEN_XPM = [
 "16 16 12 1",
 "       c None",
 ".      c #FFFFFF",
@@ -180,15 +180,15 @@ class wx_NSC(wx.Frame):
          - `bcAddr`: override for the broadcast address.
       """
       wx.Frame.__init__(self, None, -1, 'Pyro Name Server')
-      self.nsHost           = nsHost
-      self.nsPort           = nsPort
-      self.bcAddr           = bcAddr
-      self.NS               = None
+      self.nsHost = nsHost
+      self.nsPort = nsPort
+      self.bcAddr = bcAddr
+      self.NS = None
 
       self._build()
-      imageList = wx.ImageList(16,16)
+      imageList = wx.ImageList(16, 16)
       self.__idGroup = imageList.Add(wx.BitmapFromXPMData(GROUP_XPM))
-      self.__idItem  = imageList.Add(wx.BitmapFromXPMData(ITEM_XPM))
+      self.__idItem = imageList.Add(wx.BitmapFromXPMData(ITEM_XPM))
       self.__idGroupOpen = imageList.Add(wx.BitmapFromXPMData(GROUP_OPEN_XPM))
       self.treeCtrlItems.SetImageList(imageList)
       self.__imageList = imageList
@@ -197,7 +197,7 @@ class wx_NSC(wx.Frame):
       # binding stdout to my own txtCtrl Log.
       sys.stdout = self.txtCtrlLog
       
-      self._log("Pyro version: "+Pyro.constants.VERSION)
+      self._log("Pyro version: " + Pyro.constants.VERSION)
       
       self.nsc_findNS()
       if self.NS: self.update()
@@ -231,7 +231,7 @@ class wx_NSC(wx.Frame):
    def _populate_tree(self, tree, parent, group):
       subgroupsL = self.nsc_list_groups(group)
       subgroupsL.sort()
-      itemsL     = self.nsc_list_items(group)
+      itemsL = self.nsc_list_items(group)
       itemsL.sort()
       for subgroup in subgroupsL:
          groupB = tree.AppendItem(parent, subgroup)
@@ -259,24 +259,24 @@ class wx_NSC(wx.Frame):
             self.NS = locator.getNS(self.nsHost, self.nsPort, trace=1, bcaddr=self.bcAddr)
          else:
             self._log('broadcasting to find Name Server')
-            self.NS = locator.getNS(None, None, trace = 1, bcaddr=self.bcAddr) 
+            self.NS = locator.getNS(None, None, trace=1, bcaddr=self.bcAddr) 
             self.nsHost = self.NS.URI.address
             self.nsPort = self.NS.URI.port
          self.NS._setIdentification(ident)
          self._log('Name Server found, URI = %s' % self.NS.URI)
          self._setNSData()
       except ConnectionDeniedError, e:
-         if str(e).find( Pyro.constants.deniedReasons[Pyro.constants.DENIED_SECURITY] ) != -1:
+         if str(e).find(Pyro.constants.deniedReasons[Pyro.constants.DENIED_SECURITY]) != -1:
             msg = 'Authentication required:'
             dlg = wx.TextEntryDialog(self, msg, 'Authentication',
-                                    style=wx.OK|wx.CANCEL|wx.TE_PASSWORD)
+                                    style=wx.OK | wx.CANCEL | wx.TE_PASSWORD)
             dlg.CentreOnParent()
             if dlg.ShowModal() == wx.ID_OK:
                ident = dlg.GetValue()
                self.nsc_findNS(ident)
             else:
                self.NS = None
-               self._log('Connection to Name Server denied!','error')
+               self._log('Connection to Name Server denied!', 'error')
          else:
             self.NS = None
             self._logError('Unable to connect to Name Server')
@@ -309,7 +309,7 @@ class wx_NSC(wx.Frame):
          for name, t in self.NS.list(ingroup):
             if t == type:
                if type == 1:                  
-                  uri  = self.NS.resolve('%s.%s' % (ingroup,name))
+                  uri = self.NS.resolve('%s.%s' % (ingroup, name))
                   name = '%s (%s)' % (name, uri)
                elif ingroup != ':':
                   name = '%s.%s' % (ingroup, name)
@@ -396,7 +396,7 @@ class wx_NSC(wx.Frame):
       """
       try:
          self.NS.setMeta(name, meta)
-         self._log('set user meta data on '+name)
+         self._log('set user meta data on ' + name)
          return 1
       except NamingError, e:
          self._logError('unable to set user meta data,\nName Server error: %s' % e)
@@ -441,7 +441,7 @@ class wx_NSC(wx.Frame):
             parentGroupI = tree.GetItemParent(items[0])
             parentGroupName = tree.GetItemText(parentGroupI)
       else:
-         parentGroupI    = tree.GetRootItem()
+         parentGroupI = tree.GetRootItem()
          parentGroupName = ':'
       msg = 'Create group in "%s", with name:' % parentGroupName
       dlg = wx.TextEntryDialog(self, msg, 'Enter group name')
@@ -465,16 +465,16 @@ class wx_NSC(wx.Frame):
       """
       tree = self.treeCtrlItems
       itemsL, groupsL = self._getSelections()
-      namesL  = itemsL + groupsL
+      namesL = itemsL + groupsL
       if namesL:     
          namesS = ',\n '.join(namesL)
          msg = 'User meta data string for:\n %s' % namesS
          dlg = wx.TextEntryDialog(self, msg, 'Enter meta data')
          dlg.CentreOnParent()
          if dlg.ShowModal() == wx.ID_OK:
-            meta=dlg.GetValue()
+            meta = dlg.GetValue()
             for name in namesL:
-               self.nsc_set_meta(name,meta)
+               self.nsc_set_meta(name, meta)
       
    def OnDelete(self, ev=None):
       """
@@ -482,23 +482,23 @@ class wx_NSC(wx.Frame):
       """
       tree = self.treeCtrlItems
       itemsL = tree.GetSelections()
-      namesL  = []
+      namesL = []
       deleteL = []
       for i in itemsL:
          # only items (ie. no groups)
          if tree.GetPyData(i) == 1:
             parent = tree.GetItemParent(i)
             parentName = tree.GetItemText(parent)
-            name   = tree.GetItemText(i).split()[0] #only name
+            name = tree.GetItemText(i).split()[0] #only name
             namesL.append('%s.%s' % (parentName, name))
             deleteL.append(i)
       if namesL:     
          namesS = ',\n '.join(namesL)
          ret = show_message_dialog(self,
                          'Really delete following name(s)?:\n %s' % namesS,
-                         '-- Confirm --', wx.YES|wx.NO|wx.ICON_QUESTION)
+                         '-- Confirm --', wx.YES | wx.NO | wx.ICON_QUESTION)
          if ret == wx.ID_YES:
-            for name, i in zip(namesL,deleteL):
+            for name, i in zip(namesL, deleteL):
                if self.nsc_delete(name):
                   tree.Delete(i)
                   
@@ -508,20 +508,20 @@ class wx_NSC(wx.Frame):
       """
       tree = self.treeCtrlItems
       itemsL = tree.GetSelections()
-      namesL  = []
+      namesL = []
       deleteL = []
       for i in itemsL:
           # only groups (ie. no items)
           if tree.GetPyData(i) == 0:             
-             name   = tree.GetItemText(i)
-             if name not in PROTECTED_GROUPS and tree.GetChildrenCount(i)==0:
+             name = tree.GetItemText(i)
+             if name not in PROTECTED_GROUPS and tree.GetChildrenCount(i) == 0:
                 namesL.append(name)
                 deleteL.append(i)
       if namesL:
          namesS = ',\n'.join(namesL)
          ret = show_message_dialog(self,
                            'Really delete following group(s)?:\n %s' % namesS,
-                           '-- Confirm --', wx.YES|wx.NO|wx.ICON_QUESTION)
+                           '-- Confirm --', wx.YES | wx.NO | wx.ICON_QUESTION)
          if ret == wx.ID_YES:
             for name, i in zip(namesL, deleteL):
                if self.nsc_delete_group(name):
@@ -561,11 +561,11 @@ class wx_NSC(wx.Frame):
             parentGroupI = tree.GetItemParent(items[0])
             parentGroupName = tree.GetItemText(parentGroupI)
       else:
-         parentGroupI    = tree.GetRootItem()
+         parentGroupI = tree.GetRootItem()
          parentGroupName = ':'
          
       msg = 'Register new item in "%s", with:\n <name> <URI>' % parentGroupName
-      dlg =  wx.TextEntryDialog(self, msg, 'Register item')
+      dlg = wx.TextEntryDialog(self, msg, 'Register item')
       dlg.CentreOnParent()
       if dlg.ShowModal() == wx.ID_OK:
          try:
@@ -646,7 +646,7 @@ class wx_NSC(wx.Frame):
          self._log('Connection with Name Server lost', 'error')
          self.enable(False)  
       buf = cStringIO.StringIO()
-      traceback.print_exc(file = buf)
+      traceback.print_exc(file=buf)
       self._log('%s:\n%s' % (line, buf.getvalue()), 'error')
 
    def _setNSData(self):
@@ -665,7 +665,7 @@ class wx_NSC(wx.Frame):
    def _getSelections(self):
       tree = self.treeCtrlItems
       selectionsL = tree.GetSelections()
-      itemsL  = []
+      itemsL = []
       groupsL = []
       for i in selectionsL:
           if tree.GetPyData(i) == 0:
@@ -702,42 +702,42 @@ class wx_NSC(wx.Frame):
       """
       parent = wx.Panel(self, -1)
       sizer0 = wx.BoxSizer(wx.VERTICAL)
-      sizer0.Add(self._buildTopBar(parent), 0, wx.ALIGN_LEFT|wx.GROW, 5)
+      sizer0.Add(self._buildTopBar(parent), 0, wx.ALIGN_LEFT | wx.GROW, 5)
 
       splitter = wx.SplitterWindow(parent, -1)
       #- TOP PART --------------------------------------------------------#
       topParent = wx.Panel(splitter, -1)
       topSizer = wx.BoxSizer(wx.VERTICAL)
       self.treeCtrlItems = wx.TreeCtrl(topParent, -1,
-                         style = wx.TR_TWIST_BUTTONS|wx.TR_LINES_AT_ROOT|wx.TR_HAS_BUTTONS|wx.TR_HIDE_ROOT|wx.TR_MULTIPLE)
+                         style=wx.TR_TWIST_BUTTONS | wx.TR_LINES_AT_ROOT | wx.TR_HAS_BUTTONS | wx.TR_HIDE_ROOT | wx.TR_MULTIPLE)
       topSizer.Add(self.treeCtrlItems, 1, wx.EXPAND, 5)
-      topParent.SetAutoLayout( True )
-      topParent.SetSizer(topSizer )
+      topParent.SetAutoLayout(True)
+      topParent.SetSizer(topSizer)
       topSizer.Fit(topParent)
       topSizer.SetSizeHints(topParent)
       #-------------------------------------------------------------------#
       #- BOTTOM PART -----------------------------------------------------#
-      bottomParent = wx.Panel(splitter,-1)
+      bottomParent = wx.Panel(splitter, -1)
       bottomSizer = wx.BoxSizer(wx.VERTICAL)
-      self.txtCtrlLog=wx_StdoutLog(bottomParent, -1, "",
-                                  size= wx.Size(-1, 10),
-                                  style=wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_RICH)
+      self.txtCtrlLog = wx_StdoutLog(bottomParent, -1, "",
+                                  size=wx.Size(-1, 10),
+                                  style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH)
       bottomSizer.Add(self.txtCtrlLog, 1, wx.EXPAND, 5)
-      bottomParent.SetAutoLayout( True )
-      bottomParent.SetSizer(bottomSizer )
+      bottomParent.SetAutoLayout(True)
+      bottomParent.SetSizer(bottomSizer)
       bottomSizer.Fit(bottomParent)
       bottomSizer.SetSizeHints(bottomParent)
       #-------------------------------------------------------------------#
-      splitter.SplitHorizontally(topParent,bottomParent, -100)
-      sizer0.Add(splitter, 1, wx.EXPAND|wx.ALIGN_CENTRE, 5)
+      splitter.SplitHorizontally(topParent, bottomParent, -100)
+      sizer0.Add(splitter, 1, wx.EXPAND | wx.ALIGN_CENTRE, 5)
       
       self.buttonClose = wx.Button(parent, -1, 'Close')         # buttonClose
-      sizer0.Add(self.buttonClose, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+      sizer0.Add(self.buttonClose, 0, wx.ALIGN_CENTRE | wx.ALL, 5)
       
-      parent.SetAutoLayout( True )
-      parent.SetSizer( sizer0 )
-      sizer0.Fit( parent)
-      sizer0.SetSizeHints( parent)
+      parent.SetAutoLayout(True)
+      parent.SetSizer(sizer0)
+      sizer0.Fit(parent)
+      sizer0.SetSizeHints(parent)
 
    def _buildTopBar(self, parent):
       """
@@ -748,54 +748,54 @@ class wx_NSC(wx.Frame):
       sizer1 = wx.BoxSizer(wx.HORIZONTAL)
       txt1 = wx.StaticText(parent, -1, 'Name Server:')
       txt1.SetForegroundColour(wx.BLUE)
-      sizer1.Add(txt1, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTRE|wx.ALL, 5)
-      self.txtCtrlNSHost = wx.TextCtrl(parent, -1, '', size=wx.Size(300,-1),
+      sizer1.Add(txt1, 0, wx.ALIGN_LEFT | wx.ALIGN_CENTRE | wx.ALL, 5)
+      self.txtCtrlNSHost = wx.TextCtrl(parent, -1, '', size=wx.Size(300, -1),
                                       style=wx.TE_PROCESS_ENTER)
       sizer1.Add(self.txtCtrlNSHost, 0,
-                       wx.ALIGN_LEFT|wx.ALIGN_BOTTOM|wx.TOP|wx.BOTTOM, 5)
+                       wx.ALIGN_LEFT | wx.ALIGN_BOTTOM | wx.TOP | wx.BOTTOM, 5)
       txtColon = wx.StaticText(parent, -1, ':')
       txtColon.SetForegroundColour(wx.BLUE)
       sizer1.Add(txtColon, 0,
-                       wx.ALIGN_LEFT|wx.ALIGN_CENTRE|wx.TOP|wx.BOTTOM, 5)
-      self.txtCtrlNSPort = wx.TextCtrl(parent, -1, '', size=wx.Size(50,-1),
+                       wx.ALIGN_LEFT | wx.ALIGN_CENTRE | wx.TOP | wx.BOTTOM, 5)
+      self.txtCtrlNSPort = wx.TextCtrl(parent, -1, '', size=wx.Size(50, -1),
                                       style=wx.TE_PROCESS_ENTER)
       sizer1.Add(self.txtCtrlNSPort, 0,
-                       wx.ALIGN_LEFT|wx.ALIGN_BOTTOM|wx.TOP|wx.BOTTOM, 5)
+                       wx.ALIGN_LEFT | wx.ALIGN_BOTTOM | wx.TOP | wx.BOTTOM, 5)
       self.buttonUpdate = wx.Button(parent, -1, 'Update')       # buttonUpdate
-      sizer1.Add(self.buttonUpdate, 0, wx.ALIGN_LEFT|wx.ALL, 5)
+      sizer1.Add(self.buttonUpdate, 0, wx.ALIGN_LEFT | wx.ALL, 5)
       self.buttonPing = wx.Button(parent, -1, 'Ping')           # buttonPing
-      sizer1.Add(self.buttonPing, 0, wx.ALIGN_LEFT|wx.ALL, 5)
-      sizer0.Add(sizer1, 0, wx.ALIGN_LEFT|wx.GROW, 5)
+      sizer1.Add(self.buttonPing, 0, wx.ALIGN_LEFT | wx.ALL, 5)
+      sizer0.Add(sizer1, 0, wx.ALIGN_LEFT | wx.GROW, 5)
       #--
       lineH1 = wx.StaticLine(parent, -1, style=wx.LI_HORIZONTAL)
-      sizer0.Add(lineH1, 0, wx.GROW|wx.ALIGN_CENTRE|wx.LEFT|wx.RIGHT, 5)
+      sizer0.Add(lineH1, 0, wx.GROW | wx.ALIGN_CENTRE | wx.LEFT | wx.RIGHT, 5)
       #--
       sizer2 = wx.BoxSizer(wx.HORIZONTAL)
       self.buttonDeleteGroup = wx.Button(parent, -1, ' Delete group(s) ')
       sizer2.Add(self.buttonDeleteGroup, 0,
-                       wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.TOP|wx.LEFT|wx.BOTTOM, 5)
+                       wx.ALIGN_LEFT | wx.ALIGN_CENTER | wx.TOP | wx.LEFT | wx.BOTTOM, 5)
       self.buttonCreateGroup = wx.Button(parent, -1, ' Create group... ')
       sizer2.Add(self.buttonCreateGroup, 0,
-                       wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.TOP|wx.LEFT|wx.BOTTOM, 5)
+                       wx.ALIGN_LEFT | wx.ALIGN_CENTER | wx.TOP | wx.LEFT | wx.BOTTOM, 5)
       lineV1 = wx.StaticLine(parent, -1, style=wx.LI_VERTICAL)
       sizer2.Add(lineV1, 0,
-                       wx.ALL|wx.GROW, 5)
+                       wx.ALL | wx.GROW, 5)
       self.buttonDeleteSelected = wx.Button(parent, -1,
                                            ' Delete item(s) ')
       sizer2.Add(self.buttonDeleteSelected, 0,
-                       wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.ALL, 5)
+                       wx.ALIGN_LEFT | wx.ALIGN_CENTER | wx.ALL, 5)
       self.buttonRegisterItem = wx.Button(parent, -1, ' Register item... ')
       sizer2.Add(self.buttonRegisterItem, 0,
-                       wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.TOP|wx.BOTTOM, 5)
+                       wx.ALIGN_LEFT | wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, 5)
       lineV2 = wx.StaticLine(parent, -1, style=wx.LI_VERTICAL)
       sizer2.Add(lineV2, 0,
-                       wx.ALL|wx.GROW, 5)
+                       wx.ALL | wx.GROW, 5)
       self.buttonShowMeta = wx.Button(parent, -1, ' Show meta ')
       sizer2.Add(self.buttonShowMeta, 0,
-                       wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.TOP|wx.BOTTOM, 5)
+                       wx.ALIGN_LEFT | wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, 5)
       self.buttonSetMeta = wx.Button(parent, -1, ' Set meta ')
       sizer2.Add(self.buttonSetMeta, 0,
-                       wx.ALIGN_LEFT|wx.ALIGN_CENTER|wx.TOP|wx.BOTTOM, 5)
+                       wx.ALIGN_LEFT | wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM, 5)
       sizer0.Add(sizer2, 0, wx.ALIGN_LEFT, 5)
       #--
       return sizer0
@@ -812,7 +812,7 @@ class WinMessageDialog(wx.Dialog):
              
     '''
     def __init__(self, parent=None, message='Message:',
-                 caption='Message', style=wx.OK|wx.CANCEL,pos=wx.DefaultPosition):
+                 caption='Message', style=wx.OK | wx.CANCEL, pos=wx.DefaultPosition):
         wx.Dialog.__init__(self, parent, -1, caption, size=wx.DefaultSize,
                           style=wx.CAPTION, pos=pos)
         self._build(message, style)
@@ -822,8 +822,8 @@ class WinMessageDialog(wx.Dialog):
         self.EndModal(ev.GetId())
         
     def _build(self, msg, style):
-        parent   = wx.Panel(self, -1)
-        sizer    = wx.BoxSizer(wx.VERTICAL)
+        parent = wx.Panel(self, -1)
+        sizer = wx.BoxSizer(wx.VERTICAL)
         #-- icon and message --#
         msgSizer = wx.BoxSizer(wx.HORIZONTAL)
 
@@ -839,27 +839,27 @@ class WinMessageDialog(wx.Dialog):
         elif style & wx.ICON_INFORMATION == wx.ICON_INFORMATION:
             artID = wx.ART_INFORMATION
         if artID:
-            bmp = wx.ArtProvider_GetBitmap(artID, wx.ART_MESSAGE_BOX, (48,48))
+            bmp = wx.ArtProvider_GetBitmap(artID, wx.ART_MESSAGE_BOX, (48, 48))
             bmpIcon = wx.StaticBitmap(parent, -1, bmp)
-            msgSizer.Add(bmpIcon, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+            msgSizer.Add(bmpIcon, 0, wx.ALIGN_CENTRE | wx.ALL, 5)
 
         # msg #
         txtMsg = wx.StaticText(parent, -1, msg, style=wx.ALIGN_CENTRE)
-        msgSizer.Add(txtMsg, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        msgSizer.Add(txtMsg, 0, wx.ALIGN_CENTRE | wx.ALL, 5)
 
         sizer.Add(msgSizer, 0, wx.ALIGN_CENTRE, 5)
         line = wx.StaticLine(parent, -1, style=wx.LI_HORIZONTAL)
-        sizer.Add(line, 0, wx.GROW|wx.ALL, 5)
+        sizer.Add(line, 0, wx.GROW | wx.ALL, 5)
         #-- buttons --#
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         if style & wx.YES_NO == wx.YES_NO:
             btnYes = wx.Button(parent, wx.ID_YES, 'Yes')
             btnSizer.Add(btnYes, 0,
-                               wx.ALIGN_CENTRE|wx.LEFT|wx.RIGHT, 10)
-            btnNo  = wx.Button(parent, wx.ID_NO, 'No')
+                               wx.ALIGN_CENTRE | wx.LEFT | wx.RIGHT, 10)
+            btnNo = wx.Button(parent, wx.ID_NO, 'No')
             btnSizer.Add(btnNo, 0,
-                               wx.ALIGN_CENTRE|wx.LEFT|wx.RIGHT, 10)
+                               wx.ALIGN_CENTRE | wx.LEFT | wx.RIGHT, 10)
             if style & wx.YES_DEFAULT == wx.YES_DEFAULT:
                 btnYes.SetDefault()
             elif style & wx.NO_DEFAULT == wx.NO_DEFAULT:
@@ -871,18 +871,18 @@ class WinMessageDialog(wx.Dialog):
                 btnOK = wx.Button(parent, wx.ID_OK, 'OK')
                 btnOK.SetDefault()
                 btnSizer.Add(btnOK, 0,
-                                   wx.ALIGN_CENTRE|wx.LEFT|wx.RIGHT, 10)
+                                   wx.ALIGN_CENTRE | wx.LEFT | wx.RIGHT, 10)
             if style & wx.CANCEL == wx.CANCEL:
                 btnCancel = wx.Button(parent, wx.ID_CANCEL, 'Cancel')
                 btnSizer.Add(btnCancel, 0,
-                                   wx.ALIGN_CENTRE|wx.LEFT|wx.RIGHT, 10)
+                                   wx.ALIGN_CENTRE | wx.LEFT | wx.RIGHT, 10)
 
-        sizer.Add(btnSizer, 0, wx.ALIGN_CENTRE|wx.TOP, 5)
+        sizer.Add(btnSizer, 0, wx.ALIGN_CENTRE | wx.TOP, 5)
         #--
-        parent.SetAutoLayout( True )
-        parent.SetSizer(sizer )
-        sizer.Fit( parent )
-        sizer.SetSizeHints( parent )
+        parent.SetAutoLayout(True)
+        parent.SetSizer(sizer)
+        sizer.Fit(parent)
+        sizer.SetSizeHints(parent)
       
 #----------------------------------------------------------------------#
 def main(argv):
@@ -896,14 +896,14 @@ def main(argv):
    nsPort = os.getenv('PYRO_NS_BC_PORT') or Pyro.config.PYRO_NS_PORT
    bcAddr = Pyro.config.PYRO_NS_BC_ADDR
    if bcAddr:
-      bcAddr=bcAddr.strip()
-   bcAddr=bcAddr or None
+      bcAddr = bcAddr.strip()
+   bcAddr = bcAddr or None
       
    class wx_NSCApp(wx.App):
       def OnInit(self):
          Pyro.core.initClient()
          frame = wx_NSC(nsHost, nsPort, bcAddr)
-         frame.SetSize(wx.Size(630,500))
+         frame.SetSize(wx.Size(630, 500))
          frame.Show(True)
          return True
 
@@ -911,5 +911,5 @@ def main(argv):
    app.MainLoop()
 
 # allow easy usage with python -m
-if __name__=="__main__":
+if __name__ == "__main__":
    main(sys.argv)

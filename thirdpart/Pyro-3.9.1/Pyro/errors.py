@@ -34,14 +34,14 @@ class NoModuleError(PyroError):	pass		# no module found for incoming obj
 class _InternalNoModuleError(PyroError):	
 	def __init__(self, modulename=None, fromlist=None, *args):
 		# note: called without args on Python 2.5+, args will be set by __setstate__
-		self.modulename=modulename
-		self.fromlist=fromlist
-		PyroError.__init__(* (self,)+args)
+		self.modulename = modulename
+		self.fromlist = fromlist
+		PyroError.__init__(* (self,) + args)
 	def __getstate__(self):
 		return { "modulename": self.modulename, "fromlist": self.fromlist }
 	def __setstate__(self, state):
-		self.modulename=state["modulename"]
-		self.fromlist=state["fromlist"]
+		self.modulename = state["modulename"]
+		self.fromlist = state["fromlist"]
 
 
 #############################################################################
@@ -64,19 +64,19 @@ class _InternalNoModuleError(PyroError):
 import Pyro.constants
 
 class PyroExceptionCapsule:
-	def __init__(self,excObj,args=None):
+	def __init__(self, excObj, args=None):
 		self.excObj = excObj
-		self.args=args  # if specified, this is the remote traceback info
+		self.args = args  # if specified, this is the remote traceback info
 	def raiseEx(self):
-		setattr(self.excObj,Pyro.constants.TRACEBACK_ATTRIBUTE,self.args)
+		setattr(self.excObj, Pyro.constants.TRACEBACK_ATTRIBUTE, self.args)
 		raise self.excObj
 	def __str__(self):
-		s=self.excObj.__class__.__name__
+		s = self.excObj.__class__.__name__
 		if not self.args:
 			return s
 		elif len(self.args) == 1:
-			return s+': '+str(self.args[0])
+			return s + ': ' + str(self.args[0])
 		else:
-			return s+': '+str(self.args)
+			return s + ': ' + str(self.args)
 	def __getitem__(self, i):
 		return self.args[i]	

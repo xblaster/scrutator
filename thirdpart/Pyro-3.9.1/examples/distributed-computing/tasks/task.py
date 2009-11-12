@@ -7,7 +7,7 @@ import Pyro.constants
 #
 class PartitionableTask:
 	def __init__(self, name):
-		self.name=name
+		self.name = name
 	def split(self, numPiecesHint): 
 		pass  # implement in subclass
 	def join(self, task):
@@ -27,14 +27,14 @@ class PartitionableTask:
 class TaskPartition(Pyro.EventService.Clients.Publisher):
 	def __init__(self, name):
 		Pyro.EventService.Clients.Publisher.__init__(self)
-		self.name=name
+		self.name = name
 	def run(self):
-		self.publish("Distributed.cell."+self.name, "START")
+		self.publish("Distributed.cell." + self.name, "START")
 		for pos in self.work():
-			self.publish("Distributed.cell."+self.name, self.progress(pos))
-		self.publish("Distributed.cell."+self.name, "FINISHED")
-	def progress(self,pos):
-		return 100.0*pos/100.0	# override in subclass
+			self.publish("Distributed.cell." + self.name, self.progress(pos))
+		self.publish("Distributed.cell." + self.name, "FINISHED")
+	def progress(self, pos):
+		return 100.0 * pos / 100.0	# override in subclass
 	def work(self):
 		yield 100 	# override this generator in subclass, here the actual work is done
 	def __str__(self):

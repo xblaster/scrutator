@@ -90,7 +90,7 @@ def sorter(orderBy):
         else:
             fhead = sorter(orderBy[0])
             frest = sorter(orderBy[1:])
-            return lambda a, b, fhead=fhead, frest=frest: fhead(a, b) or frest(a, b)
+            return lambda a, b, fhead = fhead, frest = frest: fhead(a, b) or frest(a, b)
     if isinstance(orderBy, sqlbuilder.DESC) \
        and isinstance(orderBy.expr, sqlbuilder.SQLObjectField):
         orderBy = '-' + orderBy.expr.original
@@ -111,7 +111,7 @@ def sorter(orderBy):
         if a is None:
             if b is None:
                 return 0
-            return -1
+            return - 1
         if b is None:
             return 1
         return cmp(a, b)
@@ -376,7 +376,7 @@ class SOManyToMany(object):
         events.listen(self.event_CreateTableSignal,
                       self.otherClass, events.CreateTableSignal)
         self.clause = (
-            (self.otherClass.q.id ==
+            (self.otherClass.q.id == 
              sqlbuilder.Field(self.intermediateTable, self.otherColumn))
             & (sqlbuilder.Field(self.intermediateTable, self.joinColumn)
                == self.soClass.q.id))
@@ -385,7 +385,7 @@ class SOManyToMany(object):
         if obj is None:
             return self
         query = (
-            (self.otherClass.q.id ==
+            (self.otherClass.q.id == 
              sqlbuilder.Field(self.intermediateTable, self.otherColumn))
             & (sqlbuilder.Field(self.intermediateTable, self.joinColumn)
                == obj.id))

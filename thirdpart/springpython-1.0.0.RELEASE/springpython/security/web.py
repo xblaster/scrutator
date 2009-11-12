@@ -212,7 +212,7 @@ class HttpSessionContextIntegrationFilter(Filter):
                                         + "- new SecurityContext instance associated  with SecurityContextHolder")
                     SecurityContextHolder.setContext(self.generateNewContext())
             else:
-                self.logger.debug("HttpSession returned null object for SPRINGPYTHON_SECURITY_CONTEXT_KEY " +
+                self.logger.debug("HttpSession returned null object for SPRINGPYTHON_SECURITY_CONTEXT_KEY " + 
                                     "- new SecurityContext instance associated with SecurityContextHolder")
                 SecurityContextHolder.setContext(self.generateNewContext())
                 
@@ -355,7 +355,7 @@ class FilterSecurityInterceptor(Filter, AbstractSecurityInterceptor):
     # Key to the FilterSecurityInterceptor's token data stored in an HttpSession dictionary.
     SPRINGPYTHON_FILTER_SECURITY_INTERCEPTOR_KEY = "SPRINGPYTHON_FILTER_SECURITY_INTERCEPTOR_KEY"
     
-    def __init__(self, auth_manager = None, access_decision_mgr = None, obj_def_source = None, sessionStrategy=None):
+    def __init__(self, auth_manager=None, access_decision_mgr=None, obj_def_source=None, sessionStrategy=None):
         Filter.__init__(self)
         AbstractSecurityInterceptor.__init__(self, auth_manager, access_decision_mgr, obj_def_source)
         self.sessionStrategy = sessionStrategy
@@ -455,7 +455,7 @@ class MiddlewareFilter(Filter):
     in the __init__ method. Spring's IoC container currently doesn't support constructor arguments.
     """
     
-    def __init__(self, clazz = None, appAttribute = None):
+    def __init__(self, clazz=None, appAttribute=None):
         Filter.__init__(self)
         self.clazz = clazz
         self.appAttribute = appAttribute

@@ -9,12 +9,12 @@ from scrutator.core.tool import *
 import ihooks
 
 class SyncHook(ihooks.ModuleImporter):
-    def import_module(self, name, globals=None, locals=None, fromlist=None, level = -1):
+    def import_module(self, name, globals=None, locals=None, fromlist=None, level= -1):
 		try:
 			imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
 		except:
 			smart_import(name)
-			imp = ihooks.ModuleImporter.import_module(self,name, globals, locals, fromlist)
+			imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
 		return imp
 		
 

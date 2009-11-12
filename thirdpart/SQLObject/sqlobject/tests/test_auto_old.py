@@ -110,17 +110,17 @@ class TestAuto:
                            age=10,
                            created=now(),
                            wannahavefun=False,
-                           longField='x'*1000)
+                           longField='x' * 1000)
         jane = OldAutoTest(firstName='jane',
                            lastName='doe',
                            happy='N',
                            created=now(),
                            wannahavefun=True,
-                           longField='x'*1000)
+                           longField='x' * 1000)
         assert not john.wannahavefun
         assert jane.wannahavefun
-        assert john.longField == 'x'*1000
-        assert jane.longField == 'x'*1000
+        assert john.longField == 'x' * 1000
+        assert jane.longField == 'x' * 1000
         del classregistry.registry(
             OldAutoTest.sqlmeta.registry).classes['OldAutoTest']
 

@@ -21,7 +21,7 @@ from springpython.security.providers import Authentication
 _globalContext = None
 
 class SecurityContext(object):
-    def __init__(self, authentication = Authentication()):
+    def __init__(self, authentication=Authentication()):
         self.authentication = authentication
 
     def __str__(self):

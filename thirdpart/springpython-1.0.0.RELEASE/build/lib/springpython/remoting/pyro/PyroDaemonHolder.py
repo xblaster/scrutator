@@ -108,7 +108,7 @@ class _PyroThread(threading.Thread):
         self._running = True
         self.logger.debug("Starting up Pyro server thread for %s:%s" % (self.host, self.port))
         Pyro.core.initServer()
-        self.daemon.requestLoop(condition = lambda:self._running)
+        self.daemon.requestLoop(condition=lambda:self._running)
 
     def shutdown(self):
         """

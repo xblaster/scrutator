@@ -14,7 +14,7 @@ class Distinct2(SQLObject):
 def count(select):
     result = {}
     for ob in select:
-        result[int(ob.n)] = result.get(int(ob.n), 0)+1
+        result[int(ob.n)] = result.get(int(ob.n), 0) + 1
     return result
 
 def test_distinct():
@@ -24,7 +24,7 @@ def test_distinct():
     Distinct2(other=obs[0])
     Distinct2(other=obs[1])
 
-    query = (Distinct2.q.otherID==Distinct1.q.id)
+    query = (Distinct2.q.otherID == Distinct1.q.id)
     sel = Distinct1.select(query)
     assert count(sel) == {0: 2, 1: 1}
     sel = Distinct1.select(query, distinct=True)

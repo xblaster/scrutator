@@ -24,14 +24,14 @@ class XMLBeanFactory(AbstractBeanFactory):
 		
 		from xml.dom.minidom import parse
 		from sys import path
-		resource_name = path[0]+'/'+resource
+		resource_name = path[0] + '/' + resource
 		doc = parse(resource_name)
 		for bean in doc.getElementsByTagName('bean'):
 			self.loadBean(bean)
 	
 	def loadBean(self, bean):
 		"""load a bean"""
-		bean_id  = bean.getAttribute('id')
+		bean_id = bean.getAttribute('id')
 		class_name = bean.getAttribute('class')
 		
 		argument_list = list()
@@ -62,12 +62,12 @@ class XMLBeanFactory(AbstractBeanFactory):
 		#smart load reference of the class			
 		class_obj = smart_load(class_name)
 		try:
-			if (len(argument_list)==0):
+			if (len(argument_list) == 0):
 				class_inst = class_obj()
 			else:
 				class_inst = class_obj(*argument_list)
 		except TypeError, e:
-			raise XMLBeanConstArgError(class_obj.__name__+" bad args "+str(argument_list)+"\n"+str(e))
+			raise XMLBeanConstArgError(class_obj.__name__ + " bad args " + str(argument_list) + "\n" + str(e))
 		
 		#affect properties
 		for property in bean.getElementsByTagName('property'):

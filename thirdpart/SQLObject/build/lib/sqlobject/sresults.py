@@ -44,11 +44,11 @@ class SelectResults(object):
         query = sqlbuilder.Select(columns,
                                   where=self.clause,
                                   join=self.ops.get('join', sqlbuilder.NoDefault),
-                                  distinct=self.ops.get('distinct',False),
+                                  distinct=self.ops.get('distinct', False),
                                   lazyColumns=self.ops.get('lazyColumns', False),
                                   start=self.ops.get('start', 0),
                                   end=self.ops.get('end', None),
-                                  orderBy=self.ops.get('dbOrderBy',sqlbuilder.NoDefault),
+                                  orderBy=self.ops.get('dbOrderBy', sqlbuilder.NoDefault),
                                   reversed=self.ops.get('reversed', False),
                                   staticTables=self.tables,
                                   forUpdate=self.ops.get('forUpdate', False))
@@ -170,7 +170,7 @@ class SelectResults(object):
                 return list(iter(self))[value]
             else:
                 start = self.ops.get('start', 0) + value
-                return list(self.clone(start=start, end=start+1))[0]
+                return list(self.clone(start=start, end=start + 1))[0]
 
     def __iter__(self):
         # @@: This could be optimized, using a simpler algorithm
@@ -298,11 +298,11 @@ class SelectResults(object):
         otherClass = None
         orderBy = sqlbuilder.NoDefault
 
-        ref = self.sourceClass.sqlmeta.columns.get(attr.endswith('ID') and attr or attr+'ID', None)
+        ref = self.sourceClass.sqlmeta.columns.get(attr.endswith('ID') and attr or attr + 'ID', None)
         if ref and ref.foreignKey:
             otherClass, clause = self._throughToFK(ref)
         else:
-            join = [x for x in self.sourceClass.sqlmeta.joins if x.joinMethodName==attr]
+            join = [x for x in self.sourceClass.sqlmeta.joins if x.joinMethodName == attr]
             if join:
                 join = join[0]
                 orderBy = join.orderBy
@@ -319,11 +319,11 @@ class SelectResults(object):
                                 connection=self._getConnection())
 
     def _throughToFK(self, col):
-        otherClass = getattr(self.sourceClass, "_SO_class_"+col.foreignKey)
+        otherClass = getattr(self.sourceClass, "_SO_class_" + col.foreignKey)
         colName = col.name
         query = self.queryForSelect().newItems([sqlbuilder.ColumnAS(getattr(self.sourceClass.q, colName), colName)]).orderBy(None).distinct()
         query = sqlbuilder.Alias(query, "%s_%s" % (self.sourceClass.__name__, col.name))
-        return otherClass, otherClass.q.id==getattr(query.q, colName)
+        return otherClass, otherClass.q.id == getattr(query.q, colName)
 
     def _throughToMultipleJoin(self, join):
         otherClass = join.otherClass
@@ -331,7 +331,7 @@ class SelectResults(object):
         query = self.queryForSelect().newItems([sqlbuilder.ColumnAS(self.sourceClass.q.id, 'id')]).orderBy(None).distinct()
         query = sqlbuilder.Alias(query, "%s_%s" % (self.sourceClass.__name__, join.joinMethodName))
         joinColumn = getattr(otherClass.q, colName)
-        return otherClass, joinColumn==query.q.id
+        return otherClass, joinColumn == query.q.id
 
     def _throughToRelatedJoin(self, join):
         otherClass = join.otherClass

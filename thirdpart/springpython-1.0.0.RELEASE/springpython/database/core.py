@@ -27,7 +27,7 @@ class DaoSupport(object):
     to help carry out database operations. It requires that a connection object be
     provided during instantion.
     """
-    def __init__(self, connection_factory = None):
+    def __init__(self, connection_factory=None):
         self.database_template = DatabaseTemplate()
         self.connection_factory = connection_factory
         
@@ -42,7 +42,7 @@ class DatabaseTemplate(object):
     This class is meant to mimic the Spring framework's JdbcTemplate class.
     Since Python doesn't use JDBC, the name is generalized to "Database"
     """
-    def __init__(self, connection_factory = None):
+    def __init__(self, connection_factory=None):
         self.connection_factory = connection_factory
         self.logger = logging.getLogger("springpython.database.core.DatabaseTemplate")
 
@@ -52,7 +52,7 @@ class DatabaseTemplate(object):
         if name == "connection_factory" and value:
             self.__db = value.getConnection()
             
-    def execute(self, sql_statement, args = None):
+    def execute(self, sql_statement, args=None):
         """Issue a single SQL execute, typically a DDL statement."""
         sql_statement = self.connection_factory.convert_sql_binding(sql_statement)
 
@@ -81,7 +81,7 @@ class DatabaseTemplate(object):
         
         return rows_affected
     
-    def query(self, sql_query, args = None, rowhandler = None):
+    def query(self, sql_query, args=None, rowhandler=None):
         """Execute a query given static SQL, reading the ResultSet on a per-row basis with a RowMapper.
         If args is provided, bind the arguments (to avoid SQL injection attacks)."""
 
@@ -93,7 +93,7 @@ class DatabaseTemplate(object):
 
         return [rowhandler.map_row(row) for row in self.query_for_list(sql_query, args)]
     
-    def query_for_list(self, sql_query, args = None):
+    def query_for_list(self, sql_query, args=None):
         """Execute a query for a result list, given static SQL. If args is provided, bind the arguments 
         (to avoid SQL injection attacks)."""
 
@@ -127,17 +127,17 @@ class DatabaseTemplate(object):
         # Convert multi-item tuple into list
         return [result for result in results or []]
 
-    def query_for_int(self, sql_query, args = None):
+    def query_for_int(self, sql_query, args=None):
         """Execute a query that results in an int value, given static SQL. If args is provided, bind the arguments 
         (to avoid SQL injection attacks)."""
         return self.query_for_object(sql_query, args, types.IntType)
     
-    def query_for_long(self, sql_query, args = None):
+    def query_for_long(self, sql_query, args=None):
         """Execute a query that results in an int value, given static SQL. If args is provided, bind the arguments 
         (to avoid SQL injection attacks)."""
         return self.query_for_object(sql_query, args, types.LongType)
     
-    def query_for_object(self, sql_query, args = None, required_type = None):
+    def query_for_object(self, sql_query, args=None, required_type=None):
         """Execute a query that results in an int value, given static SQL. If args is provided, bind the arguments 
         (to avoid SQL injection attacks)."""
 
@@ -165,11 +165,11 @@ class DatabaseTemplate(object):
                     foundEquivType = True
                     break
             if not foundEquivType:
-                raise DataAccessException("Expected %s, but instead got %s"% (required_type, type(results[0][0])))
+                raise DataAccessException("Expected %s, but instead got %s" % (required_type, type(results[0][0])))
 
         return results[0][0]
 
-    def update(self, sql_statement, args = None):
+    def update(self, sql_statement, args=None):
         """Issue a single SQL update.  If args is provided, bind the arguments 
         (to avoid SQL injection attacks)."""
         return self.execute(sql_statement, args)

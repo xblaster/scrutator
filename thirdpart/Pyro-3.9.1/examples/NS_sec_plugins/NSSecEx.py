@@ -17,7 +17,7 @@ def BCGuard():
 	return BCReqValidator()
 
 def NSGuard():
-	v=NSnewConnValidator()
+	v = NSnewConnValidator()
 	v.setAllowedIdentifications([ACCEPTED_ID])
 	return v
 
@@ -35,10 +35,10 @@ class BCReqValidator(Pyro.naming.BCReqValidator):
 	# self.addr = address of client (ip, port)
 	# self.sock = reply socket (used by self.reply method)
 	def acceptLocationCmd(self):
-		print self.addr[0],'WANTS TO KNOW OUR LOCATION. Ok...'
+		print self.addr[0], 'WANTS TO KNOW OUR LOCATION. Ok...'
 		return 1
 	def acceptShutdownCmd(self):
-		print self.addr[0],'WANTS US TO SHUT DOWN, Pfff!'
+		print self.addr[0], 'WANTS US TO SHUT DOWN, Pfff!'
 		self.reply('denied!')  # send this back to client
 		return 0
 
@@ -46,12 +46,12 @@ class BCReqValidator(Pyro.naming.BCReqValidator):
 # NS Pyro Daemon newConnValidator
 class NSnewConnValidator(Pyro.protocol.DefaultConnValidator):
 	def acceptHost(self, tcpserver, conn):
-		print conn.addr[0],'WANTS CONNECTION...'
+		print conn.addr[0], 'WANTS CONNECTION...'
 		return Pyro.protocol.DefaultConnValidator.acceptHost(self, tcpserver, conn)
 	def acceptIdentification(self, tcpserver, conn, token, challenge):
-		print conn.addr[0],'SENDS IDENTIFICATION...'
-		(ok,reason)=Pyro.protocol.DefaultConnValidator.acceptIdentification(self, tcpserver, conn, token, challenge)
+		print conn.addr[0], 'SENDS IDENTIFICATION...'
+		(ok, reason) = Pyro.protocol.DefaultConnValidator.acceptIdentification(self, tcpserver, conn, token, challenge)
 		if not ok:
-			print 'Connection denied!  Make sure the identification is "'+ACCEPTED_ID+'"'
-		return (ok,reason)
+			print 'Connection denied!  Make sure the identification is "' + ACCEPTED_ID + '"'
+		return (ok, reason)
 

@@ -25,7 +25,7 @@ class SODatabaseIndex(object):
         if kw and len(kw) != len(columns) or args and len(args) != len(columns):
             raise TypeError, ("get() takes exactly %d argument and an optional "
                 "named argument 'connection' (%d given)" % (
-                len(columns), len(args)+len(kw)))
+                len(columns), len(args) + len(kw)))
         if args:
             kw = {}
             for i in range(len(args)):
@@ -47,11 +47,11 @@ class SODatabaseIndex(object):
             if desc.has_key('expression'):
                 assert not desc.has_key('column'), (
                     'You cannot provide both an expression and a column '
-                    '(for %s in index %s in %s)' %
+                    '(for %s in index %s in %s)' % 
                     (desc, self.name, self.soClass))
                 assert not desc.has_key('length'), (
                     'length does not apply to expressions (for %s in '
-                    'index %s in %s)' %
+                    'index %s in %s)' % 
                     (desc, self.name, self.soClass))
                 new.append(desc)
                 continue

@@ -22,7 +22,7 @@ class ApplicationContext(ObjectContainer):
     ApplicationContext IS a ObjectContainer. It also has the ability to define the lifecycle of
     objects.
     """
-    def __init__(self, config = None):
+    def __init__(self, config=None):
         super(ApplicationContext, self).__init__(config)
         self.logger = logging.getLogger("springpython.context.ApplicationContext")
         self.types_to_avoid = [PyroProxyFactory]
@@ -83,7 +83,7 @@ class ObjectNameAutoProxyCreator(ApplicationContextAware, ObjectPostProcessor):
     a list of advisors to every callable method. This is useful when default advice
     needs to be applied widely with minimal configuration.
     """
-    def __init__(self, objectNames = [], interceptorNames = []):
+    def __init__(self, objectNames=[], interceptorNames=[]):
         super(ObjectNameAutoProxyCreator, self).__init__()
         self.objectNames = objectNames
         self.interceptorNames = interceptorNames

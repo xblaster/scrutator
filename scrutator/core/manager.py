@@ -17,7 +17,7 @@ def default_callback(value):
 class EventManager(object):
 	""" handle event in the application"""
 
-	def __init__(self, xml_bindings = None):
+	def __init__(self, xml_bindings=None):
 		self.listeners_map = dict()
 		if xml_bindings != None: #load xml bindings
 			self.loadXMLMap(xml_bindings)
@@ -29,7 +29,7 @@ class EventManager(object):
 		
 	def bind(self, eventName, listener):
 		if not isinstance(listener, scrutator.core.listener.SimpleListener):
-			raise Exception("Not a scrutator.core.listener.SimpleListener inherited object "+str(listener))
+			raise Exception("Not a scrutator.core.listener.SimpleListener inherited object " + str(listener))
 		self.__getListenerMap(str(eventName)).append(listener)
 	
 	def unbindAll(self):
@@ -46,7 +46,7 @@ class EventManager(object):
 	def push(self, eventObj):
 		""" This push an event and activate action listener
 		"""
-		log.msg('push '+str(eventObj)+' on '+str(self))
+		log.msg('push ' + str(eventObj) + ' on ' + str(self))
 		if not isinstance(eventObj, SimpleEvent):
 			raise Exception("Not a SimpleEvent inherited object")
 		for listener_obj in self.__getListenerMap(eventObj.getType()):
@@ -75,7 +75,7 @@ class AsyncEventManagerException(Exception):
 	pass
 
 class AsyncEventManager(EventManager):
-	def __init__(self,xml_bindings = None):
+	def __init__(self, xml_bindings=None):
 		super(AsyncEventManager, self).__init__(xml_bindings)
 		self.mboxMgr = MessageBoxManager()
 	
@@ -135,7 +135,7 @@ class MessageBoxManager(EventManager):
 
 		self.getMessageBox(to).append(msg)
 
-	def getMessageBox(self,boxname):
+	def getMessageBox(self, boxname):
 		if not self.__messageBox.has_key(boxname):
 			self.__messageBox[boxname] = list()
 		return self.__messageBox[boxname]
@@ -143,7 +143,7 @@ class MessageBoxManager(EventManager):
 	def getMessagesFor(self, boxname):
 		return self.getMessageBox(boxname)
 	
-	def flushMessagesFor(self,boxname):
+	def flushMessagesFor(self, boxname):
 		self.__messageBox[boxname] = list()
 	
 	def popMessagesFor(self, boxname):
@@ -173,7 +173,7 @@ class CoreManager:
 		def getBean(self, beanName):
 			if self.beans_list.has_key(beanName):
 				return self.beans_list[beanName]
-			raise Exception('bean '+str(beanName)+' does not exist')
+			raise Exception('bean ' + str(beanName) + ' does not exist')
 	
 		def setBean(self, beanName, beanObj):
 			self.beans_list[beanName] = beanObj
@@ -220,7 +220,7 @@ class XmlEventManagerLoader:
 	def load(self, filename, eventManager):
 		from xml.dom.minidom import parse
 		from sys import path
-		resource_name = path[0]+'/'+filename
+		resource_name = path[0] + '/' + filename
 		
 		doc = parse(resource_name)
 		
@@ -229,8 +229,8 @@ class XmlEventManagerLoader:
 
 			
 			#if it's not "all" events
-			if not eventName=='all':
+			if not eventName == 'all':
 				eventName = smart_load(eventName)().getType()
 			
 			
-			eventManager.bind(eventName,self.getListener(trigger))
+			eventManager.bind(eventName, self.getListener(trigger))

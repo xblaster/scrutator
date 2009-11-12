@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 __old_import__ = __import__
 
-def new_import(name, globals={}, locals={}, fromlist=[], level=-1):
+def new_import(name, globals={}, locals={}, fromlist=[], level= -1):
 	print name
 	return __old_import(name, globals, locals, fromlist, level)
 

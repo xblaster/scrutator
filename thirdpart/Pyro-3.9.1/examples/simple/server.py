@@ -16,16 +16,16 @@ class testclass(Pyro.core.ObjBase, tst.testclass):
 
 Pyro.core.initServer()
 
-ns=Pyro.naming.NameServerLocator().getNS()
+ns = Pyro.naming.NameServerLocator().getNS()
 
-daemon=Pyro.core.Daemon()
+daemon = Pyro.core.Daemon()
 daemon.useNameServer(ns)
 
 try:
     ns.createGroup(":test")
 except NamingError:
     pass
-uri=daemon.connect(testclass(),":test.simple")
+uri = daemon.connect(testclass(), ":test.simple")
 
 print "Server is ready."
 daemon.requestLoop()

@@ -14,7 +14,7 @@ try:
 except NamingError:
 	pass
 
-daemon.connect(bouncer.Bouncer('Server'),':test.bouncer')
+daemon.connect(bouncer.Bouncer('Server'), ':test.bouncer')
 
 # enter the service loop.
 print 'Bouncer started'

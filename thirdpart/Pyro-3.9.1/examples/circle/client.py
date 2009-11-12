@@ -5,7 +5,7 @@ import Pyro.core
 
 Pyro.core.initClient()
 
-proxy=Pyro.core.getProxyForURI("PYRONAME://:test.chain_A")
-print "Result=",proxy.process(["hello"])
+proxy = Pyro.core.getProxyForURI("PYRONAME://:test.chain_A")
+print "Result=", proxy.process(["hello"])
 
 

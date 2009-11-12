@@ -2,10 +2,10 @@ import Pyro.core
 import Pyro.naming
 import Pyro.errors
 import itertools
-import sys,os,time,copy
+import sys, os, time, copy
 import sets
 
-Pyro.config.PYRO_MOBILE_CODE=1		# Enable mobile code (for the tasks)
+Pyro.config.PYRO_MOBILE_CODE = 1		# Enable mobile code (for the tasks)
 
 
 #
@@ -27,23 +27,23 @@ class Dispatcher(Pyro.core.ObjBase):
     def __init__(self, nameServer):
         Pyro.config.PYRO_NS_DEFAULTGROUP = ":Distributed.Cells"
         Pyro.core.ObjBase.__init__(self)
-        self.NSBase=nameServer
+        self.NSBase = nameServer
         # make sure that the Event Server is active:
         self.NSBase.resolve(Pyro.constants.EVENTSERVER_NAME)
-    def process(self,task):
-        print "received task:",task
-        NS=copy.copy(self.NSBase)   # copy proxy because of thread issue
+    def process(self, task):
+        print "received task:", task
+        NS = copy.copy(self.NSBase)   # copy proxy because of thread issue
         try:
-            cells=NS.list(None)  # search the namespace for processors
-            print "cells:",cells
-            cells = [ NS.resolve(name).getAttrProxy() for name,otype in cells ]
+            cells = NS.list(None)  # search the namespace for processors
+            print "cells:", cells
+            cells = [ NS.resolve(name).getAttrProxy() for name, otype in cells ]
             if cells:
                 print "splitting task"
                 taskparts = task.split(len(cells))
-                print "-->",len(taskparts),"tasks"
+                print "-->", len(taskparts), "tasks"
                 celliter = itertools.cycle(cells)   # just loop over all processors
                 print "dispatching"
-                busy=sets.Set()
+                busy = sets.Set()
                 # While there are still subtasks to compute, and the
                 # solution has not been found, dispatch the next subtask
                 # to an available cell.
@@ -86,7 +86,7 @@ class Dispatcher(Pyro.core.ObjBase):
                                 break
                     time.sleep(0.2)
 
-                print "all done for task",task
+                print "all done for task", task
                 if task.getResult() and busy:
                     print "There are still %d running tasks" % len(busy)
                     for cell in busy:
@@ -98,13 +98,13 @@ class Dispatcher(Pyro.core.ObjBase):
             else:
                 print "no cells in ns"
                 raise RuntimeError("no computing cells found")
-        except Pyro.errors.NamingError,x:
-            print "No cells registered on the network",x
+        except Pyro.errors.NamingError, x:
+            print "No cells registered on the network", x
             raise RuntimeError("no computing cells found")
     
     
 Pyro.core.initServer()
-ns=Pyro.naming.NameServerLocator().getNS()
+ns = Pyro.naming.NameServerLocator().getNS()
 try:
     ns.createGroup(":Distributed")
 except Pyro.errors.NamingError:
@@ -113,9 +113,9 @@ try:
     ns.unregister(":Distributed.Dispatcher")
 except Pyro.errors.NamingError:
     pass
-daemon=Pyro.core.Daemon()
+daemon = Pyro.core.Daemon()
 daemon.useNameServer(ns)
-uri=daemon.connect(Dispatcher(ns),":Distributed.Dispatcher")
+uri = daemon.connect(Dispatcher(ns), ":Distributed.Dispatcher")
 
 print "Dispatcher ready."
 daemon.requestLoop()

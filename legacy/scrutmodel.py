@@ -33,7 +33,7 @@ class ConnectionManager:
 	def __init__(self):
 		self.servers = dict() 	
 		
-	def addServer(self,server):
+	def addServer(self, server):
 		if self.servers.has_key(server.name):
 			raise "this server already exist"
 		
@@ -62,7 +62,7 @@ class XmlAdapter:
         
         return result
     
-    def createChannel(self,node):
+    def createChannel(self, node):
         c = Channel()
         c.name = node.getAttribute("name")
         
@@ -125,10 +125,10 @@ def doreply(message):
     return server.doreply(message)
 
 def get_comment(message):
-    separator = ['<=','=>','<-','->','<','>']
+    separator = ['<=', '=>', '<-', '->', '<', '>']
     for sep in separator:
         if sep in message:
-            comm, comm2 = message.split(sep,1)
+            comm, comm2 = message.split(sep, 1)
             if not 'http' in comm2:
                 return comm2.strip()
             return comm.strip()

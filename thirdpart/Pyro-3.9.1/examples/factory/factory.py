@@ -16,11 +16,11 @@ class Ford(Pyro.core.ObjBase):
 class CarFactory(Pyro.core.ObjBase):
 	def pid(s): return os.getpid()
 	def create(s, brand):
-		if brand=='Ford':
+		if brand == 'Ford':
 			car = Ford()
-		elif brand=='Honda':
+		elif brand == 'Honda':
 			car = Honda()
-		elif brand=='Opel':
+		elif brand == 'Opel':
 			car = Opel()
 		else:
 			raise ValueError('unknown brand')

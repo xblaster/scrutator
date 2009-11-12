@@ -20,18 +20,18 @@ that is passed in via a remote method call."""
 class DataStoreAuth(Pyro.core.ObjBase):
 	def init(self):
 		# use the username set on the connection object (by the ConnValidator)
-		tls=self.getLocalStorage()
-		tls.username=tls.caller.username
-		tls.datastore=open("datastorage_%s.txt" % tls.username,"w")
+		tls = self.getLocalStorage()
+		tls.username = tls.caller.username
+		tls.datastore = open("datastorage_%s.txt" % tls.username, "w")
 	
 	def addline(self, textline):
-		tls=self.getLocalStorage()
-		sys.stdout.write("adding line to "+tls.datastore.name+"\n")
+		tls = self.getLocalStorage()
+		sys.stdout.write("adding line to " + tls.datastore.name + "\n")
 		sys.stdout.flush()
-		tls.datastore.write(textline+" | user="+tls.username+" | came from "+str(tls.caller)+"\n")
+		tls.datastore.write(textline + " | user=" + tls.username + " | came from " + str(tls.caller) + "\n")
 	
 	def close(self):
-		tls=self.getLocalStorage()
+		tls = self.getLocalStorage()
 		tls.datastore.close()	
 
 
@@ -41,17 +41,17 @@ class SimpleServersideConnValidator(Pyro.protocol.DefaultConnValidator):
 	def acceptIdentification(self, daemon, connection, token, challenge):
 		# The token will be the username:password string, received from the client.
 		login, password = token.split(':', 1)
-		if password!="secretpassw0rd":
-			return (0,Pyro.constants.DENIED_SECURITY)
+		if password != "secretpassw0rd":
+			return (0, Pyro.constants.DENIED_SECURITY)
 		# We store the login name on the connection object to refer to it later.
-		connection.username=login
-		return (1,0)
+		connection.username = login
+		return (1, 0)
 		
 
-daemon=Pyro.core.Daemon()
-ns=Pyro.naming.NameServerLocator().getNS()
+daemon = Pyro.core.Daemon()
+ns = Pyro.naming.NameServerLocator().getNS()
 daemon.useNameServer(ns)
-daemon.setNewConnectionValidator( SimpleServersideConnValidator() )
+daemon.setNewConnectionValidator(SimpleServersideConnValidator())
 
 try:
 	ns.createGroup(":test")

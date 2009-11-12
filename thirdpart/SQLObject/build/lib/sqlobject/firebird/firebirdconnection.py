@@ -38,7 +38,7 @@ class FirebirdConnection(DBAPI):
         if not password:
             password = 'masterkey'
         if not auth:
-            auth='sysdba'
+            auth = 'sysdba'
         # check for alias using
         if (path[0] == '/') and path[-3:].lower() not in ('fdb', 'gdb'):
             path = path[1:]
@@ -111,11 +111,11 @@ class FirebirdConnection(DBAPI):
         """Firebird slaps the limit and offset (actually 'first' and
         'skip', respectively) statement right after the select."""
         if not start:
-            limit_str =  "SELECT FIRST %i" % end
+            limit_str = "SELECT FIRST %i" % end
         if not end:
             limit_str = "SELECT SKIP %i" % start
         else:
-            limit_str = "SELECT FIRST %i SKIP %i" % (end-start, start)
+            limit_str = "SELECT FIRST %i SKIP %i" % (end - start, start)
 
         match = cls.limit_re.match(query)
         if match and len(match.groups()) == 2:
@@ -155,7 +155,7 @@ class FirebirdConnection(DBAPI):
         return result[0]
 
     def addColumn(self, tableName, column):
-        self.query('ALTER TABLE %s ADD %s' %
+        self.query('ALTER TABLE %s ADD %s' % 
                    (tableName,
                     column.firebirdCreateSQL()))
 
@@ -205,8 +205,8 @@ class FirebirdConnection(DBAPI):
             results.append(colClass(**kw))
         return results
 
-    _intTypes=['INT64', 'SHORT','LONG']
-    _dateTypes=['DATE','TIME','TIMESTAMP']
+    _intTypes = ['INT64', 'SHORT', 'LONG']
+    _dateTypes = ['DATE', 'TIME', 'TIMESTAMP']
 
     def guessClass(self, t, flength, fscale=None):
         """

@@ -2,7 +2,7 @@
 
 import Pyro.core
 
-Pyro.config.PYRO_MOBILE_CODE=1		# Enable mobile code 
+Pyro.config.PYRO_MOBILE_CODE = 1		# Enable mobile code 
 
 import servermodule3
 
@@ -16,9 +16,9 @@ class PyroServer(Pyro.core.ObjBase):
 
 daemon = Pyro.core.Daemon(host='localhost', port=12233)
 print
-print 'The Pyro Deamon is running on ',daemon.hostname+':'+str(daemon.port)
+print 'The Pyro Deamon is running on ', daemon.hostname + ':' + str(daemon.port)
 
-uri=daemon.connect(PyroServer(),'MobileHierarchy')
+uri = daemon.connect(PyroServer(), 'MobileHierarchy')
 
 # enter the service loop.
 print 'waiting for calls.'

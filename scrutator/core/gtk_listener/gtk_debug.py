@@ -15,7 +15,7 @@ class GtkDebugListener(SimpleListener):
 
 		
 	def action(self, eventObj, evtMgr):
-		self.debug_list.insert(0,eventObj)
+		self.debug_list.insert(0, eventObj)
 		self.window.onRefresh()
 	
 	def getDebugList(self):
@@ -48,32 +48,32 @@ class GtkDebugWindow(gtk.Window):
 	def __init__(self, parent, listener):
 		
 		self.entries = (
-		  ( "FileMenu", None, "_File" ),			   # name, stock id, label
-		  ( "PreferencesMenu", None, "_Preferences" ), # name, stock id, label
-		  ( "ColorMenu", None, "_Color"	 ),			   # name, stock id, label
-		  ( "ShapeMenu", None, "_Shape" ),			   # name, stock id, label
-		  ( "HelpMenu", None, "_Help" ),			   # name, stock id, label
-		  ( "Refresh", gtk.STOCK_REFRESH,					  # name, stock id
-			"_Refresh","<control>R",					  # label, accelerator
-			"Refresh the list",								# tooltip
-			self.onRefresh ),
+		  ("FileMenu", None, "_File"), 			   # name, stock id, label
+		  ("PreferencesMenu", None, "_Preferences"), # name, stock id, label
+		  ("ColorMenu", None, "_Color"), 			   # name, stock id, label
+		  ("ShapeMenu", None, "_Shape"), 			   # name, stock id, label
+		  ("HelpMenu", None, "_Help"), 			   # name, stock id, label
+		  ("Refresh", gtk.STOCK_REFRESH, 					  # name, stock id
+			"_Refresh", "<control>R", 					  # label, accelerator
+			"Refresh the list", 								# tooltip
+			self.onRefresh),
 
-		  ( "Quit", gtk.STOCK_QUIT,					   # name, stock id
-			"_Quit", "<control>Q",					   # label, accelerator
-			"Quit",									   # tooltip
-			self.onClose )
+		  ("Quit", gtk.STOCK_QUIT, 					   # name, stock id
+			"_Quit", "<control>Q", 					   # label, accelerator
+			"Quit", 									   # tooltip
+			self.onClose)
 		)
 		
 		#initiate GtkDebugListener
 		self.listener = listener
 		gtk.Window.__init__(self)
 		
-		self.set_default_size(640,480)
+		self.set_default_size(640, 480)
 		
 		try:
 			self.set_screen(parent.get_screen())
 		except AttributeError:
-			self.connect('destroy', lambda *w: gtk.main_quit())
+			self.connect('destroy', lambda * w: gtk.main_quit())
 		self.set_title(self.__class__.__name__)
 		self.set_border_width(0)
 
@@ -112,10 +112,10 @@ class GtkDebugWindow(gtk.Window):
 
 		#reactor.callLater(0.5, self.onRefresh)
 
-	def onClose(self,action):
+	def onClose(self, action):
 		gtk.main_quit()
 
-	def onRefresh(self,action = None):
+	def onRefresh(self, action=None):
 		for child in self.mainList.get_children():
 			self.mainList.remove(child)
 		
@@ -124,10 +124,10 @@ class GtkDebugWindow(gtk.Window):
 		#reactor.callLater(0.2, self.onRefresh)
 
 	def getMainList(self):
-		mainList = gtk.VBox(False,0)
+		mainList = gtk.VBox(False, 0)
 		for i in self.listener.getDebugList():
-			v = gtk.HBox(False,0)
-			v.pack_start(gtk.Label(i.getString()),False,False)
+			v = gtk.HBox(False, 0)
+			v.pack_start(gtk.Label(i.getString()), False, False)
 			mainList.add(v)
 		return mainList
 		

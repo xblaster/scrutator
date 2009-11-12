@@ -33,17 +33,17 @@ class PropertyChangePublisher(Pyro.core.ObjBase, Publisher):
 	def __init__(self, name):
 		Pyro.core.ObjBase.__init__(self)
 		Publisher.__init__(self)
-		self.name=name
+		self.name = name
 	def setProperty(self, property, value):
-		print self.name,"sets",property,"to",value
-		self.publish(self.name+"."+property, value)
+		print self.name, "sets", property, "to", value
+		self.publish(self.name + "." + property, value)
 
 class PropertyChangeListener(Subscriber):
 	def __init__(self):
 		Subscriber.__init__(self)
-	def event(self,event):
+	def event(self, event):
 		# event.msg, subject, time
-		print "Listener got Event: %s=%s"%(event.subject, event.msg)
+		print "Listener got Event: %s=%s" % (event.subject, event.msg)
 
 	
 ####################### NS, ES, DAEMON, EVENT LISTENER THREADS ############
@@ -67,8 +67,8 @@ class EventServer(Thread):
 	def run(self):
 		print "Launching Pyro Event Server"
 		# we're using the OS's automatic port allocation
-		es_port=0 
-		self.starter.start(port=es_port, norange=(es_port==0))
+		es_port = 0 
+		self.starter.start(port=es_port, norange=(es_port == 0))
 	def waitUntilStarted(self):
 		return self.starter.waitUntilStarted()
 
@@ -76,18 +76,18 @@ class PyroServer(Thread):
 	def __init__(self):
 		Thread.__init__(self)
 		self.setDaemon(1)
-		self.ready=0
+		self.ready = 0
 	def run(self):
 		Pyro.core.initServer()
 		print "Creating Pyro server objects and Pyro Daemon"
 		# we're using the OS's automatic port allocation
-		port=0
-		daemon = Pyro.core.Daemon(port=port, norange=(port==0))
+		port = 0
+		daemon = Pyro.core.Daemon(port=port, norange=(port == 0))
 		daemon.useNameServer(Pyro.naming.NameServerLocator().getNS())
 		daemon.connect(PropertyChangePublisher("publisher1"), "publisher1")
 		daemon.connect(PropertyChangePublisher("publisher2"), "publisher2")
 		daemon.connect(PropertyChangePublisher("publisher3"), "publisher3")
-		self.ready=1
+		self.ready = 1
 		daemon.requestLoop()
 
 class EventListener(Thread):
@@ -110,16 +110,16 @@ def main():
 		print "Either your Python doesn't support it or it has been disabled in the config."
 		return
 
-	nss=NameServer()
+	nss = NameServer()
 	nss.start()
 	nss.waitUntilStarted()		# wait until the NS has fully started.
-	ess=EventServer()
+	ess = EventServer()
 	ess.start()
 	ess.waitUntilStarted()		# wait until the ES has fully started.
 	
 	EventListener().start()
 
-	server=PyroServer()
+	server = PyroServer()
 	server.start()
 	while not server.ready:
 		time.sleep(1)
@@ -130,14 +130,14 @@ def main():
 	try:
 		while 1:
 			print "MAIN LOOP CHANGES PROPERTIES..."
-			p1.setProperty(random.choice(string.uppercase), random.randint(0,1000))
-			p2.setProperty(random.choice(string.uppercase), random.randint(0,1000))
-			p3.setProperty(random.choice(string.uppercase), random.randint(0,1000))
+			p1.setProperty(random.choice(string.uppercase), random.randint(0, 1000))
+			p2.setProperty(random.choice(string.uppercase), random.randint(0, 1000))
+			p3.setProperty(random.choice(string.uppercase), random.randint(0, 1000))
 			time.sleep(1)
-	except Exception,x:
+	except Exception, x:
 		print "".join(Pyro.util.getPyroTraceback(x))
 
-if __name__=="__main__":
+if __name__ == "__main__":
 	main()
 
 

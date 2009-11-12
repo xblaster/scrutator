@@ -61,7 +61,7 @@ class RoleVoter(AccessDecisionVoter):
     
     All comparisons and prefixes are case sensitive.
     """
-    def __init__(self, role_prefix = "ROLE_"):
+    def __init__(self, role_prefix="ROLE_"):
         self.role_prefix = role_prefix
         self.logger = logging.getLogger("springpython.security.vote.RoleVoter")
 
@@ -124,7 +124,7 @@ class LabelBasedAclVoter(AbstractAclVoter):
      * @author Greg Turnquist
      * @see org.acegisecurity.intercept.method.aopalliance.MethodSecurityInterceptor
     """
-    def __init__(self, label_dict = None, allow_access_if_no_attr_labeled = False, attr_indicating_labeled_op = ""):
+    def __init__(self, label_dict=None, allow_access_if_no_attr_labeled=False, attr_indicating_labeled_op=""):
         if label_dict is None:
             self.label_dict = {}
         else:
@@ -154,7 +154,7 @@ class LabelBasedAclVoter(AbstractAclVoter):
 
                 labeledArguments = [arg.getLabel() for arg in invocation.args if hasattr(arg, "getLabel")]
                 matches = [arg for arg in labeledArguments if arg in userLabels]
-                misses  = [arg for arg in labeledArguments if arg not in userLabels]
+                misses = [arg for arg in labeledArguments if arg not in userLabels]
                 self.logger.debug("Arguments: %s Matches: %s Misses: %s User labels: %s" % (labeledArguments, matches, misses, userLabels))
 
                 if len(matches) > 0 and misses == []:
@@ -178,7 +178,7 @@ class AccessDecisionManager:
     """"
     Makes a final access control (authorization) decision.
     """
-    def __init__(self, access_decision_voters = [], allow_if_all_abstain = False):
+    def __init__(self, access_decision_voters=[], allow_if_all_abstain=False):
         self.access_decision_voters = access_decision_voters
         self.allow_if_all_abstain = allow_if_all_abstain
 
@@ -199,7 +199,7 @@ class AffirmativeBased(AccessDecisionManager):
     Simple concrete implementation of AccessDecisionManager that grants access
     if any AccessDecisionVoter returns an affirmative response.
     """
-    def __init__(self, access_decision_voters = [], allow_if_all_abstain = False):
+    def __init__(self, access_decision_voters=[], allow_if_all_abstain=False):
         AccessDecisionManager.__init__(self, access_decision_voters, allow_if_all_abstain)
         self.logger = logging.getLogger("springpython.security.vote.AffirmativeBased")
 
@@ -219,7 +219,7 @@ class ConsensusBased(AccessDecisionManager):
     """
     Simple concrete implementation of AccessDecisionManager that uses a consensus-based approach.
     """
-    def __init__(self, access_decision_voters = [], allow_if_all_abstain = False):
+    def __init__(self, access_decision_voters=[], allow_if_all_abstain=False):
         AccessDecisionManager.__init__(self, access_decision_voters, allow_if_all_abstain)
         self.allow_if_tied = True
         self.logger = logging.getLogger("springpython.security.vote.ConsensusBased")
@@ -256,7 +256,7 @@ class UnanimousBased(AccessDecisionManager):
     Simple concrete implementation of AccessDecisionManager that requires all voters to
     abstain or grant access.
     """
-    def __init__(self, access_decision_voters = [], allow_if_all_abstain = False):
+    def __init__(self, access_decision_voters=[], allow_if_all_abstain=False):
         AccessDecisionManager.__init__(self, access_decision_voters, allow_if_all_abstain)
         self.logger = logging.getLogger("springpython.security.vote.UnanimousBased")
 

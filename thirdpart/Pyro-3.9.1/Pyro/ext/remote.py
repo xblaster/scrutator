@@ -27,20 +27,20 @@ from Pyro.protocol import ProtocolError
 
 true, false = 1, 0
 
-copy_types         = false
-verbose            = false
-pyro_nameserver    = None
-pyro_daemon        = None
+copy_types = false
+verbose = false
+pyro_nameserver = None
+pyro_daemon = None
 client_initialized = false
 server_initialized = false
-daemon_host        = ''
-daemon_port        = 0
-daemon_objects     = []
-daemon_types       = []
+daemon_host = ''
+daemon_port = 0
+daemon_objects = []
+daemon_types = []
 
 def tb_info(tb):
 	codename = tb.tb_frame.f_code.co_filename
-	lineno   = tb.tb_lineno
+	lineno = tb.tb_lineno
 	if not (codename == '<string>' or codename.find(".py") > 0):
 		lineno = lineno - 2
 	return lineno, codename
@@ -74,7 +74,7 @@ def canonize(e_type, e_val, e_traceback):
 	elif codename.find(".py") > 0 and e_type == "SyntaxError":
 		lines.insert(0, "%s in: %s" % (e_type, e_val))
 	else:
-		lines.insert(0, "%s in line %s of %s: %s" %
+		lines.insert(0, "%s in line %s of %s: %s" % 
 					 (e_type, lineno, codename, e_val))
 
 	return lines
@@ -102,7 +102,7 @@ def unregister_objects():
 
 sys.exitfunc = unregister_objects
 
-def host_ipaddr(interface = None):
+def host_ipaddr(interface=None):
 	if sys.platform == "win32":
 		return socket.gethostbyname(socket.gethostname())
 
@@ -111,9 +111,9 @@ def host_ipaddr(interface = None):
 		cmd = '%s %s' % (cmd, interface)
 	fd = os.popen(cmd)
 
-	this_host  = None
+	this_host = None
 	interfaces = {}
-	name       = None
+	name = None
 
 	for line in fd.readlines():
 		match = re.match("(\S+)", line)
@@ -138,10 +138,10 @@ def host_ipaddr(interface = None):
 
 	return this_host or socket.gethostbyname(socket.gethostname())
 
-def find_nameserver(hostname = None, portnum = None):
+def find_nameserver(hostname=None, portnum=None):
 	if hostname and hostname.find('://') > 0:
 		URI = Pyro.core.PyroURI(hostname)
-		ns  = Pyro.naming.NameServerProxy(URI)
+		ns = Pyro.naming.NameServerProxy(URI)
 	else:
 		try:
 			if verbose:
@@ -149,7 +149,7 @@ def find_nameserver(hostname = None, portnum = None):
 					(hostname or 'BROADCAST',
 					 portnum or Pyro.config.PYRO_NS_BC_PORT)
 			locator = Pyro.naming.NameServerLocator()
-			ns = locator.getNS(host = hostname, port = portnum)
+			ns = locator.getNS(host=hostname, port=portnum)
 
 		except (Pyro.core.PyroError, socket.error), x:
 			localhost = socket.gethostbyname('localhost')
@@ -159,7 +159,7 @@ def find_nameserver(hostname = None, portnum = None):
 Naming Service not found with broadcast.
 Trying local host""", localhost, '...',
 
-			ns = locator.getNS(host = localhost, port = portnum)
+			ns = locator.getNS(host=localhost, port=portnum)
 
 	if verbose: print 'Naming Service found at', ns.URI
 
@@ -195,7 +195,7 @@ class Nameserver:
 	service for publishing certain objects by name.  It integrates
 	better with remote.py, than Pyro.naming.NameServer does."""
 	def __init__(self, ns, ns_port):
-		self.ns      = ns
+		self.ns = ns
 		self.ns_port = ns_port
 
 	def __cmp__(self, other):
@@ -238,8 +238,8 @@ class DynamicProxy(Pyro.core.DynamicProxyWithAttrs):
 			if type_name == 'exceptions.IndexError':
 				try:
 					real_type = eval(type_name)
-					msg       = msg.split('\n')[0]
-					result    = real_type(msg[msg.find(':') + 2 :])
+					msg = msg.split('\n')[0]
+					result = real_type(msg[msg.find(':') + 2 :])
 				except:
 					pass
 
@@ -297,7 +297,7 @@ def wrap(value):
 		return copy
 	return value
 
-def get_remote_object(name, hostname = None, portnum = None):
+def get_remote_object(name, hostname=None, portnum=None):
 	global client_initialized, pyro_nameserver
 
 	# initialize Pyro -- Python Remote Objects
@@ -323,33 +323,33 @@ def get_remote_object(name, hostname = None, portnum = None):
 
 class Cache(UserDict.UserDict):
 	"""simple cache that uses least recently accessed time to trim size"""
-	def __init__(self,data=None,size=100):
-		UserDict.UserDict.__init__(self,data)
+	def __init__(self, data=None, size=100):
+		UserDict.UserDict.__init__(self, data)
 		self.size = size
 
 	def resize(self):
 		"""trim cache to no more than 95% of desired size"""
-		trim = max(0, int(len(self.data)-0.95*self.size))
+		trim = max(0, int(len(self.data) - 0.95 * self.size))
 		if trim:
 			# don't want self.items() because we must sort list by access time
 			values = map(None, self.data.values(), self.data.keys())
 			values.sort()
-			for val,k in values[0:trim]:
+			for val, k in values[0:trim]:
 				del self.data[k]
 
-	def __setitem__(self,key,val):
+	def __setitem__(self, key, val):
 		if (not self.data.has_key(key) and
 			len(self.data) >= self.size):
 			self.resize()
 		self.data[key] = (time.time(), val)
 
-	def __getitem__(self,key):
+	def __getitem__(self, key):
 		"""like normal __getitem__ but updates time of fetched entry"""
 		val = self.data[key][1]
-		self.data[key] = (time.time(),val)
+		self.data[key] = (time.time(), val)
 		return val
 
-	def get(self,key,default=None):
+	def get(self, key, default=None):
 		"""like normal __getitem__ but updates time of fetched entry"""
 		try:
 			return self[key]
@@ -373,9 +373,9 @@ class Cache(UserDict.UserDict):
 		for k in otherdict.keys():
 			self[k] = otherdict[k]
 
-provided_objects = Cache(size = 100)
+provided_objects = Cache(size=100)
 
-def provide_local_object(obj, name = None, hostname = None, portnum = None):
+def provide_local_object(obj, name=None, hostname=None, portnum=None):
 	global server_initialized, pyro_daemon, pyro_nameserver
 
 	proxy_class = DynamicProxy
@@ -385,8 +385,8 @@ def provide_local_object(obj, name = None, hostname = None, portnum = None):
 		server_initialized = true
 
 	if pyro_daemon is None:
-		pyro_daemon = Pyro.core.Daemon(host = daemon_host,
-									   port = daemon_port)
+		pyro_daemon = Pyro.core.Daemon(host=daemon_host,
+									   port=daemon_port)
 
 	# If no 'name' was specified, don't even bother with the
 	# nameserver.
@@ -428,11 +428,11 @@ def interrupt(*args):
 	global abort
 	abort = true
 
-if hasattr(signal,'SIGINT'): signal.signal(signal.SIGINT, interrupt)
+if hasattr(signal, 'SIGINT'): signal.signal(signal.SIGINT, interrupt)
 #if hasattr(signal,'SIGHUP'): signal.signal(signal.SIGHUP, interrupt)
 #if hasattr(signal,'SIGQUIT'): signal.signal(signal.SIGQUIT, interrupt)
 
-def handle_requests(wait_time = None, callback = None):
+def handle_requests(wait_time=None, callback=None):
 	global abort
 
 	abort = false
@@ -466,7 +466,7 @@ def handle_requests(wait_time = None, callback = None):
 
 	return abort
 
-def handle_requests_unsafe(wait_time = None, callback = None):
+def handle_requests_unsafe(wait_time=None, callback=None):
 	global abort
 
 	abort = false

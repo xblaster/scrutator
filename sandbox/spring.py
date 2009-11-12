@@ -15,8 +15,9 @@ from springpython.context import *
 
 
 class User:
-	def __init__(self):
+	def __init__(self, name="Elodie"):
 		print "hello"
+		print name
 		pass
 
 class TestApplicationContext(PythonConfig):
@@ -24,8 +25,12 @@ class TestApplicationContext(PythonConfig):
         super(TestApplicationContext, self).__init__()
 
     @Object(scope.SINGLETON)
+	
+    def UserName(self):
+		return "bob"
+	
     def User(self):
-        return User()
+        return User(self.app_context.get_object("UserName"))
 
 def main():
 	context = ApplicationContext(TestApplicationContext())

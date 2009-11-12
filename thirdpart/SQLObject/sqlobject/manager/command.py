@@ -226,7 +226,7 @@ class Command(object):
             if cls in dependency_stack:
                 dependency_stack.append(cls)
                 raise SQLObjectCircularReferenceError, (
-                        "Found a circular reference: %s " %
+                        "Found a circular reference: %s " % 
                         (' --> '.join([x.__name__
                                        for x in dependency_stack])))
             dependency_stack.append(cls)
@@ -275,7 +275,7 @@ class Command(object):
         self.parser.usage = "%%prog [options]\n%s" % self.summary
         if self.help:
             help = textwrap.fill(
-                self.help, int(os.environ.get('COLUMNS', 80))-4)
+                self.help, int(os.environ.get('COLUMNS', 80)) - 4)
             self.parser.usage += '\n' + help
         self.parser.prog = '%s %s' % (
             os.path.basename(self.invoked_as),
@@ -459,7 +459,7 @@ class Command(object):
             for fname in filenames:
                 module_name = os.path.join(dir_name, fname)
                 module_name = module_name[module_name.find(package_name):]
-                module_name = module_name.replace(os.path.sep,'.')[:-3]
+                module_name = module_name.replace(os.path.sep, '.')[:-3]
                 try:
                     module = moduleloader.load_module(module_name)
                 except ImportError, err:
@@ -545,7 +545,7 @@ class Command(object):
         directory (if it can).  For display purposes.
         """
         if fn.startswith(os.getcwd() + '/'):
-            fn = fn[len(os.getcwd())+1:]
+            fn = fn[len(os.getcwd()) + 1:]
         return fn
 
     def open_editor(self, pretext, breaker=None, extension='.txt'):
@@ -808,7 +808,7 @@ class CommandHelp(Command):
             max_len = max([len(cn) for cn, c in items])
             for command_name, command in items:
                 print '%s:%s %s' % (command_name,
-                                    ' '*(max_len-len(command_name)),
+                                    ' '*(max_len - len(command_name)),
                                     command.summary)
                 if command.aliases:
                     print '%s (Aliases: %s)' % (
@@ -1033,13 +1033,13 @@ class CommandRecord(Command):
                        "previous version")
             else:
                 breaker = ('-'*20 + ' lines below this will be ignored '
-                           + '-'*20)
+                           + '-' * 20)
                 pre_text = breaker + '\n' + '\n'.join(all_diffs)
                 text = self.open_editor('\n\n' + pre_text, breaker=breaker,
                                         extension='.sql')
                 if text is not None:
                     fn = os.path.join(last_version_dir,
-                                      'upgrade_%s_%s.sql' %
+                                      'upgrade_%s_%s.sql' % 
                                       (dbName, version))
                     f = open(fn, 'w')
                     f.write(text)
@@ -1081,7 +1081,7 @@ class CommandRecord(Command):
     def find_output_dir(self):
         today = time.strftime('%Y-%m-%d', time.localtime())
         if self.options.version_name:
-            dir = os.path.join(self.base_dir(), today + '-' +
+            dir = os.path.join(self.base_dir(), today + '-' + 
                                self.options.version_name)
             if os.path.exists(dir):
                 print ("Error, directory already exists: %s"
@@ -1096,7 +1096,7 @@ class CommandRecord(Command):
             if not extra:
                 extra = 'a'
             else:
-                extra = chr(ord(extra)+1)
+                extra = chr(ord(extra) + 1)
 
     def find_last_version(self):
         names = []
@@ -1185,7 +1185,7 @@ class CommandUpgrade(CommandRecord):
             if v:
                 print "Running:"
                 print sql
-                print '-'*60
+                print '-' * 60
             if not sim:
                 try:
                     conn.query(sql)

@@ -117,7 +117,7 @@ class SybaseConnection(DBAPI):
     def joinSQLType(self, join):
         return 'NUMERIC(18,0) NOT NULL'
 
-    SHOW_TABLES="SELECT name FROM sysobjects WHERE type='U'"
+    SHOW_TABLES = "SELECT name FROM sysobjects WHERE type='U'"
     def tableExists(self, tableName):
         for (table,) in self.queryAll(self.SHOW_TABLES):
             if table.lower() == tableName.lower():
@@ -125,14 +125,14 @@ class SybaseConnection(DBAPI):
         return False
 
     def addColumn(self, tableName, column):
-        self.query('ALTER TABLE %s ADD COLUMN %s' %
+        self.query('ALTER TABLE %s ADD COLUMN %s' % 
                    (tableName,
                     column.sybaseCreateSQL()))
 
     def delColumn(self, sqlmeta, column):
         self.query('ALTER TABLE %s DROP COLUMN %s' % (sqlmeta.table, column.dbName))
 
-    SHOW_COLUMNS=('SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS '
+    SHOW_COLUMNS = ('SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS '
                   'WHERE TABLE_NAME = \'%s\'')
     def columnsFromSchema(self, tableName, soClass):
         colData = self.queryAll(self.SHOW_COLUMNS

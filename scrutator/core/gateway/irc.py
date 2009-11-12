@@ -7,36 +7,36 @@ class IrcGate(irc.IRCClient):
 	
 	def push(self, event):
 		return self.eventMgr.push(event)
-    
-    def connectionMade(self):
+
+	def connectionMade(self):
 		pass
 
-    def connectionLost(self, reason):
+	def connectionLost(self, reason):
 		pass
 
 
-    # callbacks for events
+	# callbacks for events
 
-    def signedOn(self):
-		pass
-        
-    def joined(self, channel):
+	def signedOn(self):
 		pass
 
-    def privmsg(self, user, channel, msg):
+	def joined(self, channel):
 		pass
 
-    def action(self, user, channel, msg):
+	def privmsg(self, user, channel, msg):
+		pass
+
+	def action(self, user, channel, msg):
 		pass
 
     # irc callbacks
 
-    def irc_NICK(self, prefix, params):
-        """Called when an IRC user changes their nickname."""
+	def irc_NICK(self, prefix, params):
+		"""Called when an IRC user changes their nickname."""
 		pass
     
-    def kickedFrom(self, channel, kicker, message):
+	def kickedFrom(self, channel, kicker, message):
 		pass
         
-    def left(self, channel):
+	def left(self, channel):
 		pass

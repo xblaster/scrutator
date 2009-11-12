@@ -27,7 +27,7 @@ def test_creation_fail():
     """
     setupClass([DIManager, DIEmployee, DIPerson])
 
-    kwargs ={'firstName':'John', 'lastname':'Doe'}
+    kwargs = {'firstName':'John', 'lastname':'Doe'}
     raises(TypeError, DIManager, **kwargs)
     #what we really need to check for is partial records in the database.
     #the following is not really adaquate.

@@ -19,7 +19,7 @@ import datetime
 
 try:
     import Sybase
-    NumericType=Sybase.NumericType
+    NumericType = Sybase.NumericType
 except ImportError:
     NumericType = None
 

@@ -11,4 +11,4 @@ def isSupported():
         return False
     return True
 
-registerConnection(['maxdb','sapdb'],builder, isSupported)
+registerConnection(['maxdb', 'sapdb'], builder, isSupported)

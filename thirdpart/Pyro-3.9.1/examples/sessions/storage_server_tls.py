@@ -20,7 +20,7 @@ in it. If not using multithreading things will break: almost all lines
 because wrong stuff is closed."""
 print
 
-Pyro.config.PYRO_MULTITHREADED=raw_input("Enable multithreading y/n? ") in ('y','Y')
+Pyro.config.PYRO_MULTITHREADED = raw_input("Enable multithreading y/n? ") in ('y', 'Y')
 
 
 # The datastore.
@@ -28,23 +28,23 @@ Pyro.config.PYRO_MULTITHREADED=raw_input("Enable multithreading y/n? ") in ('y',
 # The resource that is owned by this user session (the file handle) is stored on the TLS.
 class DataStore(Pyro.core.ObjBase):
 	def init(self, username):
-		tls=self.getLocalStorage()
-		tls.datastore=open("datastorage_%s.txt"%username,"w")
+		tls = self.getLocalStorage()
+		tls.datastore = open("datastorage_%s.txt" % username, "w")
 		
 	def addline(self, textline):
-		tls=self.getLocalStorage()
-		sys.stdout.write("adding line to "+tls.datastore.name+"\n")
+		tls = self.getLocalStorage()
+		sys.stdout.write("adding line to " + tls.datastore.name + "\n")
 		sys.stdout.flush()
-		tls.datastore.write(textline+" | came from "+str(tls.caller)+"\n")
+		tls.datastore.write(textline + " | came from " + str(tls.caller) + "\n")
 	
 	def close(self):
-		tls=self.getLocalStorage()
+		tls = self.getLocalStorage()
 		tls.datastore.close()	
 			
 		
 
-daemon=Pyro.core.Daemon()
-ns=Pyro.naming.NameServerLocator().getNS()
+daemon = Pyro.core.Daemon()
+ns = Pyro.naming.NameServerLocator().getNS()
 daemon.useNameServer(ns)
 
 try:

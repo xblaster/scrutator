@@ -17,30 +17,30 @@ class Chatter(Publisher, Subscriber):
 	def __init__(self):
 		Publisher.__init__(self)
 		Subscriber.__init__(self)
-		self.chatbox = Pyro.core.getProxyForURI('PYRONAME://'+CHAT_SERVER_NAME)
+		self.chatbox = Pyro.core.getProxyForURI('PYRONAME://' + CHAT_SERVER_NAME)
 	def event(self, event):
-		(nick,line)=event.msg
-		if nick!=self.nick:
-			print '['+nick+'] '+line
+		(nick, line) = event.msg
+		if nick != self.nick:
+			print '[' + nick + '] ' + line
 	def chooseChannel(self):
-		nicks=self.chatbox.getNicks()
+		nicks = self.chatbox.getNicks()
 		if nicks:
-			print 'The following people are on the server: ',', '.join(nicks)
-		channels=self.chatbox.getChannels()
+			print 'The following people are on the server: ', ', '.join(nicks)
+		channels = self.chatbox.getChannels()
 		channels.sort()
 		if channels:
-			print 'The following channels already exist: ',', '.join(channels)
+			print 'The following channels already exist: ', ', '.join(channels)
 			print
-			self.channel=raw_input('Choose a channel or create a new one: ')
+			self.channel = raw_input('Choose a channel or create a new one: ')
 		else:
 			print 'The server has no active channels.'
-			self.channel=raw_input('Name for new channel: ')
-		self.nick=raw_input('Choose a nickname: ')
-		(self.eventTopic, people)=self.chatbox.join(self.channel,self.nick)
+			self.channel = raw_input('Name for new channel: ')
+		self.nick = raw_input('Choose a nickname: ')
+		(self.eventTopic, people) = self.chatbox.join(self.channel, self.nick)
 		self.subscribe(self.eventTopic)
-		print 'Joined channel',self.channel,'as',self.nick
-		print 'People on this channel:',', '.join(people)
-		self.inputThread=Thread(target=self.handleInput)
+		print 'Joined channel', self.channel, 'as', self.nick
+		print 'People on this channel:', ', '.join(people)
+		self.inputThread = Thread(target=self.handleInput)
 		self.inputThread.start()
 		try:
 			self.listen()
@@ -53,25 +53,25 @@ class Chatter(Publisher, Subscriber):
 		try:
 			try:
 				while not self.abortListen:
-					line=raw_input('> ')
-					if line=='/quit':
+					line = raw_input('> ')
+					if line == '/quit':
 						break
 					if line:
-						self.publish(self.eventTopic,(self.nick,line))
+						self.publish(self.eventTopic, (self.nick, line))
 			except EOFError:
 				pass
 		finally:
 			# need to get new chatbox proxy because we're in a different thread
-			chatbox = Pyro.core.getProxyForURI('PYRONAME://'+CHAT_SERVER_NAME)
+			chatbox = Pyro.core.getProxyForURI('PYRONAME://' + CHAT_SERVER_NAME)
 			chatbox.leave(self.channel, self.nick)
 			self.abort()
 			print 'Bye!'
 
 
 def main():
-	chatter=Chatter()
+	chatter = Chatter()
 	chatter.chooseChannel()
 
 	
-if __name__=="__main__":
+if __name__ == "__main__":
 	main()

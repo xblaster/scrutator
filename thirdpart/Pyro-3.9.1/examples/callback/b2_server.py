@@ -18,7 +18,7 @@ try:
 except NamingError:
 	pass
 
-daemon.connect(bouncer.Bouncer('Server'),':test.bouncer2')
+daemon.connect(bouncer.Bouncer('Server'), ':test.bouncer2')
 
 # enter the service loop.
 print 'This bounce example will deadlock!'

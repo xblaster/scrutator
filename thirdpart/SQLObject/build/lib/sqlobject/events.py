@@ -193,15 +193,15 @@ def summarize_events_by_sender(sender=None, output=None, indent=0):
                 continue
             header = 'Sender: %r' % real_sender
             print >> output, (' '*indent) + header
-            print >> output, (' '*indent) + '='*len(header)
-            summarize_events_by_sender(real_sender, output=output, indent=indent+2)
+            print >> output, (' '*indent) + '=' * len(header)
+            summarize_events_by_sender(real_sender, output=output, indent=indent + 2)
     else:
         for signal, receivers in sorted_items(dispatcher.connections.get(id(sender), [])):
             receivers = [deref(r) for r in receivers if deref(r)]
             header = 'Signal: %s (%i receivers)' % (sort_name(signal),
                                                     len(receivers))
             print >> output, (' '*indent) + header
-            print >> output, (' '*indent) + '-'*len(header)
+            print >> output, (' '*indent) + '-' * len(header)
             for receiver in sorted(receivers, key=sort_name):
                 print >> output, (' '*indent) + '  ' + nice_repr(receiver)
 

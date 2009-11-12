@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 import Pyro.naming, Pyro.core, Pyro.util, Pyro.protocol, Pyro.constants
-from Pyro.errors import PyroError,NamingError
+from Pyro.errors import PyroError, NamingError
 from Pyro.protocol import getHostname
 
 
@@ -12,28 +12,28 @@ from Pyro.protocol import getHostname
 class hostCheckingValidator(Pyro.protocol.DefaultConnValidator):
 	def __init__(self):
 		Pyro.protocol.DefaultConnValidator.__init__(self)
-	def acceptHost(self,daemon,conn):
-		(ip, port)=conn.addr
+	def acceptHost(self, daemon, conn):
+		(ip, port) = conn.addr
 		try:
-			hostname=getHostname(ip)
+			hostname = getHostname(ip)
 		except:
-			hostname='<unknown>'
-		print '\nNew connection from',ip,hostname
-		a=raw_input('Do you want to accept this? y/n: ')
-		if a=='y':
+			hostname = '<unknown>'
+		print '\nNew connection from', ip, hostname
+		a = raw_input('Do you want to accept this? y/n: ')
+		if a == 'y':
 			# user accepts, but pass it on to the default validator,
 			# which will check the max. number of connections...
-			return Pyro.protocol.DefaultConnValidator.acceptHost(self,daemon, conn)
+			return Pyro.protocol.DefaultConnValidator.acceptHost(self, daemon, conn)
 		else:
-			Pyro.util.Log.msg('ConnValidator','User denied connection from',ip,hostname)
-			return (0,Pyro.constants.DENIED_HOSTBLOCKED)	# not ok
+			Pyro.util.Log.msg('ConnValidator', 'User denied connection from', ip, hostname)
+			return (0, Pyro.constants.DENIED_HOSTBLOCKED)	# not ok
 
 
 ##### test object
 
 class testobject(Pyro.core.ObjBase):
-	def method(self,arg):
-		print 'method was called with',arg
+	def method(self, arg):
+		print 'method was called with', arg
 		return 42
 
 
@@ -41,9 +41,9 @@ class testobject(Pyro.core.ObjBase):
 
 # initialize the server and set the default namespace group
 Pyro.core.initServer()
-Pyro.config.PYRO_TRACELEVEL=3
-Pyro.config.PYRO_NS_DEFAULTGROUP=':test'
-Pyro.config.PYRO_LOGFILE='server_log'
+Pyro.config.PYRO_TRACELEVEL = 3
+Pyro.config.PYRO_NS_DEFAULTGROUP = ':test'
+Pyro.config.PYRO_LOGFILE = 'server_log'
 print 'Check the logfile for messages: server_log'
 
 # Construct the Pyro Daemon with our own connection validator
@@ -55,7 +55,7 @@ locator = Pyro.naming.NameServerLocator()
 print 'searching for Naming Service...'
 ns = locator.getNS()
 
-print 'Naming Service found at',ns.URI.address,'('+(Pyro.protocol.getHostname(ns.URI.address) or '??')+') port',ns.URI.port
+print 'Naming Service found at', ns.URI.address, '(' + (Pyro.protocol.getHostname(ns.URI.address) or '??') + ') port', ns.URI.port
 
 # make sure our namespace group exists
 try: ns.createGroup(':test')
@@ -67,7 +67,7 @@ daemon.useNameServer(ns)
 try: ns.unregister('denyhosts')
 except NamingError: pass
 
-daemon.connect(testobject(),'denyhosts')
+daemon.connect(testobject(), 'denyhosts')
 
 # enter the service loop.
 print 'Server object "denyhosts" ready.'

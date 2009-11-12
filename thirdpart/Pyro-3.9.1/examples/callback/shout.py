@@ -14,5 +14,5 @@ def main():
 	print 'Shouting something'
 	server.shout('somebody there?')
 
-if __name__=='__main__':
+if __name__ == '__main__':
 	main()

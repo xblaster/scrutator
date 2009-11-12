@@ -22,4 +22,4 @@ while True:
         print "no, trying again"
         time.sleep(1)
 
-print "getting the result from the server:",serv.result()
+print "getting the result from the server:", serv.result()

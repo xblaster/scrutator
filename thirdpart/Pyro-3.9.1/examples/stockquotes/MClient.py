@@ -9,13 +9,13 @@ class MatchStockSubscriber(Subscriber):
 		Subscriber.__init__(self)
 		self.subscribeMatch(pattern)
 	def event(self, event):
-		print event.subject,'=',event.msg
+		print event.subject, '=', event.msg
 
 pattern = '^STOCKQUOTE\\.S.*$'
 
 try:
-	listener=MatchStockSubscriber(pattern)
-	print 'Listening on pattern',pattern
+	listener = MatchStockSubscriber(pattern)
+	print 'Listening on pattern', pattern
 	listener.listen()
 except NamingError:
 	print 'Cannot find service. Is the Event Service running?'

@@ -14,21 +14,21 @@ group = ':test'  # the default namespace group for the tests
 def getproxy(objName, withAttrs=0):
 	# initialize the client and set the default namespace group
 	Pyro.core.initClient()
-	Pyro.config.PYRO_NS_DEFAULTGROUP=group
+	Pyro.config.PYRO_NS_DEFAULTGROUP = group
 
 	# locate the NS
 	locator = Pyro.naming.NameServerLocator()
 	print 'Searching Naming Service...',
 	ns = locator.getNS()
-	print 'Naming Service found at',ns.URI.address,'('+(Pyro.protocol.getHostname(ns.URI.address) or '??')+') port',ns.URI.port
+	print 'Naming Service found at', ns.URI.address, '(' + (Pyro.protocol.getHostname(ns.URI.address) or '??') + ') port', ns.URI.port
 
 	# resolve the Pyro object
 	print 'asking for object'
 	try:
-		URI=ns.resolve(objName)
-		print 'URI:',URI
-	except Pyro.core.PyroError,x:
-		print 'Couldn\'t locate object, nameserver says:',x
+		URI = ns.resolve(objName)
+		print 'URI:', URI
+	except Pyro.core.PyroError, x:
+		print 'Couldn\'t locate object, nameserver says:', x
 		raise SystemExit
 
 	# create a proxy for the Pyro object, and return that

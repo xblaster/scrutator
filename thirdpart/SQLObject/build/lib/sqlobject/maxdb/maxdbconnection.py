@@ -32,7 +32,7 @@ class LowerBoundOfSliceIsNotSupported(maxdbException):
         maxdbException.__init__(self, '')
 
 class IncorrectIDStyleError(maxdbException) :
-    def __init__(self,value):
+    def __init__(self, value):
         maxdbException.__init__(
             self,
             'This primary key name is not in the expected style, '
@@ -52,7 +52,7 @@ class PrimaryKeyNotFounded(maxdbException):
             self,
             "No primary key was defined on table %r" % value)
 
-SAPDBMAX_ID_LENGTH=32
+SAPDBMAX_ID_LENGTH = 32
 
 class MaxdbConnection(DBAPI):
 
@@ -68,13 +68,13 @@ class MaxdbConnection(DBAPI):
             from sapdb import dbapi
         self.module = dbapi
         self.autoCommit = autoCommit
-        self.user      = user
-        self.password  = password
-        self.database  = database
-        self.host      = host
-        self.sqlmode   = sqlmode
+        self.user = user
+        self.password = password
+        self.database = database
+        self.host = host
+        self.sqlmode = sqlmode
         self.isolation = isolation
-        self.timeout   = timeout
+        self.timeout = timeout
 
         DBAPI.__init__(self, **kw)
 
@@ -84,26 +84,26 @@ class MaxdbConnection(DBAPI):
         return cls(host, db=path, user=auth, password=password, **args)
     connectionFromURI = classmethod(connectionFromURI)
 
-    def _getConfigParams(self,sqlmode,auto):
-        autocommit='off'
+    def _getConfigParams(self, sqlmode, auto):
+        autocommit = 'off'
         if auto:
-            autocommit='on'
+            autocommit = 'on'
         opt = {}
         opt["autocommit"] = autocommit
         opt["sqlmode"] = sqlmode
         if self.isolation:
-            opt["isolation"]=self.isolation
+            opt["isolation"] = self.isolation
         if self.timeout :
-            opt["timeout"]=self.timeout
+            opt["timeout"] = self.timeout
         return opt
 
     def _setAutoCommit(self, conn, auto):
         conn.close()
         conn.__init__(self.user, self.password, self.database,
                       self.host,
-                      **self._getConfigParams(self.sqlmode,auto))
+                      **self._getConfigParams(self.sqlmode, auto))
 
-    def createSequenceName(self,table):
+    def createSequenceName(self, table):
         """
         sequence name are builded with the concatenation of the table
         name with '_SEQ' word we truncate the name of the
@@ -111,12 +111,12 @@ class MaxdbConnection(DBAPI):
         characters so that the name of the sequence does not exceed 32
         characters
         """
-        return '%s_SEQ'%(table[:SAPDBMAX_ID_LENGTH -4])
+        return '%s_SEQ' % (table[:SAPDBMAX_ID_LENGTH - 4])
 
     def makeConnection(self):
         conn = dbapi.Connection(
             self.user, self.password, self.database, self.host,
-            **self._getConfigParams(self.sqlmode,self.autoCommit))
+            **self._getConfigParams(self.sqlmode, self.autoCommit))
         return conn
 
     def _queryInsertID(self, conn, soInstance, id, names, values):
@@ -136,9 +136,9 @@ class MaxdbConnection(DBAPI):
             self.printDebug(conn, id, 'QueryIns', 'result')
         return id
 
-    def sqlAddLimit(cls,query,limit):
+    def sqlAddLimit(cls, query, limit):
         sql = query
-        sql = sql.replace("SELECT","SELECT ROWNO, ")
+        sql = sql.replace("SELECT", "SELECT ROWNO, ")
         if sql.find('WHERE') != -1:
             sql = sql + ' AND ' + limit
         else:
@@ -150,7 +150,7 @@ class MaxdbConnection(DBAPI):
         if start:
             raise LowerBoundOfSliceIsNotSupported
         limit = ' ROWNO   <= %d ' % (end)
-        return cls.sqlAddLimit(query,limit)
+        return cls.sqlAddLimit(query, limit)
     _queryAddLimitOffset = classmethod(_queryAddLimitOffset)
 
 
@@ -185,7 +185,7 @@ class MaxdbConnection(DBAPI):
     def createIndexSQL(self, soClass, index):
         return index.maxdbCreateIndexSQL(soClass)
 
-    def dropTable(self, tableName,cascade=False):
+    def dropTable(self, tableName, cascade=False):
         #we drop the table in a transaction because the removal of the
         #table and the sequence must be atomic
         #i tried to use the transaction class but i get a recursion limit error
@@ -210,7 +210,7 @@ class MaxdbConnection(DBAPI):
         return False
 
     def addColumn(self, tableName, column):
-        self.query('ALTER TABLE %s ADD %s' %
+        self.query('ALTER TABLE %s ADD %s' % 
                    (tableName,
                     column.maxdbCreateSQL()))
 
@@ -238,16 +238,16 @@ class MaxdbConnection(DBAPI):
 
         results = []
         keymap = {}
-        pkmap={}
-        fkData = self.queryAll(self.GET_PK_AND_FK% tableName)
+        pkmap = {}
+        fkData = self.queryAll(self.GET_PK_AND_FK % tableName)
         for col, cons_type, refcol, reftable in fkData:
-            col_name= col.lower()
-            pkmap[col_name]=False
+            col_name = col.lower()
+            pkmap[col_name] = False
             if cons_type == 'R':
-                keymap[col_name]=reftable.lower()
+                keymap[col_name] = reftable.lower()
 
             elif cons_type == 'P':
-                pkmap[col_name]=True
+                pkmap[col_name] = True
 
         if len(pkmap) == 0:
             raise PrimaryKeyNotFounded, tableName
@@ -260,14 +260,14 @@ class MaxdbConnection(DBAPI):
             if field_name == 'id' and  pkmap[field_name]:
                 continue
 
-            colClass, kw = self.guessClass(data_type,data_len,data_scale)
+            colClass, kw = self.guessClass(data_type, data_len, data_scale)
             kw['name'] = field_name
             kw['dbName'] = field
 
             if nullAllowed == 'Y' :
-                nullAllowed=False
+                nullAllowed = False
             else:
-                nullAllowed=True
+                nullAllowed = True
 
             kw['notNone'] = nullAllowed
             if default is not None:
@@ -280,8 +280,8 @@ class MaxdbConnection(DBAPI):
 
         return results
 
-    _numericTypes=['INTEGER', 'INT','SMALLINT']
-    _dateTypes=['DATE','TIME','TIMESTAMP']
+    _numericTypes = ['INTEGER', 'INT', 'SMALLINT']
+    _dateTypes = ['DATE', 'TIME', 'TIMESTAMP']
 
     def guessClass(self, t, flength, fscale=None):
         """
@@ -301,7 +301,7 @@ class MaxdbConnection(DBAPI):
         elif t in self._dateTypes:
             return col.DateTimeCol, {}
         elif t == 'FIXED':
-            return CurrencyCol,{'size':flength,
+            return CurrencyCol, {'size':flength,
                                 'precision':fscale}
         else:
             return col.Col, {}

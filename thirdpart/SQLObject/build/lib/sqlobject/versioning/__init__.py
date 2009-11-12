@@ -58,7 +58,7 @@ def getColumns(columns, cls):
 
 
 class Versioning(object):
-    def __init__(self, extraCols = None):
+    def __init__(self, extraCols=None):
         if extraCols:
             self.extraCols = extraCols
         else:
@@ -79,7 +79,7 @@ class Versioning(object):
 
         attrs.update(self.extraCols)
 
-        self.versionClass = type(self.soClass.__name__+'Versions',
+        self.versionClass = type(self.soClass.__name__ + 'Versions',
                                  (Version,),
                                  attrs)
 
@@ -111,5 +111,5 @@ class Versioning(object):
         if obj is None:
             return self
         return self.versionClass.select(
-            self.versionClass.q.masterID==obj.id, connection=obj._connection)
+            self.versionClass.q.masterID == obj.id, connection=obj._connection)
 

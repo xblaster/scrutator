@@ -74,7 +74,7 @@ class MethodInvocation(object):
         self.kwargs = kwargs
         return self.proceed()
 
-    def dump_interceptors(self, level = logging.INFO):
+    def dump_interceptors(self, level=logging.INFO):
         """DEBUG: Method used to dump the stack of interceptors in order of execution."""
         for interceptor in self.intercept_stack:
             self.logger.log(level, "Interceptor stack: %s" % interceptor.__class__.__name__)
@@ -84,7 +84,7 @@ class RegexpMethodPointcutAdvisor(Pointcut, MethodMatcher, MethodInterceptor):
     This is a combination PointCut/MethodMatcher/MethodInterceptor. It allows associating one or more
     defined advices with a set of regular expression patterns.
     """
-    def __init__(self, advice = None, patterns = None):
+    def __init__(self, advice=None, patterns=None):
         Pointcut.__init__(self)
         MethodMatcher.__init__(self)
         self.advice = advice
@@ -204,7 +204,7 @@ class ProxyFactory(object):
     """This object helps to build AopProxy objects programmatically. It allows configuring advice and target objects.
     Then it will produce an AopProxy when needed. To use similar behavior in an IoC environment, see ProxyFactoryObject."""
     
-    def __init__(self, target = None, interceptors = None):
+    def __init__(self, target=None, interceptors=None):
         self.logger = logging.getLogger("springpython.aop.ProxyFactory")
         self.target = target
         if not interceptors:
@@ -228,7 +228,7 @@ class ProxyFactory(object):
 class ProxyFactoryObject(ProxyFactory, AopProxy):
     """This class acts as both a ProxyFactory to build and an AopProxy. It makes itself look like the target object.
     Any changes to the target and list of interceptors is immediately seen when using this as a proxy."""
-    def __init__(self, target = None, interceptors = None):
+    def __init__(self, target=None, interceptors=None):
         ProxyFactory.__init__(self, target, interceptors)
         self.logger = logging.getLogger("springpython.aop.ProxyFactoryObject")
         
@@ -236,7 +236,7 @@ class ProxyFactoryObject(ProxyFactory, AopProxy):
         return self.__getattr__("__str__")()
 
 class PerformanceMonitorInterceptor(MethodInterceptor):
-    def __init__(self, prefix = None, level = logging.DEBUG):
+    def __init__(self, prefix=None, level=logging.DEBUG):
         self.prefix = prefix
         self.level = level
         self.logger = logging.getLogger("springpython.aop")
@@ -246,5 +246,5 @@ class PerformanceMonitorInterceptor(MethodInterceptor):
         timing.start()
         results = invocation.proceed()
         timing.finish()
-        self.logger.log(self.level, "%s END => %s" % (self.prefix, timing.milli()/1000.0))
+        self.logger.log(self.level, "%s END => %s" % (self.prefix, timing.milli() / 1000.0))
         return results

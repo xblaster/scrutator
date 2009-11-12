@@ -1,10 +1,10 @@
 from SQLObject import *
-conn = PostgresConnection(db = 'merchant_test', user = 'merchant_test', password = 'mtest')
+conn = PostgresConnection(db='merchant_test', user='merchant_test', password='mtest')
 
 class Role(SQLObject):
     _connection = conn
 
-    name = StringCol(length = 20)
+    name = StringCol(length=20)
     people = RelatedJoin('Person')
     
 class Person(SQLObject):
@@ -12,9 +12,9 @@ class Person(SQLObject):
 
     _connection = conn
     
-    firstName = StringCol(length = 100)
-    middleInitial = StringCol(length = 1)
-    lastName = StringCol(length = 150)
+    firstName = StringCol(length=100)
+    middleInitial = StringCol(length=1)
+    lastName = StringCol(length=150)
     phoneNumbers = MultipleJoin("PhoneNumber") 
 
     roles = RelatedJoin('Role')
@@ -23,4 +23,4 @@ class PhoneNumber(SQLObject):
     _connection = conn
 
     person = ForeignKey('Person')
-    phoneNumber = StringCol(length = 10)
+    phoneNumber = StringCol(length=10)

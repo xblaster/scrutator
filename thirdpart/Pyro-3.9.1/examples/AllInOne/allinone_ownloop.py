@@ -31,17 +31,17 @@ class PropertyChangePublisher(Pyro.core.ObjBase, Publisher):
 	def __init__(self, name):
 		Pyro.core.ObjBase.__init__(self)
 		Publisher.__init__(self)
-		self.name=name
+		self.name = name
 	def setProperty(self, property, value):
-		print self.name,"sets",property,"to",value
-		self.publish(self.name+"."+property, value)
+		print self.name, "sets", property, "to", value
+		self.publish(self.name + "." + property, value)
 
 class PropertyChangeListener(Subscriber):
 	def __init__(self):
 		Subscriber.__init__(self)
-	def event(self,event):
+	def event(self, event):
 		# event.msg, subject, time
-		print "Listener got Event: %s=%s"%(event.subject, event.msg)
+		print "Listener got Event: %s=%s" % (event.subject, event.msg)
 
 	
 
@@ -51,32 +51,32 @@ class Server(Thread):
 	def __init__(self):
 		Thread.__init__(self)
 		self.setDaemon(1)
-		self.ns_starter=None
-		self.ns_sockets=[]
-		self.es_starter=None
-		self.es_sockets=[]
-		self.daemon=None
+		self.ns_starter = None
+		self.ns_sockets = []
+		self.es_starter = None
+		self.es_sockets = []
+		self.daemon = None
 		# daemon sockets are dynamic...
-		self.listener=None
-		self.listener_sockets=[]
+		self.listener = None
+		self.listener_sockets = []
 	def setNameServerStarter(self, starter):
 		starter.waitUntilStarted()
-		self.ns_starter=starter
-		self.ns_sockets=starter.getServerSockets()
+		self.ns_starter = starter
+		self.ns_sockets = starter.getServerSockets()
 	def setEventServerStarter(self, starter):
 		starter.waitUntilStarted()
-		self.es_starter=starter
-		self.es_sockets=starter.getServerSockets()
+		self.es_starter = starter
+		self.es_sockets = starter.getServerSockets()
 	def setPyroDaemon(self, daemon):
-		self.daemon=daemon
+		self.daemon = daemon
 	def setEventListener(self, listener):
-		self.listener=listener
-		self.listener_sockets=listener.getDaemon().getServerSockets()
+		self.listener = listener
+		self.listener_sockets = listener.getDaemon().getServerSockets()
 	def run(self):
 		Pyro.core.initServer()
 		while 1:
 			all_sockets = self.ns_sockets + self.es_sockets + self.listener_sockets
-			daemon_sockets=[]
+			daemon_sockets = []
 			if self.daemon:
 				# daemon sockets are dynamic.
 				daemon_sockets = self.daemon.getServerSockets()
@@ -85,7 +85,7 @@ class Server(Thread):
 			################### CUSTOM EVENT LOOP ####################
 
 			if all_sockets:
-				ins,outs,exs=select.select(all_sockets,[],[],1)
+				ins, outs, exs = select.select(all_sockets, [], [], 1)
 			else:
 				# windows doesn't like empty select. Just wait a while.
 				time.sleep(1)
@@ -135,26 +135,26 @@ def main():
 	starter = Pyro.naming.NameServerStarter()  # no special identification
 	starter.initialize()
 	server.setNameServerStarter(starter)
-	print "NAME SERVER STARTED ON PORT",starter.daemon.port
+	print "NAME SERVER STARTED ON PORT", starter.daemon.port
 	
 	print "STARTING EVENT SERVER"
 	starter = Pyro.EventService.Server.EventServiceStarter()  # no special identification
 	# use port autoselect
-	es_port=0
-	starter.initialize(port=es_port, norange=(es_port==0))
+	es_port = 0
+	starter.initialize(port=es_port, norange=(es_port == 0))
 	server.setEventServerStarter(starter)
-	print "EVENT SERVER STARTED ON PORT",starter.daemon.port
+	print "EVENT SERVER STARTED ON PORT", starter.daemon.port
 
 	print "CREATING PYRO SERVER OBJECTS AND PYRO DAEMON"
 	# use port autoselect
-	port=0
-	daemon = Pyro.core.Daemon(port=port, norange=(port==0))
+	port = 0
+	daemon = Pyro.core.Daemon(port=port, norange=(port == 0))
 	daemon.useNameServer(Pyro.naming.NameServerLocator().getNS())
 	daemon.connect(PropertyChangePublisher("publisher1"), "publisher1")
 	daemon.connect(PropertyChangePublisher("publisher2"), "publisher2")
 	daemon.connect(PropertyChangePublisher("publisher3"), "publisher3")
 	server.setPyroDaemon(daemon)
-	print "PYRO SERVER ACTIVATED ON PORT",daemon.port
+	print "PYRO SERVER ACTIVATED ON PORT", daemon.port
 
 	listener = PropertyChangeListener()
 	listener.subscribeMatch("^publisher.\\..*$")
@@ -169,12 +169,12 @@ def main():
 	try:
 		while True:
 			print "MAIN LOOP CHANGES PROPERTIES..."
-			p1.setProperty(random.choice(string.uppercase), random.randint(0,1000))
-			p2.setProperty(random.choice(string.uppercase), random.randint(0,1000))
-			p3.setProperty(random.choice(string.uppercase), random.randint(0,1000))
+			p1.setProperty(random.choice(string.uppercase), random.randint(0, 1000))
+			p2.setProperty(random.choice(string.uppercase), random.randint(0, 1000))
+			p3.setProperty(random.choice(string.uppercase), random.randint(0, 1000))
 			time.sleep(1)
-	except Exception,x:
+	except Exception, x:
 		print "".join(Pyro.util.getPyroTraceback(x))
 
-if __name__=="__main__":
+if __name__ == "__main__":
 	main()

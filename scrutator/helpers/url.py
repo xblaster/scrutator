@@ -18,10 +18,10 @@ def detect_link(message):
         return m.group()
 
 def get_comment(message):
-    separator = ['<=','=>','<-','->','<','>']
+    separator = ['<=', '=>', '<-', '->', '<', '>']
     for sep in separator:
         if sep in message:
-            comm, comm2 = message.split(sep,1)
+            comm, comm2 = message.split(sep, 1)
             if not 'http' in comm2:
                 return comm2.strip()
             return comm.strip()

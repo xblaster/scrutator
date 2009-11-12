@@ -12,10 +12,10 @@ import Pyro.core
 class Bouncer(Pyro.core.CallbackObjBase):
 	def __init__(self, name):
 		Pyro.core.ObjBase.__init__(self)
-		self.name=name
-		self.count=0
-	def process(self,message,callback):
-		print 'This is',self.name
+		self.name = name
+		self.count = 0
+	def process(self, message, callback):
+		print 'This is', self.name
 		print 'I\'ll throw an exception...'
 		raise ValueError("Some error in the callback function")
 		

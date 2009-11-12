@@ -13,7 +13,7 @@ or without multithreading enabled. You can check this by looking at the
 output on the screen and the contents of the datafiles."""
 print
 
-Pyro.config.PYRO_MULTITHREADED=raw_input("Enable multithreading y/n? ") in ('y','Y')
+Pyro.config.PYRO_MULTITHREADED = raw_input("Enable multithreading y/n? ") in ('y', 'Y')
 
 
 # The datastore.
@@ -22,23 +22,23 @@ Pyro.config.PYRO_MULTITHREADED=raw_input("Enable multithreading y/n? ") in ('y',
 # on the caller object on the TLS.
 class DataStore(Pyro.core.ObjBase):
 	def init(self, username):
-		caller=self.getLocalStorage().caller
-		caller.datastore=open("datastorage_%s.txt"%username,"w")
+		caller = self.getLocalStorage().caller
+		caller.datastore = open("datastorage_%s.txt" % username, "w")
 		
 	def addline(self, textline):
-		caller=self.getLocalStorage().caller
-		sys.stdout.write("adding line to "+caller.datastore.name+"\n")
+		caller = self.getLocalStorage().caller
+		sys.stdout.write("adding line to " + caller.datastore.name + "\n")
 		sys.stdout.flush()
-		caller.datastore.write(textline+" | came from "+str(caller)+"\n")
+		caller.datastore.write(textline + " | came from " + str(caller) + "\n")
 	
 	def close(self):
-		caller=self.getLocalStorage().caller
+		caller = self.getLocalStorage().caller
 		caller.datastore.close()	
 			
 		
 
-daemon=Pyro.core.Daemon()
-ns=Pyro.naming.NameServerLocator().getNS()
+daemon = Pyro.core.Daemon()
+ns = Pyro.naming.NameServerLocator().getNS()
 daemon.useNameServer(ns)
 
 try:

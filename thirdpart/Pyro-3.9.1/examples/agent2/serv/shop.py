@@ -3,8 +3,8 @@
 
 class Mall:
 	def __init__(self):
-		self.shops=[]
-	def addShop(self,shop):
+		self.shops = []
+	def addShop(self, shop):
 		self.shops.append(shop)
 	def goShopping(self, shopper):
 		for shop in self.shops:
@@ -15,22 +15,22 @@ class Mall:
 
 
 class Shop:
-	def __init__(self,name):
-		self.name=name
-		self.stock={}
-	def setStock(self,stock):
-		self.stock=stock
+	def __init__(self, name):
+		self.name = name
+		self.stock = {}
+	def setStock(self, stock):
+		self.stock = stock
 	def getStock(self):
 		return self.stock
-	def buy(self,shopper,product):
+	def buy(self, shopper, product):
 		if self.stock.has_key(product):
-			print self.name+':',shopper,'buys',product
+			print self.name + ':', shopper, 'buys', product
 			del self.stock[product]
 			# Create a "true" object that was bought.
 			# The shopping agent will put this object
 			# in his inventory, so it will travel back
 			# to the client (also by using mobile code).
-			exec("import objects."+product)
-			object=eval("objects."+product+"."+product+"()")
+			exec("import objects." + product)
+			object = eval("objects." + product + "." + product + "()")
 			return object
 

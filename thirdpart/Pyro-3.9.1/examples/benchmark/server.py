@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-import sys,os
+import sys, os
 
-sys.path.insert(0,os.pardir)		# to find testserver.py
+sys.path.insert(0, os.pardir)		# to find testserver.py
 
 import testserver
 
 import Pyro.core
-Pyro.config.PYRO_MULTITHREADING=0  
+Pyro.config.PYRO_MULTITHREADING = 0  
 
 import bench
 

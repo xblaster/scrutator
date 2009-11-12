@@ -52,7 +52,7 @@ class UsernamePasswordAuthenticationToken(Authentication):
     A basic concrete version of authentication. Works for most scenarios.
     """
     
-    def __init__(self, username = None, password = None, granted_auths = None):
+    def __init__(self, username=None, password=None, granted_auths=None):
         Authentication.__init__(self)
         self.username = username
         self.password = password
@@ -83,7 +83,7 @@ class AuthenticationManager:
     even process an Authentication, the AuthenticationManager will throw a ProviderNotFoundException.
     """
     
-    def __init__(self, auth_providers = None):
+    def __init__(self, auth_providers=None):
         if auth_providers is None:
             self.auth_providers = []
         else:

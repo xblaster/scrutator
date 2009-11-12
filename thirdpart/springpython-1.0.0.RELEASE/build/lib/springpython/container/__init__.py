@@ -32,7 +32,7 @@ class ObjectContainer(object):
     instance is needed. NOTE: This explicitly means that one object in one source
     can refer to another object in another source OF ANY FORMAT as a property.
     """
-    def __init__(self, config = None):
+    def __init__(self, config=None):
         self.logger = logging.getLogger("springpython.container.ObjectContainer")
 
         if config is None:

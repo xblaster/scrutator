@@ -37,11 +37,11 @@ def getRLockObject():
 # bogus event class, for systems that don't have threads
 class BogusEvent:
 	def __init__(self):
-		self.flag=0
-	def isSet(self): return self.flag==1
-	def set(self): self.flag=1
-	def clear(self): self.flag=0
-	def wait(self,timeout=None):
+		self.flag = 0
+	def isSet(self): return self.flag == 1
+	def set(self): self.flag = 1
+	def clear(self): self.flag = 0
+	def wait(self, timeout=None):
 		raise RuntimeError("cannot wait in non-threaded environment")
 
 def getEventObject():
@@ -58,64 +58,64 @@ def getEventObject():
 if Pyro.config.PYRO_STDLOGGING:
 	# new-style logging using logging module, python 2.3+
 	import logging, logging.config
-	cfgfile=Pyro.config.PYRO_STDLOGGING_CFGFILE
+	cfgfile = Pyro.config.PYRO_STDLOGGING_CFGFILE
 	if not os.path.isabs(cfgfile):
-		Pyro.config.PYRO_STDLOGGING_CFGFILE=os.path.join(Pyro.config.PYRO_STORAGE, cfgfile)
-		cfgfile=Pyro.config.PYRO_STDLOGGING_CFGFILE
-	externalConfig=0
+		Pyro.config.PYRO_STDLOGGING_CFGFILE = os.path.join(Pyro.config.PYRO_STORAGE, cfgfile)
+		cfgfile = Pyro.config.PYRO_STDLOGGING_CFGFILE
+	externalConfig = 0
 	try:
 		open(cfgfile).close()
 		logging.config.fileConfig(cfgfile)
-		externalConfig=1
-	except IOError,x:
+		externalConfig = 1
+	except IOError, x:
 		# Config file couldn't be read! Use builtin config.
 		# First make the logfiles absolute paths:
 		if not os.path.isabs(Pyro.config.PYRO_LOGFILE):
-			Pyro.config.PYRO_LOGFILE=os.path.join(Pyro.config.PYRO_STORAGE, Pyro.config.PYRO_LOGFILE)
+			Pyro.config.PYRO_LOGFILE = os.path.join(Pyro.config.PYRO_STORAGE, Pyro.config.PYRO_LOGFILE)
 		if not os.path.isabs(Pyro.config.PYRO_USER_LOGFILE):
-			Pyro.config.PYRO_USER_LOGFILE=os.path.join(Pyro.config.PYRO_STORAGE, Pyro.config.PYRO_USER_LOGFILE)
+			Pyro.config.PYRO_USER_LOGFILE = os.path.join(Pyro.config.PYRO_STORAGE, Pyro.config.PYRO_USER_LOGFILE)
 
 	class LoggerBase:
 		if externalConfig:
 			def __init__(self):
-				self.logger=logging.getLogger(self._getLoggerName())
+				self.logger = logging.getLogger(self._getLoggerName())
 		else:
 			def __init__(self):
-				self.logger=logging.getLogger("Pyro."+str(id(self)))		# each time a different logger ...
+				self.logger = logging.getLogger("Pyro." + str(id(self)))		# each time a different logger ...
 				self.setLevel(self._getPyroLevel())
-				handler=logging.FileHandler(self._logfile())
+				handler = logging.FileHandler(self._logfile())
 				handler.setFormatter(logging.Formatter("%(asctime)s [%(process)d:%(thread)d] ** %(levelname)s ** %(message)s"))
 				self.logger.addHandler(handler)
 		def setLevel(self, pyroLevel):
-			if pyroLevel>=3:
+			if pyroLevel >= 3:
 				self.logger.setLevel(logging.DEBUG)
-			elif pyroLevel>=2:
+			elif pyroLevel >= 2:
 				self.logger.setLevel(logging.WARN)
-			elif pyroLevel>=1:
+			elif pyroLevel >= 1:
 				self.logger.setLevel(logging.ERROR)
 			else:
 				self.logger.setLevel(999)
-		def msg(self,source,*args):
+		def msg(self, source, *args):
 			self.setLevel(self._getPyroLevel())
 			if not args:
 				(args, source) = ([source], "N/A")
-			self.logger.info("%s ** %s", source, reduce(lambda x,y: str(x)+' '+str(y),args))
-		def warn(self,source,*args):
+			self.logger.info("%s ** %s", source, reduce(lambda x, y: str(x) + ' ' + str(y), args))
+		def warn(self, source, *args):
 			self.setLevel(self._getPyroLevel())
 			if not args:
 				(args, source) = ([source], "N/A")
-			self.logger.warn("%s ** %s", source, reduce(lambda x,y: str(x)+' '+str(y),args))
-		def error(self,source,*args):
+			self.logger.warn("%s ** %s", source, reduce(lambda x, y: str(x) + ' ' + str(y), args))
+		def error(self, source, *args):
 			self.setLevel(self._getPyroLevel())
 			if not args:
 				(args, source) = ([source], "N/A")
-			self.logger.error("%s ** %s", source, reduce(lambda x,y: str(x)+' '+str(y),args))
-		def raw(self,ztr):
-			self.logger.log(999,ztr.rstrip())
+			self.logger.error("%s ** %s", source, reduce(lambda x, y: str(x) + ' ' + str(y), args))
+		def raw(self, ztr):
+			self.logger.log(999, ztr.rstrip())
 		def _logfile(self):
-			raise NotImplementedError,'must override'
+			raise NotImplementedError, 'must override'
 		def _getlevel(self):
-			raise NotImplementedError,'must override'
+			raise NotImplementedError, 'must override'
 
 
 	class SystemLogger(LoggerBase):
@@ -140,64 +140,64 @@ else:
 	class LoggerBase:
 		# Logger base class. Subclasses must override _logfile and  _checkTraceLevel.
 		def __init__(self):
-			self.lock=getLockObject()
-		def msg(self,source,*args):
-			if self._checkTraceLevel(3): self._trace('NOTE',source, args)
-		def warn(self,source,*args):
-			if self._checkTraceLevel(2): self._trace('WARN',source, args)
-		def error(self,source,*args):
-			if self._checkTraceLevel(1): self._trace('ERR!',source, args)
-		def raw(self,str):
+			self.lock = getLockObject()
+		def msg(self, source, *args):
+			if self._checkTraceLevel(3): self._trace('NOTE', source, args)
+		def warn(self, source, *args):
+			if self._checkTraceLevel(2): self._trace('WARN', source, args)
+		def error(self, source, *args):
+			if self._checkTraceLevel(1): self._trace('ERR!', source, args)
+		def raw(self, str):
 			self.lock.acquire()
 			try:
-				f=open(self._logfile(),'a')
+				f = open(self._logfile(), 'a')
 				f.write(str)
 				f.close()
 			finally:
 				self.lock.release()
-		def _trace(self,typ,source, arglist):
+		def _trace(self, typ, source, arglist):
 			self.lock.acquire()
 			try:
 				if not arglist:
 					(arglist, source) = ([source], "N/A")
 				try:
-					tf=open(self._logfile(),'a')
+					tf = open(self._logfile(), 'a')
 					try:
-						pid=os.getpid()
-						pidinfo=" ["+str(os.getpid())
+						pid = os.getpid()
+						pidinfo = " [" + str(os.getpid())
 					except:
-						pidinfo=" ["   # at least jython has no getpid()
+						pidinfo = " ["   # at least jython has no getpid()
 					if supports_multithreading():
-						pidinfo+=":"+threading.currentThread().getName()
-					pidinfo+="] "	
-					tf.write(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))+
-					  pidinfo+'** '+typ+' ** '+str(source)+' ** '+reduce(lambda x,y: str(x)+' '+str(y),arglist)+'\n')
+						pidinfo += ":" + threading.currentThread().getName()
+					pidinfo += "] "	
+					tf.write(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + 
+					  pidinfo + '** ' + typ + ' ** ' + str(source) + ' ** ' + reduce(lambda x, y: str(x) + ' ' + str(y), arglist) + '\n')
 					tf.close()
-				except Exception,x:
+				except Exception, x:
 					pass
 			finally:
 				self.lock.release()
 		def _logfile(self):
-			raise NotImplementedError,'must override'
-		def _checkTraceLevel(self,level):
-			raise NotImplementedError,'must override'
+			raise NotImplementedError, 'must override'
+		def _checkTraceLevel(self, level):
+			raise NotImplementedError, 'must override'
 	
 	class SystemLogger(LoggerBase):
 		def _checkTraceLevel(self, level):
 			return Pyro.config.PYRO_TRACELEVEL >= level
 		def _logfile(self):
-			filename=Pyro.config.PYRO_LOGFILE
+			filename = Pyro.config.PYRO_LOGFILE
 			if not os.path.isabs(filename):
-				Pyro.config.PYRO_LOGFILE=os.path.join(Pyro.config.PYRO_STORAGE, filename)
+				Pyro.config.PYRO_LOGFILE = os.path.join(Pyro.config.PYRO_STORAGE, filename)
 			return Pyro.config.PYRO_LOGFILE
 			
 	class UserLogger(LoggerBase):
 		def _checkTraceLevel(self, level):
 			return Pyro.config.PYRO_USER_TRACELEVEL >= level
 		def _logfile(self):
-			filename=Pyro.config.PYRO_USER_LOGFILE
+			filename = Pyro.config.PYRO_USER_LOGFILE
 			if not os.path.isabs(filename):
-				Pyro.config.PYRO_USER_LOGFILE=os.path.join(Pyro.config.PYRO_STORAGE, filename)
+				Pyro.config.PYRO_USER_LOGFILE = os.path.join(Pyro.config.PYRO_STORAGE, filename)
 			return Pyro.config.PYRO_USER_LOGFILE
 
 
@@ -210,10 +210,10 @@ Log = SystemLogger()
 # that has a thread-safe cache.
 class DirLister:
 	def __init__(self):
-		self.lock=getLockObject()
+		self.lock = getLockObject()
 		self.__listdir_cache = {}
 
-	def __call__(self,path):
+	def __call__(self, path):
 		self.lock.acquire()
 		try:
 			try:
@@ -225,17 +225,17 @@ class DirLister:
 			self.lock.release()
 		mtime = os.stat(path)[8]
 		if mtime <> cached_mtime:
-			files=[]
-			directories=[]
+			files = []
+			directories = []
 			for e in os.listdir(path):
-				if os.path.isdir(os.path.join(path,e)):
+				if os.path.isdir(os.path.join(path, e)):
 					directories.append(e)
 				else:
 					files.append(e)
 		self.lock.acquire()
 		try:
 			self.__listdir_cache[path] = mtime, files, directories
-			return files,directories
+			return files, directories
 		finally:
 			self.lock.release()
 
@@ -249,38 +249,38 @@ class ArgParser:
 	def parse(self, args, optionlist):
 		# optionlist is a string such as "ab:c" which means
 		# we search for 3 options (-a, -b, -c) of which -b has an argument.
-		self.options={}		# public, the option->value dictionary
-		self.args=[]		# public, the rest of the arguments
-		self.ignored=[]		# public, ignored options
-		optionlist+=' '		# add sentinel
-		if type(args)==type(''):
-			args=args.split()
+		self.options = {}		# public, the option->value dictionary
+		self.args = []		# public, the rest of the arguments
+		self.ignored = []		# public, ignored options
+		optionlist += ' '		# add sentinel
+		if type(args) == type(''):
+			args = args.split()
 		while args:
-			arg=args[0]
+			arg = args[0]
 			del args[0]
-			if arg[0]=='-':
-				if len(arg)>=2:   # arg is an option. Check our list
+			if arg[0] == '-':
+				if len(arg) >= 2:   # arg is an option. Check our list
 					idx = optionlist.find(arg[1])
-					if idx>=0:
-						if optionlist[idx+1]==':':   # option requires argument.
-							if len(arg)>=3:   # argument is appended. Use this.
-								self.options[arg[1]]=arg[2:]
+					if idx >= 0:
+						if optionlist[idx + 1] == ':':   # option requires argument.
+							if len(arg) >= 3:   # argument is appended. Use this.
+								self.options[arg[1]] = arg[2:]
 								continue
 							# fetch argument from next string
-							if len(args)>=1:
-								self.options[arg[1]]=args[0]
+							if len(args) >= 1:
+								self.options[arg[1]] = args[0]
 								del args[0]
 								continue
 							else:   # missing arg, substitute None
-								self.options[arg[1]]=None
+								self.options[arg[1]] = None
 						else:   # option requires no argument, use None
-							self.options[arg[1]]=None
+							self.options[arg[1]] = None
 					else:   # didn't find this option, skip it
 						self.ignored.append(arg[1])
 				else:   # arg is a single '-'. Stop parsing.
 					for a in args:
 						self.args.append(a)
-					args=None
+					args = None
 			else:   # arg is no option, add it to the residu list and continue
 				self.args.append(arg)
 	def hasOpt(self, option):
@@ -289,39 +289,39 @@ class ArgParser:
 		try:
 			return self.options[option]
 		except KeyError:
-			if not isinstance(default,Exception):
+			if not isinstance(default, Exception):
 				return default
 			raise KeyError('no such option')
 	def printIgnored(self):
 		if self.ignored:
 			print 'Ignored options:',
 			for o in self.ignored:
-				print '-'+o,
+				print '-' + o,
 			print
 
 
-_getGUID_counter=0		# extra safeguard against double numbers
-_getGUID_lock=getLockObject()
+_getGUID_counter = 0		# extra safeguard against double numbers
+_getGUID_lock = getLockObject()
 
-if os.name=='java':
+if os.name == 'java':
 	# define jython specific stuff
 	# first, the guid stuff
 	import java.rmi.dgc
 	def getGUID():
 		# Jython uses java's own ID routine used by RMI
-		return java.rmi.dgc.VMID().toString().replace(':','-').replace('--','-')
+		return java.rmi.dgc.VMID().toString().replace(':', '-').replace('--', '-')
 	import imp
-	if not hasattr(imp,"acquire_lock"):
+	if not hasattr(imp, "acquire_lock"):
 		# simulate missing imp.acquire_lock() from jython 2.2 (fixed in jython 2.5)
-		imp_lock=getLockObject()
+		imp_lock = getLockObject()
 		def imp_acquire_lock():
 			return imp_lock.acquire()
 		def imp_release_lock():
 			return imp_lock.release()
-		imp.acquire_lock=imp_acquire_lock
-		imp.release_lock=imp_release_lock
+		imp.acquire_lock = imp_acquire_lock
+		imp.release_lock = imp_release_lock
 		
-elif sys.platform=='cli':
+elif sys.platform == 'cli':
 	import System
 	def getGUID():
 		# IronPython uses .NET guid call
@@ -336,33 +336,33 @@ else:
 		# For A: should use the machine's MAC ethernet address, but there is no
 		# portable way to get it... use the IP address + 2 bytes process id.
 		try:
-			ip=socket.gethostbyname(socket.gethostname())
-			networkAddrStr=binascii.hexlify(socket.inet_aton(ip))+"%04x" % os.getpid()
+			ip = socket.gethostbyname(socket.gethostname())
+			networkAddrStr = binascii.hexlify(socket.inet_aton(ip)) + "%04x" % os.getpid()
 		except socket.error:
 			# can't get IP address... use another value, like our Python id() and PID
-			Log.warn('getGUID','Can\'t get IP address')
+			Log.warn('getGUID', 'Can\'t get IP address')
 			try:
-				ip=os.getpid()
+				ip = os.getpid()
 			except:
-				ip=0
+				ip = 0
 			ip += id(getGUID)
 			networkAddrStr = "%08lx%04x" % (ip, os.getpid())
 	
 		_getGUID_lock.acquire()  # cannot generate multiple GUIDs at once
 		global _getGUID_counter
-		t1=time.time()*100 +_getGUID_counter
-		_getGUID_counter+=1 
+		t1 = time.time()*100 + _getGUID_counter
+		_getGUID_counter += 1 
 		_getGUID_lock.release()
-		t2=int((t1*time.clock())%sys.maxint) & 0xffffff
-		t1=int(t1%sys.maxint) 
+		t2 = int((t1 * time.clock()) % sys.maxint) & 0xffffff
+		t1 = int(t1 % sys.maxint) 
 		timestamp = (long(t1) << 24) | t2 
-		r2=(random.randint(0,sys.maxint/2)>>4) & 0xffff
-		r3=(random.randint(0,sys.maxint/2)>>5) & 0xff
-		return networkAddrStr+'%014x%06x' % (timestamp, (r2<<8)|r3 )
+		r2 = (random.randint(0, sys.maxint / 2) >> 4) & 0xffff
+		r3 = (random.randint(0, sys.maxint / 2) >> 5) & 0xff
+		return networkAddrStr + '%014x%06x' % (timestamp, (r2 << 8) | r3)
 
 def genguid_scripthelper(argv):
-	p=ArgParser()
-	p.parse(argv,'')
+	p = ArgParser()
+	p.parse(argv, '')
 	if p.args or p.ignored:
 		print 'Usage: genguid  (no arguments)'
 		print 'This tool generates Pyro UIDs.'
@@ -386,52 +386,52 @@ def getPickle():
 			import pickle
 			return pickle
 
-_xmlpickle={}
+_xmlpickle = {}
 def getXMLPickle(impl=None):		
 	# load & config the required xml pickle.
 	# Currently supported: Gnosis Utils' gnosis.xml.pickle.
 	global _xmlpickle
 	if not impl:
-		impl=Pyro.config.PYRO_XML_PICKLE
+		impl = Pyro.config.PYRO_XML_PICKLE
 	if impl in _xmlpickle:
 		return _xmlpickle[impl]
 	try:	
-		if impl=='gnosis':
+		if impl == 'gnosis':
 			import gnosis.xml.pickle
 			import gnosis.version
-			gnosisVer=(gnosis.version.MAJOR, gnosis.version.MINOR)
-			if gnosisVer==(1,2):
+			gnosisVer = (gnosis.version.MAJOR, gnosis.version.MINOR)
+			if gnosisVer == (1, 2):
 				# gnosis 1.2 style pickling, with paranoia setting
-				_xmlpickle[impl]=gnosis.xml.pickle
+				_xmlpickle[impl] = gnosis.xml.pickle
 				gnosis.xml.pickle.setParanoia(Pyro.config.PYRO_GNOSIS_PARANOIA)		# default paranoia level is too strict for Pyro
 				gnosis.xml.pickle.setParser('SAX')		# use fastest parser (cEXPAT?)
 				return gnosis.xml.pickle
-			elif gnosisVer>=(1,3):
+			elif gnosisVer >= (1, 3):
 				from gnosis.xml.pickle import SEARCH_ALL, SEARCH_STORE, SEARCH_NO_IMPORT, SEARCH_NONE
-				if Pyro.config.PYRO_GNOSIS_PARANOIA<0:
+				if Pyro.config.PYRO_GNOSIS_PARANOIA < 0:
 					class_search_flag = SEARCH_ALL		# allow import of needed modules
-				elif Pyro.config.PYRO_GNOSIS_PARANOIA==0:
+				elif Pyro.config.PYRO_GNOSIS_PARANOIA == 0:
 					class_search_flag = SEARCH_NO_IMPORT  # dont import new modules, only use known
 				else:
 					class_search_flag = SEARCH_STORE   # only use class store
 				# create a wrapper class to be able to pass additional args into gnosis methods
 				class GnosisPickle:
-					def dumps(data, *args,**kwargs):
+					def dumps(data, *args, **kwargs):
 						return gnosis.xml.pickle.dumps(data, allow_rawpickles=0)
-					dumps=staticmethod(dumps)
+					dumps = staticmethod(dumps)
 					def loads(xml, *args, **kwargs):
 						return gnosis.xml.pickle.loads(xml, allow_rawpickles=0, class_search=class_search_flag)
-					loads=staticmethod(loads)
-					def dump(data, file, *args,**kwargs):
+					loads = staticmethod(loads)
+					def dump(data, file, *args, **kwargs):
 						return gnosis.xml.pickle.dump(data, file, allow_rawpickles=0)
-					dump=staticmethod(dump)
+					dump = staticmethod(dump)
 					def load(file, *args, **kwargs):
 						return gnosis.xml.pickle.load(file, allow_rawpickles=0, class_search=class_search_flag)
-					load=staticmethod(load)
-				_xmlpickle[impl]=GnosisPickle
+					load = staticmethod(load)
+				_xmlpickle[impl] = GnosisPickle
 				return GnosisPickle
 			else:
-				raise NotImplementedError('no supported Gnosis tools version found (need at least 1.2). Found '+gnosis.version.VSTRING)
+				raise NotImplementedError('no supported Gnosis tools version found (need at least 1.2). Found ' + gnosis.version.VSTRING)
 		else:
 			raise ImportError('unsupported xml pickle implementation requested: %s' % impl)
 	except ImportError:
@@ -442,11 +442,11 @@ def getXMLPickle(impl=None):
 # Pyro traceback printing
 def getPyroTraceback(exc_obj):
 	def formatRemoteTraceback(remote_tb_lines) :
-		result=[]
+		result = []
 		result.append(" +--- This exception occured remotely (Pyro) - Remote traceback:")
 		for line in remote_tb_lines :
 			if line.endswith("\n"):
-				line=line[:-1]
+				line = line[:-1]
 			lines = line.split("\n")
 			for line in lines :
 				result.append("\n | ")
@@ -454,11 +454,11 @@ def getPyroTraceback(exc_obj):
 		result.append("\n +--- End of remote traceback")
 		return result
 	try:
-		exc_type, exc_value, exc_trb=sys.exc_info()
-		remote_tb=getattr(exc_obj,Pyro.constants.TRACEBACK_ATTRIBUTE,None)
-		local_tb=formatTraceback(exc_type, exc_value, exc_trb)
+		exc_type, exc_value, exc_trb = sys.exc_info()
+		remote_tb = getattr(exc_obj, Pyro.constants.TRACEBACK_ATTRIBUTE, None)
+		local_tb = formatTraceback(exc_type, exc_value, exc_trb)
 		if remote_tb:
-			remote_tb=formatRemoteTraceback(remote_tb)
+			remote_tb = formatRemoteTraceback(remote_tb)
 			return local_tb + remote_tb
 		else:
 			# hmm. no remote tb info, return just the local tb.
@@ -472,10 +472,10 @@ def formatTraceback(ex_type, ex_value, tb):
 	if Pyro.config.PYRO_DETAILED_TRACEBACK:
 		get_line_number = traceback.tb_lineno
 	
-		res = ['-'*50+ "\n",
+		res = ['-' * 50 + "\n",
 			   " <%s> RAISED : %s\n" % (str(ex_type), str(ex_value)),
 			   " Extended Stacktrace follows (most recent call last)\n",
-			   '-'*50+'\n' ]
+			   '-'*50 + '\n' ]
 	 
 		try:
 			# Do some manipulation shit of stack
@@ -530,7 +530,7 @@ def formatTraceback(ex_type, ex_value, tb):
 					
 					for key, value, in flocals:
 						if key in frame.f_code.co_names:
-							local_res="  %20s = " % key
+							local_res = "  %20s = " % key
 							try:
 								local_res += repr(value)
 							except:
@@ -539,16 +539,16 @@ def formatTraceback(ex_type, ex_value, tb):
 								except:
 									local_res += "<ERROR>"
 									
-							res.append(local_res+"\n")
+							res.append(local_res + "\n")
 							
 					res.append('-'*50 + '\n')
 			res.append(" <%s> RAISED : %s\n" % (str(ex_type), str(ex_value)))
-			res.append('-'*50+'\n')
+			res.append('-'*50 + '\n')
 			return res
 			
 		except:
-			return ['-'*50+"\nError building extended traceback!!! :\n",
-				  ''.join(traceback.format_exception(* sys.exc_info() ) ) + '-'*50 + '\n',
+			return ['-' * 50 + "\nError building extended traceback!!! :\n",
+				  ''.join(traceback.format_exception(* sys.exc_info())) + '-'*50 + '\n',
 				  'Original Exception follows:\n',
 				  ''.join(traceback.format_exception(ex_type, ex_value, tb)) ]
 

@@ -66,7 +66,7 @@ def getinfo(func):
     signature = inspect.formatargspec(regargs, varargs, varkwargs, defaults,
                                       formatvalue=lambda value: "")[1:-1]
     return dict(name=func.__name__, argnames=argnames, signature=signature,
-                defaults = func.func_defaults, doc=func.__doc__,
+                defaults=func.func_defaults, doc=func.__doc__,
                 module=func.__module__, dict=func.__dict__,
                 globals=func.func_globals, closure=func.func_closure)
 

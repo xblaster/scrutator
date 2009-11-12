@@ -47,7 +47,7 @@ class UserDetailsService(object):
         raise NotImplementedError()
 
 class InMemoryUserDetailsService(UserDetailsService):
-    def __init__(self, user_dict = None):
+    def __init__(self, user_dict=None):
         super(InMemoryUserDetailsService, self).__init__()
         if user_dict is None:
             self.user_dict = {}

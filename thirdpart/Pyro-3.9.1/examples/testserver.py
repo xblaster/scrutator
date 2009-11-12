@@ -7,7 +7,7 @@ import sys
 import Pyro.naming
 import Pyro.core
 from Pyro.protocol import getHostname
-from Pyro.errors import PyroError,NamingError
+from Pyro.errors import PyroError, NamingError
 
 group = ':test'   # the namespace group for all test servers
 
@@ -22,14 +22,14 @@ group = ':test'   # the namespace group for all test servers
 def start(objClass, objName, delegate=0):
 	# initialize the server and set the default namespace group
 	Pyro.core.initServer()
-	Pyro.config.PYRO_NS_DEFAULTGROUP=group
+	Pyro.config.PYRO_NS_DEFAULTGROUP = group
 
 	# locate the NS
 	daemon = Pyro.core.Daemon()
 	locator = Pyro.naming.NameServerLocator()
 	print 'searching for Naming Service...'
 	ns = locator.getNS()
-	print 'Naming Service found at',ns.URI.address,'('+(Pyro.protocol.getHostname(ns.URI.address) or '??')+') port',ns.URI.port
+	print 'Naming Service found at', ns.URI.address, '(' + (Pyro.protocol.getHostname(ns.URI.address) or '??') + ') port', ns.URI.port
 
 	# make sure our namespace group exists
 	try:
@@ -48,16 +48,16 @@ def start(objClass, objName, delegate=0):
 	if delegate:
 		print 'Delegation...'
 		# use Deletation approach
-		obj=Pyro.core.ObjBase()
+		obj = Pyro.core.ObjBase()
 		obj.delegateTo(objClass())
-		daemon.connect(obj,objName)
+		daemon.connect(obj, objName)
 	else:
 		# use regular ObjBase subclassing approach
-		obj=objClass()
-		daemon.connect(obj,objName)
+		obj = objClass()
+		daemon.connect(obj, objName)
 
 	# enter the service loop.
-	print 'Server object "'+objName+'" ready.'
+	print 'Server object "' + objName + '" ready.'
 	try:
 		# daemon.setTimeout(5)
 		daemon.requestLoop()

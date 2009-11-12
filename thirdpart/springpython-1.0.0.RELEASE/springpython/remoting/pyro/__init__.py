@@ -24,7 +24,7 @@ class PyroServiceExporter(InitializingObject):
     be up and running in order to receive requests and allow dispatching to the exposed
     object.
     """
-    def __init__(self, service = None, service_name = None, service_host = "localhost", service_port = 7766):
+    def __init__(self, service=None, service_name=None, service_host="localhost", service_port=7766):
         self.logger = logging.getLogger("springpython.remoting.pyro.PyroServiceExporter")
         self.service = service
         self.service_name = service_name

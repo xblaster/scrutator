@@ -19,7 +19,7 @@ from Pyro.protocol import getHostname
 class PyroNSControl:
 	def args(self, args):
 		self.Args = Pyro.util.ArgParser()
-		self.Args.parse(args,'h:p:c:i:')
+		self.Args.parse(args, 'h:p:c:i:')
 		self.Args.printIgnored()
 		if self.Args.args:
 			cmd = self.Args.args[0]
@@ -28,24 +28,24 @@ class PyroNSControl:
 		return None	
 
 	def connect(self, sysCmd=None):
-		host = self.Args.getOpt('h',None)
-		bcaddr = self.Args.getOpt('c',None)
+		host = self.Args.getOpt('h', None)
+		bcaddr = self.Args.getOpt('c', None)
 		port = int(self.Args.getOpt('p', 0))
-		ident = self.Args.getOpt('i',None)
-		if port==0:
-			port=None
+		ident = self.Args.getOpt('i', None)
+		if port == 0:
+			port = None
 
 		locator = NameServerLocator(identification=ident)
 		if not sysCmd:
-			self.NS = locator.getNS(host,port,1,bcaddr=bcaddr)
-			print 'NS is at',self.NS.URI.address,'('+(getHostname(self.NS.URI.address) or '??')+') port',self.NS.URI.port
+			self.NS = locator.getNS(host, port, 1, bcaddr=bcaddr)
+			print 'NS is at', self.NS.URI.address, '(' + (getHostname(self.NS.URI.address) or '??') + ') port', self.NS.URI.port
 			self.NS._setIdentification(ident)
 		else:
-			result = locator.sendSysCommand(sysCmd,host,port,1,bcaddr=bcaddr)
-			print 'Result from system command',sysCmd,':',result
+			result = locator.sendSysCommand(sysCmd, host, port, 1, bcaddr=bcaddr)
+			print 'Result from system command', sysCmd, ':', result
 
 	def handleError(self, msg, exc):
-		print "## %s: " % msg, 
+		print "## %s: " % msg,
 		if isinstance(exc.args, (list, tuple)):
 			print "; ".join(exc.args[:-1]),
 		else:
@@ -59,35 +59,35 @@ class PyroNSControl:
 
 	def listall(self):
 		self.connect()
-		flat=self.NS.flatlist()
+		flat = self.NS.flatlist()
 		flat.sort()
 		print '-------------- START DATABASE'
-		for (name,val) in flat:
-			print name,' --> ',str(val)
+		for (name, val) in flat:
+			print name, ' --> ', str(val)
 		print '-------------- END'
 
 	def list(self):
 		self.connect()
 		if not self.Args.args:
 			# list the current group
-			print self.NS.fullName(''),'-->',
+			print self.NS.fullName(''), '-->',
 			self.printList(self.NS.list(None))
 		else:
 			# list all subpaths
 			for n in self.Args.args:
-				print self.NS.fullName(n),' -->',
+				print self.NS.fullName(n), ' -->',
 				try:
 					self.printList(self.NS.list(n))
-				except NamingError,x:
+				except NamingError, x:
 				    self.handleError("can't list", x)
 
-	def printList(self,list):
+	def printList(self, list):
 		list.sort()
 		print '(',
-		for (n,t) in list:
-			if t==0:
-				print '['+n+']',
-			elif t==1:
+		for (n, t) in list:
+			if t == 0:
+				print '[' + n + ']',
+			elif t == 1:
 				print n,
 		print ')'
 
@@ -97,20 +97,20 @@ class PyroNSControl:
 			print 'No arguments, nothing to resolve'
 		else:
 			for n in self.Args.args:
-				print n,' -->',
+				print n, ' -->',
 				try:
 					print self.NS.resolve(n)
-				except NamingError,x:
+				except NamingError, x:
 				    self.handleError("can't resolve", x)
 	
 	def register(self):
 		self.connect()
 		try:
-			self.NS.register(self.Args.args[0],self.Args.args[1])
-			uri=Pyro.core.PyroURI(self.Args.args[1])
-			print 'registered',self.Args.args[0],' --> ',uri
-		except NamingError,x:
-			self.handleError('Error from NS',x)
+			self.NS.register(self.Args.args[0], self.Args.args[1])
+			uri = Pyro.core.PyroURI(self.Args.args[1])
+			print 'registered', self.Args.args[0], ' --> ', uri
+		except NamingError, x:
+			self.handleError('Error from NS', x)
 		except IndexError:
 			print 'Register needs 2 args: name URI'
 		
@@ -119,8 +119,8 @@ class PyroNSControl:
 		for n in self.Args.args:
 			try:
 				self.NS.unregister(n)
-				print n,'unregistered.'
-			except NamingError,x:
+				print n, 'unregistered.'
+			except NamingError, x:
 				self.handleError("Can't unregister", x)
 
 	def creategroup(self):
@@ -128,18 +128,18 @@ class PyroNSControl:
 		for n in self.Args.args:
 			try:
 				self.NS.createGroup(n)
-				print n,'created.'
-			except NamingError,x:
-				self.handleError("Can't create group '"+n+"'",x)
+				print n, 'created.'
+			except NamingError, x:
+				self.handleError("Can't create group '" + n + "'", x)
 
 	def deletegroup(self):
 		self.connect()
 		for n in self.Args.args:
 			try:
 				self.NS.deleteGroup(n)
-				print n,'deleted.'
-			except NamingError,x:
-				self.handleError("Can't delete group '"+n+"'",x)
+				print n, 'deleted.'
+			except NamingError, x:
+				self.handleError("Can't delete group '" + n + "'", x)
 				
 	def showmeta(self):
 		self.connect()
@@ -147,21 +147,21 @@ class PyroNSControl:
 			print 'No arguments, nothing to show meta of'
 		for n in self.Args.args:
 			try:
-				print "META INFO OF",self.NS.fullName(n)
-				print "system meta info :",self.NS._getSystemMeta(n)
-				print "  user meta info :",self.NS.getMeta(n)
-			except NamingError,x:
-				self.handleError("Can't get metadata",x)
+				print "META INFO OF", self.NS.fullName(n)
+				print "system meta info :", self.NS._getSystemMeta(n)
+				print "  user meta info :", self.NS.getMeta(n)
+			except NamingError, x:
+				self.handleError("Can't get metadata", x)
 	
 	def setmeta(self):
 		self.connect()
 		try:
-			if len(self.Args.args)>2:
+			if len(self.Args.args) > 2:
 				raise IndexError
-			name=self.Args.args[0]
-			meta=self.Args.args[1]
-			self.NS.setMeta(name,meta)
-			print "Metadata of",name,"set."
+			name = self.Args.args[0]
+			meta = self.Args.args[1]
+			self.NS.setMeta(name, meta)
+			print "Metadata of", name, "set."
 		except IndexError:
 			print 'Setmeta needs 2 args: name metadata'
 
@@ -189,14 +189,14 @@ def usage():
 def main(argv):
 
 	ctrl = PyroNSControl()
-	cmd=ctrl.args(argv)
+	cmd = ctrl.args(argv)
 
 	if not cmd:
 		usage()
 
 	try:
 		# nice construct to map commands to the member function to call
-		call= { 'ping': ctrl.ping,
+		call = { 'ping': ctrl.ping,
 			  'list': ctrl.list,
 			  'listall': ctrl.listall,
 			  'resolve': ctrl.resolve,
@@ -214,19 +214,19 @@ def main(argv):
 	try:
 		Pyro.core.initClient(banner=0)
 		call()
-	except ConnectionDeniedError,arg:
-		print 'Could not connect to the server:',arg
-		if str(arg)==Pyro.constants.deniedReasons[Pyro.constants.DENIED_SECURITY]:
+	except ConnectionDeniedError, arg:
+		print 'Could not connect to the server:', arg
+		if str(arg) == Pyro.constants.deniedReasons[Pyro.constants.DENIED_SECURITY]:
 			print "Supply correct authentication ID?"
-	except PyroError,arg:
-		print 'There is a problem:',arg
-	except Exception,x:
-		print 'CAUGHT ERROR, printing Pyro traceback >>>>>>',x
+	except PyroError, arg:
+		print 'There is a problem:', arg
+	except Exception, x:
+		print 'CAUGHT ERROR, printing Pyro traceback >>>>>>', x
 		print ''.join(Pyro.util.getPyroTraceback(x))
 		print '<<<<<<< end of Pyro traceback'
 
 
 # allow easy usage with python -m
-if __name__=="__main__":
+if __name__ == "__main__":
 	import sys
 	main(sys.argv[1:])

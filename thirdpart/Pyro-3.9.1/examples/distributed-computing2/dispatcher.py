@@ -27,8 +27,8 @@ class DispatcherQueue(Pyro.core.ObjBase):
 ######## main program
 
 Pyro.core.initServer()
-ns=Pyro.naming.NameServerLocator().getNS()
-daemon=Pyro.core.Daemon()
+ns = Pyro.naming.NameServerLocator().getNS()
+daemon = Pyro.core.Daemon()
 daemon.useNameServer(ns)
 
 try:
@@ -39,7 +39,7 @@ try:
 	ns.unregister(":Distributed2.dispatcher")
 except NamingError:
 	pass
-uri=daemon.connect(DispatcherQueue(),":Distributed2.dispatcher")
+uri = daemon.connect(DispatcherQueue(), ":Distributed2.dispatcher")
 
 print "Dispatcher is ready."
 daemon.requestLoop()

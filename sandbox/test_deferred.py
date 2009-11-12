@@ -1,5 +1,5 @@
 from twisted.internet import defer
-from twisted.internet import threads,reactor
+from twisted.internet import threads, reactor
 import random
 from time import sleep
 
@@ -11,23 +11,23 @@ def printResult(result):
 			res = res + value
 		else:
 			print 'Failure:', value.getErrorMessage()
-	print "total: "+str(res)
+	print "total: " + str(res)
 	reactor.stop()
 
 def calc(number):
-	sleep(random.randint(0,10))
-	print "calc number "+str(number)	
+	sleep(random.randint(0, 10))
+	print "calc number " + str(number)	
 	return number * number
 
 def massCalc():
 	defer_list = list()
 	for i in range(20):
-		d = threads.deferToThread(calc,i)
+		d = threads.deferToThread(calc, i)
 		defer_list.append(d)
 	
 	print "create defer list"	
 	dl = defer.DeferredList(defer_list)
 	dl.addCallback(printResult)
 
-reactor.callLater(2,massCalc)
+reactor.callLater(2, massCalc)
 reactor.run()
