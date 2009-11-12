@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+	<bean id="class1" class="scrutator.tests.injector.MockupClass"/>
+	<bean id="class2" class="scrutator.tests.injector.MockupClass">
+		<constructor-arg>
+			<value>robert</value>
+		</constructor-arg>
+	</bean>
+</beans>

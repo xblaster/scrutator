@@ -10,11 +10,22 @@ from scrutator.core.event import *
 
 import unittest
 
+class MockupClass:
+    def __init__(self, name="bob"):
+        self.name = name
         
 class TestCoreManager(unittest.TestCase):
     def testSingleton(self):
         self.assertEquals(id(CoreManager()), id(CoreManager()))
 
+class TestXmlContext(unittest.TestCase):
+    def testLoadBasicXML(self):
+        context = Context()
+        XMLBeanFactory("scrutator/tests/injector_test.xml", context)
+        
+        self.assertEquals("bob",context.get_object("class1").name)
+        self.assertEquals("robert",context.get_object("class2").name)
+        
 class TestXml(unittest.TestCase):
     def testLoad(self):
         xeml = XmlEventManagerLoader()

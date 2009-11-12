@@ -12,7 +12,7 @@ class ContextNotFoundException(Exception):
 
 class Context:
     """ default contexte interface """
-    def __init(self):
+    def __init__(self):
         self.beans_list = dict()
         
     def getBean(self, beanName):
@@ -118,8 +118,9 @@ class AbstractBeanFactory:
     
 
 class XMLBeanFactory(AbstractBeanFactory):
-    def __init__(self, resource):
+    def __init__(self, resource, context = CoreManager()):
         
+        self.context = context
         
         from xml.dom.minidom import parse
         from sys import path
@@ -156,7 +157,7 @@ class XMLBeanFactory(AbstractBeanFactory):
                 #if we have reference element, fetch it with the getBean method
                 #warning: you must declare reference before using it
                 if (node.nodeName == "ref"):
-                    argument_list.append(CoreManager().getBean(node.getAttribute("bean")))
+                    argument_list.append(self.context.getBean(node.getAttribute("bean")))
         
         #smart load reference of the class            
         class_obj = smart_load(class_name)
@@ -175,7 +176,7 @@ class XMLBeanFactory(AbstractBeanFactory):
                 setattr(class_inst, property.getAttribute('name'), value)
             else: 
                 value = property.getElementsByTagName('ref')[0].getAttribute('bean')
-                bean_class = CoreManager().getBean(value)
+                bean_class = self.context.getBean(value)
                 setattr(class_inst, property.getAttribute('name'), bean_class)
-        CoreManager().setBean(bean_id, class_inst)
+        self.context.setBean(bean_id, class_inst)
             
