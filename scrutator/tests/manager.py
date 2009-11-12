@@ -137,6 +137,8 @@ class TestMessageBoxManager(unittest.TestCase):
 
 		self.assertEquals(asyncMgr.getStoredEvent(), l)
 		self.assertEquals(asyncMgr.getStoredEvent(), list())"""
+
+from scrutator.minidi.injector import *
 		
 class TestCoreManager(unittest.TestCase):
 	def testSingleton(self):

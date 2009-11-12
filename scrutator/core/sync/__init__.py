@@ -2,7 +2,7 @@
 #remove upload dir
 import shutil
 shutil.rmtree('upload', True)
-from scrutator.core.tool import *
+from scrutator.minidi.tool import *
 
 
 #install hook

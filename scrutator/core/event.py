@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrutator.core.exception
-from scrutator.core.tool import smart_load
+from scrutator.minidi.tool import smart_load
 
 
 class EventSerializer(object):

@@ -4,7 +4,7 @@ from scrutator.core.factory import *
 
 from scrutator.core.sync.event import *
 
-from scrutator.core.tool import *
+from scrutator.minidi.tool import *
 
 if __name__ == '__main__':
 	xmlbe = XMLBeanFactory('resource/impl/client.xml')
@@ -14,9 +14,9 @@ if __name__ == '__main__':
 	define_smart_load_bus(eventSender)
 	#eventSender.push(event)
 
-	#cmd='from scrutator.core.tool import *'+"\n"
-	#cmd='import scrutator.core.tool'+"\n"
-	#cmd='exec(scrutator.core.tool)'+"\n"
+	#cmd='from scrutator.minidi.tool import *'+"\n"
+	#cmd='import scrutator.minidi.tool'+"\n"
+	#cmd='exec(scrutator.minidi.tool)'+"\n"
 	#cmd+='_safeimport(scrutator.core.event.SimpleEvent)'+"\n"
 	#event = RawCommandEvent(cmd = cmd)
 	#eventSender.push(event)

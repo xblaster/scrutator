@@ -11,7 +11,6 @@ from twisted.python import log
 
 
 class SCRTServices(xmlrpc.XMLRPC):
-	"""An example object to be published."""
 
 	manager = None
 	mboxManager = None
@@ -143,40 +142,7 @@ class XMLRPCClient:
 		#self.xmlrpc_connect.callRemote(send_list).addCallbacks(printValue, printError)
 		#threads.deferToThread(self.xmlrpc_connect.push(send_list))
 
-		#from twisted.web import soap, server
-		"""
-		from twisted.web import soap
-		import os
 
-		def getQuote():
-		    return "That beverage, sir, is off the hizzy."
-
-		class Quoter(soap.SOAPPublisher):
-		    Publish one method, 'quote'.
-
-		    def soap_quote(self):
-		        return getQuote()
-
-		resource = Quoter()
-		"""
-		"""
-		class SoapServices(soap.SOAPPublisher):
-
-			manager = 0
-
-			def __init__(self):
-				pass
-
-			def soap_push(self, obj_list, source):
-				es = EventSerializer()
-				for obj in obj_list:
-					res = es.array2event(obj_list)
-					s_reconstruct = es.array2event(res)
-					manager.push(s_reconstruct)
-
-			def soap_pull(self, source):
-				return null
-		"""
 
 
 

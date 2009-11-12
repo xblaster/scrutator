@@ -1,5 +1,5 @@
 import unittest
-from scrutator.core.tool import *
+from scrutator.minidi.tool import *
 import sys
 
 class TestTool(unittest.TestCase):
