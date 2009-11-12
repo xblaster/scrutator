@@ -6,32 +6,41 @@ Created on 12 Nov 2009
 
 from scrutator.minidi.tool import smart_load
 
+class ContextNotFoundException(Exception):
+    pass
+
+
+class Context:
+    """ default contexte interface """
+    def __init(self):
+        self.beans_list = dict()
+        
+    def getBean(self, beanName):
+        if self.beans_list.has_key(beanName):
+            return self.beans_list[beanName]
+        raise ContextNotFoundException('bean ' + str(beanName) + ' does not exist')
+
+    def setBean(self, beanName, beanObj):
+        self.beans_list[beanName] = beanObj 
+        
+    def get_object(self, object_name):
+        return self.getBean(object_name)
+    
+
 class CoreManager:
     """ A python singleton """
 
-    class __CoreManagerimpl:
+    class __CoreManagerimpl(Context):
         """ Implementation of the singleton interface """
-        from scrutator.core.manager import EventManager 
-        beans_list = dict()
         
+        from scrutator.core.manager import EventManager 
         eventManager = EventManager()
         
-        def __init__(self):
-            pass
         
         def push(self, eventObj):
             return self.eventManager.push(eventObj)
             
-        def getEventManager(self):
-            return self.eventManager
-            
-        def getBean(self, beanName):
-            if self.beans_list.has_key(beanName):
-                return self.beans_list[beanName]
-            raise Exception('bean ' + str(beanName) + ' does not exist')
-    
-        def setBean(self, beanName, beanObj):
-            self.beans_list[beanName] = beanObj
+        
 
 
     # storage for the instance reference

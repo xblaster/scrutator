@@ -138,24 +138,5 @@ class TestMessageBoxManager(unittest.TestCase):
 		self.assertEquals(asyncMgr.getStoredEvent(), l)
 		self.assertEquals(asyncMgr.getStoredEvent(), list())"""
 
-from scrutator.minidi.injector import *
-		
-class TestCoreManager(unittest.TestCase):
-	def testSingleton(self):
-		self.assertEquals(id(CoreManager()), id(CoreManager()))
 
-class TestXml(unittest.TestCase):
-	def testLoad(self):
-		xeml = XmlEventManagerLoader()
-		em = EventManager()
-		xeml.load('resource/sample.xml', em)
-		
-		em.push(BanEvent())
-		
-		try: 
-			em.push(KickEvent())
-		except Exception:
-			pass
-		else:
-			self.fail("expected an exception from ExceptionListener")
 		
