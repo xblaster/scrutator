@@ -7,6 +7,7 @@ from twisted.web.xmlrpc import Proxy
 from scrutator.core.manager import *
 
 from twisted.python import log
+from scrutator.minidi.injector import CoreManager
 
 
 
@@ -85,9 +86,10 @@ class XMLRPCServer:
 		
 class XMLRPCClient:
 	
-	source = "default"
-	
 	def __init__(self, serviceuri, eventMgr):
+		
+		self.initSource()
+		
 		import xmlrpclib
 		self.serviceuri = str(serviceuri)
 		self.xmlrpc_connect = Proxy(str(serviceuri))
@@ -96,6 +98,15 @@ class XMLRPCClient:
 		self.retryPullTimer = 5
 		self.maxPullTimer = 5
 		reactor.callLater(5, self.pull)
+		
+		print "-- init XMLRPCClient -- "+self.source
+		
+		
+		
+	def initSource(self):
+		import os
+		import uuid
+		self.source = os.getenv('HOSTNAME')+"/"+uuid.uuid1()
 
 	def reinject(self, msgList):
 		es = EventSerializer()

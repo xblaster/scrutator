@@ -54,6 +54,10 @@ class TestConfigUsage(unittest.TestCase):
     def testMixedConfig(self):
         context = Context(XMLConfig("scrutator/tests/injector_test.xml"),MockupPythonConfig())
         self.assertEquals("bob",context.get_object("Mixed").class1.name)
+        
+    def testContextInjection(self):
+        context = Context(XMLConfig("scrutator/tests/injector_test.xml"),MockupPythonConfig())
+        context.get_object("class1").getContext().get_object("class2")
 
 
 class TestXmlContext(unittest.TestCase):

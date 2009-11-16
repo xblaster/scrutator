@@ -7,11 +7,12 @@ from scrutator.core.sync.event import *
 from scrutator.minidi.tool import *
 
 if __name__ == '__main__':
-	xmlbe = XMLBeanFactory('resource/impl/client.xml')
+	
+	CoreManager().addConfig(XMLConfig('resource/impl/client.xml'))
 	
 	eventSender = CoreManager().getBean('eventSender')
-	#event = KickEvent()
 	define_smart_load_bus(eventSender)
+	
 	#eventSender.push(event)
 
 	#cmd='from scrutator.minidi.tool import *'+"\n"

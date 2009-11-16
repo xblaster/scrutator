@@ -61,8 +61,15 @@ class Context:
             return self.beans_list[beanName]
         raise ContextNotFoundException('bean ' + str(beanName) + ' does not exist')
 
+    def __ImplantGetContext(self):
+        return self
+
     def setBean(self, beanName, beanObj):
-        self.beans_list[beanName] = beanObj 
+        self.beans_list[beanName] = beanObj
+        if not 'context' in dir(beanObj):
+            #if no attribute name "context", we add the context
+            beanObj.context = self 
+            beanObj.getContext = self.__ImplantGetContext
         
     def get_object(self, object_name):
         """aliases for getBean"""

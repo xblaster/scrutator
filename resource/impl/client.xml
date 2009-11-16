@@ -12,8 +12,5 @@
 		<value>http://localhost:7080</value>
 		<ref bean="mainEventManager"/>
 	</constructor-arg>
-	<property name="source">
-		<value>bot1</value>
-	</property>
 </bean>
 </beans>
