@@ -31,9 +31,9 @@ class EventManager(object):
 		em = self
 		
 		if context != None:
-			xeml.load(xml_bindings, context)
+			xeml.load(xml_bindings, self, context)
 		else: 
-		    xeml.load(xml_bindings)
+		    xeml.load(xml_bindings, self)
 		
 	def bind(self, eventName, listener):
 		if not isinstance(listener, scrutator.core.listener.SimpleListener):

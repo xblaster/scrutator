@@ -18,7 +18,8 @@ print __import__
 from scrutator.core.network import *
 from scrutator.core.factory import *
 
-from scrutator.minidi.injector import Context, XMLConfig
+from scrutator.core.config import ServerConfig
+from scrutator.minidi.injector import Context
 
 """class Reply(SimpleListener):
 	
@@ -29,7 +30,15 @@ from scrutator.minidi.injector import Context, XMLConfig
 
 if __name__ == '__main__':
 
-	CoreManager().addConfig(XMLConfig("resource/impl/server.xml"))
+	#CoreManager().addConfig(XMLConfig("resource/impl/server.xml"))
+	context = Context() 
+	context.addConfig(ServerConfig())
+	
+	#ask retrieve due to lazy init
+	context.getBean('mainEventManager')
+	
+	#eventSender = context.getBean('eventSender')
+
 
 	reactor.run()
 	
