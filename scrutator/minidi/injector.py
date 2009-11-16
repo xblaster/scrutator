@@ -143,7 +143,7 @@ class CoreManager:
 
 class XmlEventManagerLoader:
     
-    def getListener(self, xmlNode):
+    def getListener(self, xmlNode, context):
         if xmlNode.hasAttribute('listener'):
             listenerName = xmlNode.getAttribute('listener')
             listenerClass = smart_load(listenerName)()
@@ -151,12 +151,12 @@ class XmlEventManagerLoader:
             
         if xmlNode.hasAttribute('bean'):
             beanName = xmlNode.getAttribute('bean')
-            listenerClass = CoreManager().getBean(beanName)
+            listenerClass = context.getBean(beanName)
             return listenerClass
         raise Exception('listener or bean')
 
     
-    def load(self, filename, eventManager):
+    def load(self, filename, eventManager, context = CoreManager()):
         from xml.dom.minidom import parse
         from sys import path
         resource_name = path[0] + '/' + filename
@@ -172,7 +172,7 @@ class XmlEventManagerLoader:
                 eventName = smart_load(eventName)().getType()
             
             
-            eventManager.bind(eventName, self.getListener(trigger))
+            eventManager.bind(eventName, self.getListener(trigger, context))
             
 
 class XMLBeanConstArgError(Exception):

@@ -6,7 +6,6 @@ from scrutator.minidi.tool import *
 from scrutator.core.listener import *
 from scrutator.core.event import *
 
-
 from twisted.python import log
 
 from twisted.internet import threads, reactor
@@ -19,16 +18,22 @@ class EventManager(object):
 	""" handle event in the application"""
 
 	def __init__(self, xml_bindings=None):
+
+
 		self.listeners_map = dict()
 		if xml_bindings != None: #load xml bindings
 			self.loadXMLMap(xml_bindings)
 			
-	def loadXMLMap(self, xml_bindings):
+	def loadXMLMap(self, xml_bindings, context = None):
 		from scrutator.minidi.injector import *
 
 		xeml = XmlEventManagerLoader()
 		em = self
-		xeml.load(xml_bindings, self)
+		
+		if context != None:
+			xeml.load(xml_bindings, context)
+		else: 
+		    xeml.load(xml_bindings)
 		
 	def bind(self, eventName, listener):
 		if not isinstance(listener, scrutator.core.listener.SimpleListener):

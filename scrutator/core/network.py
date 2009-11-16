@@ -106,7 +106,7 @@ class XMLRPCClient:
 	def initSource(self):
 		import os
 		import uuid
-		self.source = os.getenv('HOSTNAME')+"/"+uuid.uuid1()
+		self.source = str(os.getenv('HOSTNAME'))+"/"+str(uuid.uuid1())
 
 	def reinject(self, msgList):
 		es = EventSerializer()

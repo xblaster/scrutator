@@ -5,12 +5,18 @@ from scrutator.core.factory import *
 from scrutator.core.sync.event import *
 
 from scrutator.minidi.tool import *
+from scrutator.minidi.injector import *
+
+
+
+from scrutator.core.config import AgentConfig
 
 if __name__ == '__main__':
 	
-	CoreManager().addConfig(XMLConfig('resource/impl/client.xml'))
+	context = Context() 
+	context.addConfig(AgentConfig())
 	
-	eventSender = CoreManager().getBean('eventSender')
+	eventSender = context.getBean('eventSender')
 	define_smart_load_bus(eventSender)
 	
 	#eventSender.push(event)
