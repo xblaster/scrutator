@@ -18,6 +18,14 @@ class TestCoreManager(unittest.TestCase):
     def testSingleton(self):
         self.assertEquals(id(CoreManager()), id(CoreManager()))
 
+class TestXmlConfigUsage(unittest.TestCase):
+    def testXMLConfig(self):
+        context = Context()
+        context.addConfig(XMLConfig("scrutator/tests/injector_test.xml"))
+        self.assertEquals("bob",context.get_object("class1").name)
+        self.assertEquals("robert",context.get_object("class2").name)
+
+
 class TestXmlContext(unittest.TestCase):
     def testLoadBasicXML(self):
         context = Context()

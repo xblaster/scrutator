@@ -10,6 +10,27 @@ class ContextNotFoundException(Exception):
     pass
 
 
+class Config(object):
+    def __init__(self):
+        self.context = None
+
+    def load(self, context):
+        self.context = context
+
+class XMLConfig(Config):
+    def __init__(self, xml_filename):
+        super(XMLConfig, self).__init__()
+        self.filename = xml_filename
+        
+    def load(self,context):
+        super(XMLConfig, self).load(context)
+        XMLBeanFactory(self.filename, context)
+        
+class PythonConfig(Config):
+    def __init__(self):
+        super(PythonConfig, self).__init__()
+        pass
+
 class Context:
     """ default contexte interface """
     def __init__(self):
@@ -25,6 +46,15 @@ class Context:
         
     def get_object(self, object_name):
         return self.getBean(object_name)
+
+    def addConfig(self, config):
+        """
+        add configuration to a context
+        """
+        if not isinstance(config, Config):
+            raise Exception("Not a config object")
+        
+        config.load(self)
     
 
 class CoreManager:
