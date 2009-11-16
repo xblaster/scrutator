@@ -19,6 +19,9 @@ class Config(object):
         
     def hasObject(self, objectName):
         return False
+    
+    def getContext(self):
+        return self.context
 
 class XMLConfig(Config):
     def __init__(self, xml_filename):
@@ -45,9 +48,13 @@ class PythonConfig(Config):
     
 class Context:
     """ default contexte interface """
-    def __init__(self):
+    def __init__(self, *args):
         self.beans_list = dict()
         self.config_list = list()
+        
+        for config in args:
+            if isinstance(config, Config):
+                self.addConfig(config)
         
     def getBean(self, beanName):
         if self.hasObject(beanName):
@@ -58,6 +65,11 @@ class Context:
         self.beans_list[beanName] = beanObj 
         
     def get_object(self, object_name):
+        """aliases for getBean"""
+        return self.getBean(object_name)
+    
+    def getObject(self, object_name):
+        """aliases for getBean"""
         return self.getBean(object_name)
     
     def hasObject(self, objectName):
