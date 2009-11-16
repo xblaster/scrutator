@@ -16,6 +16,9 @@ class Config(object):
 
     def load(self, context):
         self.context = context
+        
+    def hasObject(self, objectName):
+        return False
 
 class XMLConfig(Config):
     def __init__(self, xml_filename):
@@ -30,14 +33,24 @@ class PythonConfig(Config):
     def __init__(self):
         super(PythonConfig, self).__init__()
         pass
-
+    
+    def hasObject(self, objectName):
+        if objectName in dir(self):
+            return True
+        return False
+    
+    def loadObject(self, objectName, context):
+        func = getattr(self, objectName)
+        return func() 
+    
 class Context:
     """ default contexte interface """
     def __init__(self):
         self.beans_list = dict()
+        self.config_list = list()
         
     def getBean(self, beanName):
-        if self.beans_list.has_key(beanName):
+        if self.hasObject(beanName):
             return self.beans_list[beanName]
         raise ContextNotFoundException('bean ' + str(beanName) + ' does not exist')
 
@@ -46,6 +59,18 @@ class Context:
         
     def get_object(self, object_name):
         return self.getBean(object_name)
+    
+    def hasObject(self, objectName):
+        if self.beans_list.has_key(objectName):
+            return True
+        
+        for config in self.config_list:
+            if config.hasObject(objectName):
+                #put object in beans_list
+                self.beans_list[objectName] = config.loadObject(objectName, self)
+                return True
+            
+        return False
 
     def addConfig(self, config):
         """
@@ -55,6 +80,7 @@ class Context:
             raise Exception("Not a config object")
         
         config.load(self)
+        self.config_list.append(config)
     
 
 class CoreManager:
