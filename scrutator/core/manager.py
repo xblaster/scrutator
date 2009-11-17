@@ -36,8 +36,6 @@ class EventManager(object):
 		    xeml.load(xml_bindings, self)
 		
 	def bind(self, eventName, listener):
-		if not isinstance(listener, scrutator.core.listener.SimpleListener):
-			raise Exception("Not a scrutator.core.listener.SimpleListener inherited object " + str(listener))
 		self.__getListenerMap(str(eventName)).append(listener)
 	
 	def unbindAll(self):
@@ -58,12 +56,19 @@ class EventManager(object):
 		if not isinstance(eventObj, SimpleEvent):
 			raise Exception("Not a SimpleEvent inherited object")
 		for listener_obj in self.__getListenerMap(eventObj.getType()):
-			#threads.deferToThread(listener_obj.action(eventObj)).addCallback(default_callback)
-			listener_obj.action(eventObj, self)
+			#if it's a "regular listener"
+			if isinstance(listener_obj, scrutator.core.listener.SimpleListener):
+				listener_obj.action(eventObj, self)
+			#else if it's directly a method binded
+			else:
+				listener_obj(eventObj, self)
 		
 		for listener_obj in self.__getListenerMap('all'):
 			#threads.deferToThread(listener_obj.action(eventObj)).addCallback(default_callback)
-			listener_obj.action(eventObj, self)
+			if isinstance(listener_obj, scrutator.core.listener.SimpleListener):
+				listener_obj.action(eventObj, self)
+			else:
+				listener_obj(eventObj, self)
 			
 		return None
 			

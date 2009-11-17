@@ -6,6 +6,11 @@ from scrutator.core.listener import *
 class TestMockupException(Exception):
 	pass
 
+
+class CallbackChunkMock:
+	def fuzzyMethod(self, obj, evtMgr):
+		raise TestMockupException("ACTION !!!")
+
 class ListenerMockup(SimpleListener):
 	"""docstring for EventMockup"""
 	def __init__(self, arg=[]):
@@ -33,6 +38,19 @@ class TestEventManager(unittest.TestCase):
 			self.fail("expected TestMockupException")
 		
 		self.manager.unbind(KickEvent().getType(), self.listenermock)
+		self.manager.push(KickEvent())
+		
+	def testSimplePushWithNoListener(self):
+		mock = CallbackChunkMock()
+		self.manager.bind(KickEvent().getType(), mock.fuzzyMethod)
+		try:
+			self.manager.push(KickEvent())
+		except TestMockupException: 
+			pass
+		else:
+			self.fail("expected TestMockupException")
+		
+		self.manager.unbind(KickEvent().getType(), mock.fuzzyMethod)
 		self.manager.push(KickEvent())
 		
 	def testGatePush(self):

@@ -104,9 +104,9 @@ class XMLRPCClient:
 		
 		
 	def initSource(self):
-		import os
+		import socket
 		import uuid
-		self.source = str(os.getenv('HOSTNAME'))+"/"+str(uuid.uuid1())
+		self.source = str(socket.gethostname())+"/"+str(uuid.uuid1())
 
 	def reinject(self, msgList):
 		es = EventSerializer()
