@@ -7,10 +7,13 @@ from scrutator.core.sync.event import *
 from scrutator.minidi.tool import *
 from scrutator.minidi.injector import *
 
-from scrutator.protocols.identify.brain import IdentifyBrainClient
+from scrutator.protocols.identify.brain import GlobalBrainClient, MinimalBrainClient
 
 
 from scrutator.core.config import AgentConfig
+
+
+
 
 if __name__ == '__main__':
 	
@@ -40,9 +43,12 @@ if __name__ == '__main__':
 	
 	#init the brain
 	
-	ic = IdentifyBrainClient()
+	mb = MinimalBrainClient()
+	context.setBean('minimalbrain',mb)
+	
+	ic = GlobalBrainClient()
 	context.setBean('brain',ic)
-
-
+	
+	
 	
 	reactor.run()

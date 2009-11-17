@@ -45,7 +45,7 @@ if __name__ == '__main__':
 	#eventSender = context.getBean('eventSender')
 	
 	#init the brain
-	ic = IdentifyBrainServer()
+	ic = GlobalBrainServer()
 	context.setBean('brain',ic)
 	
 	

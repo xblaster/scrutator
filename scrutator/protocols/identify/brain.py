@@ -7,7 +7,11 @@ Created on 17 Nov 2009
 from scrutator.protocols.common import Brain
 from scrutator.protocols.identify.event import IdentifyEvent, IdentifyReceiveEvent
 
-class IdentifyBrainServer(Brain):
+from scrutator.core.event import DieEvent
+
+from twisted.internet import reactor
+
+class GlobalBrainServer(Brain):
     
     def onInit(self):
         self.bus = self.getContext().getBean("mainEventManager")
@@ -20,11 +24,21 @@ class IdentifyBrainServer(Brain):
         if not source in self.hostList:
             self.hostList.append(source)
             evtMgr.push(IdentifyReceiveEvent())
-            print "first contact from "+source
+            evtMgr.push(DieEvent())
 
-class IdentifyBrainClient(Brain):
+class GlobalBrainClient(Brain):
     def onInit(self):
         self.bus = self.getContext().getBean("mainEventManager")
         self.sender = self.getContext().getBean('eventSender')
         self.sender.push(IdentifyEvent())
+      
+class MinimalBrainClient(Brain):
+    def onInit(self):
+        self.bus = self.getContext().getBean("mainEventManager")
+        self.bus.bind(DieEvent().getType(), self.onDieEvent)
+        
+
+    def onDieEvent(self, eventObj, evtMgr):
+        print "DIEEEEEE !!!"
+        reactor.stop()
     

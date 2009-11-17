@@ -106,4 +106,7 @@ class ConnectionMade(SimpleEvent):
 class ConnectionLost(SimpleEvent):
 	pass
 
+class DieEvent(SimpleEvent):
+	pass
+
 
