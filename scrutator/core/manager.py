@@ -57,21 +57,24 @@ class EventManager(object):
 			raise Exception("Not a SimpleEvent inherited object")
 		for listener_obj in self.__getListenerMap(eventObj.getType()):
 			#if it's a "regular listener"
-			if isinstance(listener_obj, scrutator.core.listener.SimpleListener):
-				listener_obj.action(eventObj, self)
-			#else if it's directly a method binded
-			else:
-				listener_obj(eventObj, self)
+			self.execute_binding(listener_obj, eventObj)
 		
 		for listener_obj in self.__getListenerMap('all'):
 			#threads.deferToThread(listener_obj.action(eventObj)).addCallback(default_callback)
-			if isinstance(listener_obj, scrutator.core.listener.SimpleListener):
-				listener_obj.action(eventObj, self)
-			else:
-				listener_obj(eventObj, self)
+			self.execute_binding(listener_obj, eventObj)
 			
 		return None
-			
+	
+	def execute_binding(self, listener_obj, eventObj, manager = None):
+		if manager == None:
+			manager = self
+		 
+		if isinstance(listener_obj, scrutator.core.listener.SimpleListener):
+			listener_obj.action(eventObj, manager)
+			#else if it's directly a method binded
+		else:
+			listener_obj(eventObj, manager)		
+	
 	def __getListenerMap(self, mapname):
 		""""
 		return a listener map name for bindings
@@ -119,10 +122,11 @@ class AsyncEventManager(EventManager):
 
 		#normal behaviour
 		for listener_obj in self.getListenerMap(eventObj.getType()):
-			listener_obj.action(eventObj, fakeReplyBus)
+			#listener_obj.action(eventObj, fakeReplyBus)
+			self.execute_binding(listener_obj, eventObj, fakeReplyBus)
 		
 		for listener_obj in self.getListenerMap('all'):
-			listener_obj.action(eventObj, fakeReplyBus)
+			self.execute_binding(listener_obj, eventObj, fakeReplyBus)
 			
 		return None
 		

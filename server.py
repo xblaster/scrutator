@@ -18,8 +18,13 @@ print __import__
 from scrutator.core.network import *
 from scrutator.core.factory import *
 
+
+from scrutator.protocols.identify.brain import *
+
 from scrutator.core.config import ServerConfig
 from scrutator.minidi.injector import Context
+
+
 
 """class Reply(SimpleListener):
 	
@@ -35,10 +40,14 @@ if __name__ == '__main__':
 	context.addConfig(ServerConfig())
 	
 	#ask retrieve due to lazy init
-	context.getBean('mainEventManager')
-	
+	#context.getBean('mainEventManager')
+	context.getBean('eventReceiver')
 	#eventSender = context.getBean('eventSender')
-
-
+	
+	#init the brain
+	ic = IdentifyBrainServer()
+	context.setBean('brain',ic)
+	
+	
 	reactor.run()
 	

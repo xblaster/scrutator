@@ -8,3 +8,6 @@ from scrutator.core.event import SimpleEvent
 
 class IdentifyEvent(SimpleEvent):
     pass
+
+class IdentifyReceiveEvent(SimpleEvent):
+    pass

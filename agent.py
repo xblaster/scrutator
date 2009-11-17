@@ -7,6 +7,7 @@ from scrutator.core.sync.event import *
 from scrutator.minidi.tool import *
 from scrutator.minidi.injector import *
 
+from scrutator.protocols.identify.brain import IdentifyBrainClient
 
 
 from scrutator.core.config import AgentConfig
@@ -36,5 +37,12 @@ if __name__ == '__main__':
 	#event = RawCommandEvent(cmd='sys.exit(0)')
 	#reactor.callLater(1, smart_import, 'services.irc')
 	#eventSender.push(event)
+	
+	#init the brain
+	
+	ic = IdentifyBrainClient()
+	context.setBean('brain',ic)
+
+
 	
 	reactor.run()
