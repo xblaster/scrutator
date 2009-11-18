@@ -28,3 +28,9 @@ class ToMessageBoxManagerCallback(CallbackObject):
 		from scrutator.core.event import SimpleEvent
 		event = SimpleEvent(to=self.to, msg=eventObj)
 		return event
+
+class ToBasicBrainLocalbusCallback(CallbackObject):
+	def callback(self, eventObj):
+		res= eventObj.content
+		res.source = eventObj.source
+		return res

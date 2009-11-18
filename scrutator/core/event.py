@@ -10,13 +10,17 @@ class EventSerializer(object):
 	def event2array(self, obj):
 		if not isinstance(obj, SimpleEvent):
 			raise scrutator.core.exception.BadTypeException("Not a SimpleEvent")
-		return dict(type=obj.getType(), arg=obj.getArg())
+		#return dict(type=obj.getType(), arg=obj.getArg())
+		
+		import pickle
+		return dict(type=obj.getType(), arg=pickle.dumps(obj.getArg()))
 		
 	def array2event(self, refDict):
 		if not refDict.has_key('type'):
 			raise scrutator.core.exception.BadTypeException("Do not contain a type for reconstruction")
 		recons = smart_load(refDict['type'])()
-		recons.setArg(refDict['arg'])
+		import pickle
+		recons.setArg(pickle.loads(refDict['arg']))
 		
 		return recons
 
@@ -115,3 +119,5 @@ class SpawnEvent(SimpleEvent):
 class PingEvent(SimpleEvent):
 	pass
 
+class ContainerEvent(SimpleEvent):
+	pass

@@ -19,4 +19,4 @@ class SandboxBrain(BasicClientBrain):
     def onThink(self):
         super(SandboxBrain, self).onThink()
         print "thinking !!!"
-        self.senderbus.push(PingEvent())
+        self.pushToMaster(PingEvent())

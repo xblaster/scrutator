@@ -119,7 +119,7 @@ class XMLRPCClient:
 	def handleError(self, error):
 		#need to rework that
 		print "ERROR !!! " + str(error)
-		reactor.callLater(self.retryPullTimer, self.pull)
+		#reactor.callLater(self.retryPullTimer, self.pull)
 	
 	def preprocessResult(self, result):
 		

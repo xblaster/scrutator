@@ -11,3 +11,6 @@ class IdentifyEvent(SimpleEvent):
 
 class IdentifyReceiveEvent(SimpleEvent):
     pass
+
+class GlobalEvent(SimpleEvent):
+    pass

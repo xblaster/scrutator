@@ -6,8 +6,9 @@ Created on 17 Nov 2009
 
 from twisted.internet import reactor
 from scrutator.core.manager import EventManager
+from scrutator.core.listener import GateListener, PrintListener
 
-from scrutator.core.event import PingEvent
+from scrutator.core.event import PingEvent, ContainerEvent, SimpleEvent
 
 class Brain(object):
     def __init__(self):
@@ -20,9 +21,9 @@ class Brain(object):
 class BasicBrain(Brain):
     think_period = 10
     
+    
     def __init__(self):
         super(BasicBrain, self).__init__()
-        self.localbus = EventManager()
         
     def onInit(self):
         self.bus = self.getContext().getBean("mainEventManager")
@@ -37,11 +38,28 @@ class BasicBrain(Brain):
         
         
 class BasicServerBrain(BasicBrain):
+    
+    transport_event = ContainerEvent
+    
     def __init__(self):
         super(BasicServerBrain, self).__init__()
-        #self.localbus.bind(PingEvent().getType(), self.onPing)
+        self.localbus = EventManager()
+        
+    def onInit(self):
+        
+        super(BasicServerBrain, self).onInit()
+        from scrutator.core.callback import ToBasicBrainLocalbusCallback 
+        callback = ToBasicBrainLocalbusCallback()
+        gate_listener = GateListener(self.localbus, callback.callback)
+        self.bus.bind(self.transport_event().getType(), gate_listener)
+        
+    def sendTo(self, to, msg):
+        self.bus.getMessageBoxManager().push(SimpleEvent(to=to, msg=msg))
+        
     
 class BasicClientBrain(BasicBrain):
+    transport_event = ContainerEvent
+    
     def __init__(self):
         super(BasicClientBrain, self).__init__()
         
@@ -52,4 +70,11 @@ class BasicClientBrain(BasicBrain):
     
     def onThink(self):
         super(BasicClientBrain, self).onThink()
-        self.senderbus.push(PingEvent())
+        #self.senderbus.push(PingEvent())
+        self.pushToMaster(PingEvent())
+        
+    def pushToMaster(self, param_event):
+        event = self.transport_event()
+        event.setArgEntry('content', param_event)
+        event.setArgEntry('plop',"heuiheui")
+        self.senderbus.push(event)

@@ -44,6 +44,7 @@ class TestEvents(unittest.TestCase):
 		if not isinstance(s_reconstruct, BanEvent):
 			self.fail('Bad reconstruction :)')
 			
+			
 	def testEventDelayedEventConst(self):
 		mock = self.getMockupEvent()
 		
