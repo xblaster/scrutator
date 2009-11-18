@@ -10,13 +10,14 @@ import ihooks
 
 class SyncHook(ihooks.ModuleImporter):
     def import_module(self, name, globals=None, locals=None, fromlist=None, level= -1):
-		try:
-			imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
-		except:
-			smart_import(name)
-			imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
-		return imp
-		
+        try:
+            imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
+        #except (NameError, ImportError) as e:
+        except:
+            smart_import(name)
+            imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
+        return imp
+    
 
 
 

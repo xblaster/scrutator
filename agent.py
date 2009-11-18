@@ -13,9 +13,11 @@ from scrutator.protocols.identify.brain import GlobalBrainClient, MinimalBrainCl
 from scrutator.core.config import AgentConfig
 
 
-
+#import sys
 
 if __name__ == '__main__':
+	
+		
 	
 	context = Context() 
 	context.addConfig(AgentConfig())
@@ -43,10 +45,15 @@ if __name__ == '__main__':
 	
 	#init the brain
 	
+	if len(sys.argv) > 1:
+		brain = sys.argv[1]
+	else:
+		brain = "scrutator.protocols.identify.brain.GlobalBrainClient"
+
 	mb = MinimalBrainClient()
 	context.setBean('minimalbrain',mb)
-	
-	ic = GlobalBrainClient()
+
+	ic = smart_load(brain)()
 	context.setBean('brain',ic)
 	
 	

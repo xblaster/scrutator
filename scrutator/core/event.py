@@ -109,4 +109,9 @@ class ConnectionLost(SimpleEvent):
 class DieEvent(SimpleEvent):
 	pass
 
+class SpawnEvent(SimpleEvent):
+	pass
+
+class PingEvent(SimpleEvent):
+	pass
 

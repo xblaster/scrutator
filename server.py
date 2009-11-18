@@ -48,6 +48,5 @@ if __name__ == '__main__':
 	ic = GlobalBrainServer()
 	context.setBean('brain',ic)
 	
-	
 	reactor.run()
 	
