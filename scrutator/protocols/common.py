@@ -76,5 +76,4 @@ class BasicClientBrain(BasicBrain):
     def pushToMaster(self, param_event):
         event = self.transport_event()
         event.setArgEntry('content', param_event)
-        event.setArgEntry('plop',"heuiheui")
         self.senderbus.push(event)

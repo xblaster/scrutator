@@ -23,6 +23,7 @@ from scrutator.protocols.identify.brain import *
 
 from scrutator.core.config import ServerConfig
 from scrutator.minidi.injector import Context
+from scrutator.protocols.example.sandbox import SandboxBrainServer
 
 
 
@@ -46,7 +47,10 @@ if __name__ == '__main__':
 	
 	#init the brain
 	ic = GlobalBrainServer()
-	context.setBean('brain',ic)
+	context.setBean('RegistryBrain',ic)
+	
+	sb = SandboxBrainServer()
+	context.setBean('SandboxBrain',sb)
 	
 	reactor.run()
 	
