@@ -19,7 +19,7 @@ from scrutator.core.network import *
 from scrutator.core.factory import *
 
 
-from scrutator.protocols.identify.brain import *
+from remote.protocols.identify.brain import *
 
 from scrutator.core.config import ServerConfig
 from scrutator.minidi.injector import Context

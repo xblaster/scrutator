@@ -24,7 +24,7 @@ def onReactorInit():
 	if len(sys.argv) > 1:
 		brain = sys.argv[1]
 	else:
-		brain = "scrutator.protocols.identify.brain.GlobalBrainClient"
+		brain = "remote.protocols.identify.brain.GlobalBrainClient"
 
 	ic = smart_load(brain)()
 	context.setBean('brain',ic)	
