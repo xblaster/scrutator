@@ -1,13 +1,15 @@
+import xml.dom.minidom
+import unittest
 from scrutator.core.manager import EventManager
 from scrutator.core.sync.listener import FileRequestListener,\
 	FileContentListener
 from scrutator.core.sync.event import FileContent
 from scrutator.core.listener import PrintListener
 from scrutator.core.event import KickEvent, BanEvent, DieEvent
-import unittest
+
 from scrutator.minidi.tool import *
 import sys
-import xml.dom.minidom
+#
 
 
 
