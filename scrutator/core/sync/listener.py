@@ -2,8 +2,6 @@
 import scrutator.core.listener
 import scrutator.core.sync.event 
 from twisted.python import log
-import sys
-sys.path.append('upload/')
 
 class FileRequestListener(scrutator.core.listener.SimpleListener):
 	""" base of all listener"""
@@ -33,19 +31,21 @@ class FileContentListener(scrutator.core.listener.SimpleListener):
 
 	def action(self, eventObj, evtMgr):
 		#create dirs
-		xpld = eventObj.filename.split('.')
-		pyfile = xpld.pop()
-		directory = str('.').join(xpld)
+		xpld = eventObj.filename.split('/')
+		#for i in xpld:
+		#	print i
+		#pyfile = xpld.pop()
+		directory = str('/').join(xpld[0:len(xpld)-1])
 		
 		#create uploaded file
 		import os
 		try:
 			os.makedirs(self.upload_dir + directory)
-			log.msg("Making "+ directory)
+			#log.msg("Making "+ directory)
 		except:
 			pass
 		
 		f = open(self.upload_dir + eventObj.filename, 'w+')
-		log.msg("Writing in "+ eventObj.filename)
+		#log.msg("Writing in "+ eventObj.filename)
 		f.write(eventObj.content)
 		f.close()

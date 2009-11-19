@@ -1,6 +1,9 @@
 from scrutator.core.manager import EventManager
-from scrutator.core.sync.listener import FileRequestListener
-#from scrutator.core.sync.event import FileContent
+from scrutator.core.sync.listener import FileRequestListener,\
+	FileContentListener
+from scrutator.core.sync.event import FileContent
+from scrutator.core.listener import PrintListener
+from scrutator.core.event import KickEvent, BanEvent, DieEvent
 import unittest
 from scrutator.minidi.tool import *
 import sys
@@ -21,6 +24,14 @@ class TestTool(unittest.TestCase):
 		
 		content = f.read()
 		
-		#bus = EventManager()
-		#FileRequestListener()
-		#bus.bind(FileContent().getType(),FileRequestListener())
+		bus = EventManager()
+		bus.bind(FileContent().getType(),FileContentListener())
+		bus.bind('all',PrintListener())
+		
+		
+		bus.push(FileContent(filename="hello/world/nimp/__init__.py",content="print \"init\""))
+		bus.push(FileContent(filename="fake/__init__.py",content="print \"init\""))
+		bus.push(FileContent(filename="fake/fake.py",content=content))
+		
+		bus.push(DieEvent(test="hello"))
+		import fake.fake

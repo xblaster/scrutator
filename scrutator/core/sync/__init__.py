@@ -4,6 +4,8 @@ import shutil
 shutil.rmtree('upload', True)
 from scrutator.minidi.tool import *
 
+import sys
+sys.path.append('upload')
 
 #install hook
 import ihooks
@@ -23,17 +25,15 @@ import ihooks
 #        return imp
 class SyncHook(ihooks.ModuleImporter):
     def import_module(self, name, globals=None, locals=None, fromlist=None, level = -1):
-        if fromlist:
-            print 'syncHOOK '+name+' '+str(fromlist)
+        #smart_import(name)
         try:
             imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
-        except (Exception), e:
-            log.msg("Catched Exception")
+        except NameError:
             import traceback
             traceback.print_exc(file=sys.stdout)
-
             smart_import(name)
-            imp = ihooks.ModuleImporter.import_module(self,name, globals, locals, fromlist)
+            imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
         return imp
 
-
+print 'Install sync_hook'
+SyncHook().install()
