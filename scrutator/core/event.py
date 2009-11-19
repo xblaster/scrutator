@@ -18,7 +18,11 @@ class EventSerializer(object):
 	def array2event(self, refDict):
 		if not refDict.has_key('type'):
 			raise scrutator.core.exception.BadTypeException("Do not contain a type for reconstruction")
-		recons = smart_load(refDict['type'])()
+		try:
+			recons = smart_load(refDict['type'])()
+		except TypeError:
+			raise Exception(refDict['type']+" can't be unserialize")
+			
 		import pickle
 		recons.setArg(pickle.loads(refDict['arg']))
 		
