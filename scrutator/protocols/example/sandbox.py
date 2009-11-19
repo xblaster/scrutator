@@ -32,7 +32,9 @@ class SandboxBrainServer(BasicServerBrain):
     def onThink(self):
         super(SandboxBrainServer, self).onThink()
         print "LIST :"
-        for name in self.getContext().getBean('RegistryBrain').getHostList():
-            print name
+        agent_list = self.getContext().getBean('RegistryBrain').getAgentList()
+        for key in agent_list.keys():
+            print key
+            print agent_list[key].getLastPing()
         #print "thinking !!!"
         

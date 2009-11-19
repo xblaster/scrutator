@@ -14,26 +14,17 @@ from scrutator.core.listener import PrintListener
 from remote.protocols.identify.event import IdentifyEvent, IdentifyReceiveEvent, GlobalEvent
 
 
+
 class GlobalBrainServer(BasicServerBrain):
     transport_event = GlobalEvent
     
     def onInit(self):
         super(GlobalBrainServer, self).onInit()
-        self.hostList = list()
-        self.localbus.bind(IdentifyEvent().getType(), self.onIdentify)
-        self.localbus.bind(PingEvent().getType(), self.onPing)
-        log.msg("INIT GLOBAL BRAIN SERVER")
+    #    self.localbus.bind(IdentifyEvent().getType(), self.onIdentify)
     
-    def onPing(self, eventObj, evtMgr):
-        source = eventObj.source
-        if not source in self.hostList:
-            self.hostList.append(source)    
-    
-    def onIdentify(self, eventObj, evtMgr):
-        source = eventObj.source
-        
-    def getHostList(self):
-        return self.hostList
+    #def onIdentify(self, eventObj, evtMgr):
+    #    source = eventObj.source
+
         #self.sendTo(source,SpawnEvent(brain='scrutator.protocols.common.BasicClientBrain'))
 
 class GlobalBrainClient(BasicClientBrain):

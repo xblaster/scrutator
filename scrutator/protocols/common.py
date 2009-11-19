@@ -44,7 +44,16 @@ class BasicBrain(Brain):
         
         
 
+from datetime import datetime
 
+class Agent:
+    time = None
+
+    def update(self):
+        self.time = datetime.now() 
+        
+    def getLastPing(self):
+        return (datetime.now()-self.time).seconds
         
 class BasicServerBrain(BasicBrain):
     
@@ -52,7 +61,20 @@ class BasicServerBrain(BasicBrain):
     
     def __init__(self):
         super(BasicServerBrain, self).__init__()
+        self.hostDict = dict()
         self.localbus = EventManager()
+        self.localbus.bind(PingEvent().getType(), self.onPing)
+    
+    def onPing(self, eventObj, evtMgr):
+        source = eventObj.source
+        if not self.hostDict.has_key(source):
+            self.hostDict[source] = Agent() 
+            self.onFirstPing(eventObj, evtMgr)
+        
+        self.hostDict[source].update()
+            
+    def onFirstPing(self, eventObj, evtMgr):
+        pass    
         
     def onInit(self):
         
@@ -61,9 +83,16 @@ class BasicServerBrain(BasicBrain):
         callback = ToBasicBrainLocalbusCallback()
         gate_listener = GateListener(self.localbus, callback.callback)
         self.bus.bind(self.transport_event().getType(), gate_listener)
-        
+    
     def sendTo(self, to, msg):
         self.bus.getMessageBoxManager().push(SimpleEvent(to=to, msg=msg))
+
+    def getAgentList(self):
+        return self.hostDict
+        
+    def getHostList(self):
+        return self.hostDict.keys()
+
         
     
 class BasicClientBrain(BasicBrain):
@@ -75,7 +104,7 @@ class BasicClientBrain(BasicBrain):
     def onInit(self):
         self.senderbus = self.getContext().getBean("eventSender")
         super(BasicClientBrain, self).onInit()
-
+       
     
     def onThink(self):
         super(BasicClientBrain, self).onThink()
