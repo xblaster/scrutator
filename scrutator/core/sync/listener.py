@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrutator.core.listener
 import scrutator.core.sync.event 
-
+from twisted.python import log
 import sys
 sys.path.append('upload/')
 
@@ -41,9 +41,11 @@ class FileContentListener(scrutator.core.listener.SimpleListener):
 		import os
 		try:
 			os.makedirs(self.upload_dir + directory)
+			log.msg("Making "+ directory)
 		except:
 			pass
 		
 		f = open(self.upload_dir + eventObj.filename, 'w+')
+		log.msg("Writing in "+ eventObj.filename)
 		f.write(eventObj.content)
 		f.close()

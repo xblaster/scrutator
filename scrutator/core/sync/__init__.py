@@ -14,8 +14,12 @@ class SyncHook(ihooks.ModuleImporter):
             imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
         #except (NameError, ImportError) as e:
         except:
-            smart_import(name)
-            imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
+            try:
+                smart_import(name)
+                imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
+            except (Exception), e:
+                log.msg("Error during smart_import" +str(e))
+                pass
         return imp
     
 print 'Install sync_hook'

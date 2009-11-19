@@ -55,13 +55,15 @@ def smart_import(packageName):
 	return __safeimport(packageName)
 
 def __safeimport(packageName):
-	"""this is a not so safe import for the moment"""
 	try:
+		log.msg("EXEC "+packageName)
 		exec(packageName)
 		#print "REPLICATE"
-	except NameError:
-		
+	except (NameError),e:
+		log.msg(str(e))
+		"""this is a not so safe import for the moment"""
 		global __safeimport_dict
+		log.msg("safe import " +str(__safeimport_dict))
 		
 		if not packageName in __safeimport_dict:
 			log.msg("__safeimport " + packageName)
@@ -69,13 +71,8 @@ def __safeimport(packageName):
 		
 		#put packageName in global
 		globals()[packageName] = __safeimport_dict[packageName]
+		log.msg("IMPORTED !!!"+str(__safeimport_dict))
 		return __safeimport_dict[packageName]
-		#exec("global "+packageName.split('.').pop(0))
-			
-		#print "---------"
-		#print globals()
-		#for v in globals():
-			#print str(v)
 
 
 def __check_tree(packageName):
@@ -91,12 +88,13 @@ def __check_tree(packageName):
 	  arbo.pop()
 	  
 	  #if __init does not exist, we fetch it
-	  print "check " + str(file_check)
+	  log.msg("check " + str(file_check))
 	  if not os.path.isfile(file_check):
 	      bus = get_smart_load_bus()
 	      from scrutator.core.sync.event import FileRequest
 	      event = FileRequest(file=file_check)
-	      log.msg("Launch async call for " + str(packageName))
+	      log.msg("Launch async4 call for " + str(packageName))
+	      log.msg("push " + str(event) + ' to ' + str(bus))
 	      bus.push(event)
 	      #from twisted.internet import reactor
 	      #reactor.iterate()
@@ -112,35 +110,45 @@ def __async_import(packageName):
 		__check_tree(packageName)
 		import scrutator.core.sync.event
 		event = scrutator.core.sync.event.FileRequest(file=packagename_to_packagefile(packageName))
-		print "push " + str(event) + ' to ' + str(bus)
+		log.msg("Launch async call for " + str(packageName))
+		log.msg("push " + str(event) + ' to ' + str(bus))
 		bus.push(event)
+	else:
+		raise Exception("no distant bus")
+		
 
 #try to import the file
 def __try_import(packageName):
-	#print "try left "+str(retry)+" for package "+str(packageName)		
+	#log.msg("try left "+str(retry)+" for package "+str(packageName))
 	imp = None
 	async_call = False
 	
 	while imp == None:
 		packageFile = packagename_to_packagefile(packageName)
+		
 		#log.msg("Loop")
-				
 		#if source file does not exist
+		log.msg("package file "+packageFile)
 		if not (os.path.isfile('upload/' + packageFile) or os.path.isfile(packageFile)):
 			#require it at first call
 			if not async_call:
-				log.msg("Launch async call for " + str(packageName))
 				threads.deferToThread(__async_import, packageName)
 				async_call = True
 			reactor.iterate(4)
 		else:
+			imp = __import__(packageName)	
+			log.msg("IMP "+str(imp))
 			try:
-				imp = __import__(packageName)
-			except ImportError:
-				log.err()
+				log.msg("try importing")
+				#imp = __import__(packageName)	
+			except (Exception), exp:
+				log.msg(str(exp))
+				log.msg("Error during import")
 				return None
-			
+			log.msg(imp)
+		
 		
 
 		#try to reimport it with a retry less
+	log.msg("Return __try_import "+str(imp))
 	return imp

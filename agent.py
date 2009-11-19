@@ -7,42 +7,18 @@ from scrutator.core.sync.event import *
 from scrutator.minidi.tool import *
 from scrutator.minidi.injector import *
 
-from scrutator.protocols.identify.brain import GlobalBrainClient, MinimalBrainClient
+#from scrutator.protocols.identify.brain import GlobalBrainClient
+from scrutator.protocols.common import MinimalBrainClient
 
 
 from scrutator.core.config import AgentConfig
 
 
+
+
 #import sys
 
-if __name__ == '__main__':
-	
-		
-	
-	context = Context() 
-	context.addConfig(AgentConfig())
-	
-	eventSender = context.getBean('eventSender')
-	define_smart_load_bus(eventSender)
-	
-	#eventSender.push(event)
-
-	#cmd='from scrutator.minidi.tool import *'+"\n"
-	#cmd='import scrutator.minidi.tool'+"\n"
-	#cmd='exec(scrutator.minidi.tool)'+"\n"
-	#cmd+='_safeimport(scrutator.core.event.SimpleEvent)'+"\n"
-	#event = RawCommandEvent(cmd = cmd)
-	#eventSender.push(event)
-
-	#event = RawCommandEvent(cmd='from tmp.scrutator.core.manager import EventManager')
-	#event = FileRequest(file='scrutator/core/listener.py')
-	#for i in range(10):
-	#  event = RawCommandEvent(cmd='print "'+str(i)+'"')
-	#  eventSender.push(event)
-	#event = RawCommandEvent(cmd='sys.exit(0)')
-	#reactor.callLater(1, smart_import, 'services.irc')
-	#eventSender.push(event)
-	
+def onReactorInit():
 	#init the brain
 	
 	if len(sys.argv) > 1:
@@ -50,12 +26,21 @@ if __name__ == '__main__':
 	else:
 		brain = "scrutator.protocols.identify.brain.GlobalBrainClient"
 
+	ic = smart_load(brain)()
+	context.setBean('brain',ic)	
+
+
+if __name__ == '__main__':
+	context = Context() 
+	context.addConfig(AgentConfig())
+	
+	eventSender = context.getBean('eventSender')
+	define_smart_load_bus(eventSender)
+	
 	mb = MinimalBrainClient()
 	context.setBean('minimalbrain',mb)
-
-	ic = smart_load(brain)()
-	context.setBean('brain',ic)
 	
-	
+	reactor.callLater(0.5, onReactorInit)
 	
 	reactor.run()
+	

@@ -3,16 +3,15 @@ Created on 17 Nov 2009
 
 @author: wax
 '''
+from twisted.internet import reactor
 
 from scrutator.protocols.common import Brain, BasicClientBrain, BasicServerBrain
+from scrutator.core.event import DieEvent, SpawnEvent, PingEvent
+from scrutator.core.listener import SpawnListener
+from scrutator.core.listener import PrintListener
+
 from scrutator.protocols.identify.event import IdentifyEvent, IdentifyReceiveEvent, GlobalEvent
 
-from scrutator.core.event import DieEvent, SpawnEvent, PingEvent
-
-from twisted.internet import reactor
-from scrutator.core.listener import SpawnListener
-
-from scrutator.core.listener import PrintListener
 
 class GlobalBrainServer(BasicServerBrain):
     transport_event = GlobalEvent
@@ -43,15 +42,5 @@ class GlobalBrainClient(BasicClientBrain):
         #self.pushToMaster(IdentifyEvent())
 
       
-class MinimalBrainClient(BasicClientBrain):
-    transport_event = GlobalEvent
-    def onInit(self):
-        super(MinimalBrainClient, self).onInit()
-        self.bus = self.getContext().getBean("mainEventManager")
-        self.bus.bind(DieEvent().getType(), self.onDieEvent)
-        self.bus.bind(SpawnEvent().getType(), SpawnListener())
 
-    def onDieEvent(self, eventObj, evtMgr):
-        print "DIEEEEEE !!!"
-        reactor.stop()
     
