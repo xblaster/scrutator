@@ -30,7 +30,7 @@ class SyncHook(ihooks.ModuleImporter):
             imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
         except Exception:
             import traceback
-            traceback.print_exc(file=sys.stdout)
+            #traceback.print_exc(file=sys.stdout)
             smart_import(name)
             imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
         return imp

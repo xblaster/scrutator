@@ -57,7 +57,7 @@ class SimpleEvent(object):
 		self.arg[entryname] = entry
 		
 	def hasArgEntry(self, argname):
-		return self.arg.has_key(argname)
+		return self.getArg().has_key(argname)
 
 	def getString(self):
 	    str_res = self.__class__.__module__ + '.' + self.__class__.__name__ + ': {'
@@ -68,6 +68,9 @@ class SimpleEvent(object):
 	    return str_res
 	
 	def __getattribute__(self, name):
+		
+		if name =="arg":
+			return super(SimpleEvent, self).__getattribute__('arg') 
 		try:
 			return super(SimpleEvent, self).__getattribute__(name)
 		except AttributeError:
