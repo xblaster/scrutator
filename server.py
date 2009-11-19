@@ -24,6 +24,7 @@ from remote.protocols.identify.brain import *
 from scrutator.core.config import ServerConfig
 from scrutator.minidi.injector import Context
 from scrutator.protocols.example.sandbox import SandboxBrainServer
+from remote.protocols.irc.brain import IrcBrainServer
 
 
 
@@ -51,6 +52,9 @@ if __name__ == '__main__':
 	
 	sb = SandboxBrainServer()
 	context.setBean('SandboxBrain',sb)
+	
+	ib = IrcBrainServer()
+	context.setBean('IrcBrainServer',ib)
 	
 	reactor.run()
 	

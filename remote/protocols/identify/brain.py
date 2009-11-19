@@ -20,7 +20,6 @@ class GlobalBrainServer(BasicServerBrain):
     
     def onInit(self):
         super(GlobalBrainServer, self).onInit()
-    #    self.localbus.bind(IdentifyEvent().getType(), self.onIdentify)
     
     #def onIdentify(self, eventObj, evtMgr):
     #    source = eventObj.source

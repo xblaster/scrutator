@@ -113,7 +113,7 @@ class XMLRPCClient:
 		
 		for obj in msgList:
 			res = es.array2event(obj)
-			print "REINJECT" + str(res)
+			#print "REINJECT" + str(res)
 			self.manager.push(res)
 	
 	def handleError(self, error):
@@ -135,7 +135,7 @@ class XMLRPCClient:
 		return result
 	
 	def pull(self):
-		log.msg('pull ' + str(self.serviceuri))
+		#log.msg('pull ' + str(self.serviceuri))
 		d = self.xmlrpc_connect.callRemote('pull', self.source).addCallback(self.preprocessResult)
 		d.addCallbacks(self.reinject, self.handleError)
 		
