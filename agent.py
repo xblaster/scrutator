@@ -12,10 +12,6 @@ from scrutator.protocols.common import MinimalBrainClient
 
 
 from scrutator.core.config import AgentConfig
-
-
-
-
 #import sys
 
 def onReactorInit():

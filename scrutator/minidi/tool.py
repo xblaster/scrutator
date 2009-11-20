@@ -121,19 +121,20 @@ def __async_import(packageName):
 def __try_import(packageName):
 	#log.msg("try left "+str(retry)+" for package "+str(packageName))
 	imp = None
-	async_call = False
+	async_call = 0
 	
 	while imp == None:
 		packageFile = packagename_to_packagefile(packageName)
 		
+		log.msg(str(packageFile))
 		#log.msg("Loop")
 		#if source file does not exist
 		#log.msg("package file "+packageFile)
 		if not (os.path.isfile('upload/' + packageFile) or os.path.isfile(packageFile)):
 			#require it at first call
-			if not async_call:
+			if (async_call%20)==0:
 				threads.deferToThread(__async_import, packageName)
-				async_call = True
+			async_call+=1	
 			reactor.iterate(4)
 		else:
 			try:

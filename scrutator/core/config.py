@@ -10,6 +10,7 @@ from scrutator.minidi.injector import PythonConfig
 
 from scrutator.core.manager import *
 from scrutator.core.network import *
+from scrutator.core.sync.event import FileContent, FileRequest
 
 
 class AgentConfig(PythonConfig):
@@ -21,7 +22,8 @@ class AgentConfig(PythonConfig):
     
     def mainEventManager(self):
         mm = EventManager()
-        mm.loadXMLMap('resource/impl/client.xml', self.getContext())
+        #mm.loadXMLMap('resource/impl/client.xml', self.getContext())
+        mm.bind(FileContent().getType(),FileContentListener())
         
         return mm
     
@@ -48,7 +50,8 @@ class ServerConfig(PythonConfig):
     
     def mainEventManager(self):
         am = AsyncEventManager()
-        am.loadXMLMap('resource/impl/server_map.xml',self.getContext())
+        #am.loadXMLMap('resource/impl/server_map.xml',self.getContext())
+        am.bind(FileRequest().getType(),FileRequestListener())
         return am
     
     
