@@ -15,6 +15,11 @@ class DisconnectEvent(SimpleEvent):
     pass
 
 
+class LinkEvent(SimpleEvent):
+    #param url, author, channel, desc, network
+    pass
+
+
 #action
 class ConnectEventAction(SimpleEvent):
     pass
