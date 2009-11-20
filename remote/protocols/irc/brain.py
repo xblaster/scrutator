@@ -3,28 +3,17 @@ Created on 19 Nov 2009
 
 @author: wax
 '''
-from scrutator.protocols.common import BasicServerBrain, BasicClientBrain
+
+from twisted.protocols.irc import *
+from twisted.python import log
+
+from scrutator.protocols.common import BasicClientBrain
 from scrutator.core.event import SpawnEvent
 from remote.protocols.irc.event import IrcEvent
+from remote.protocols.genericbrain import GenericBrainClient
 
-class IrcBrainServer(BasicServerBrain):
-    transport_event = IrcEvent
-    def __init__(self):
-        super(IrcBrainServer, self).__init__()
-        self.spawned = list()
-    
-    def onFirstPing(self, eventObj, evtMgr):
-        #print "NEW CLIENT !!!!!!!!"
-        pass
-     
-    def onThink(self):
-        self.launchClient()
-    
-    def launchClient(self):
-        for source in self.getContext().getBean('RegistryBrain').getHostList():
-            if not source in self.spawned:
-                self.sendTo(source,SpawnEvent(brain='remote.protocols.irc.brain.IrcBrainClient'))
-                self.spawned.append(source)
+
+
 
 
 class IrcBrainClient(BasicClientBrain):
@@ -34,3 +23,6 @@ class IrcBrainClient(BasicClientBrain):
         
     def onInit(self):
         super(IrcBrainClient, self).onInit()
+        
+    def onThink(self):
+        log.msg("ON THINK ! => ")

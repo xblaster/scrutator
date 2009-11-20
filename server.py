@@ -24,7 +24,7 @@ from remote.protocols.identify.brain import *
 from scrutator.core.config import ServerConfig
 from scrutator.minidi.injector import Context
 from scrutator.protocols.example.sandbox import SandboxBrainServer
-from remote.protocols.irc.brain import IrcBrainServer
+from remote.protocols.irc.server import IrcBrainServer
 
 
 
