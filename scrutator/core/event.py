@@ -57,7 +57,7 @@ class SimpleEvent(object):
 		self.arg[entryname] = entry
 		
 	def hasArgEntry(self, argname):
-		return self.getArg().has_key(argname)
+		return self.arg.has_key(argname)
 
 	def getString(self):
 	    str_res = self.__class__.__module__ + '.' + self.__class__.__name__ + ': {'
