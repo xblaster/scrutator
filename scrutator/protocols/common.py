@@ -83,6 +83,8 @@ class BasicServerBrain(BasicBrain):
         callback = ToBasicBrainLocalbusCallback()
         gate_listener = GateListener(self.localbus, callback.callback)
         self.bus.bind(self.transport_event().getType(), gate_listener)
+        
+        self.localbus.bind('all', PrintListener())
     
     def sendTo(self, to, msg):
         self.bus.getMessageBoxManager().push(SimpleEvent(to=to, msg=msg))

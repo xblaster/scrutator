@@ -28,3 +28,37 @@ class GenericBrainServer(BasicServerBrain):
         log.msg()
         log.msg()
         addLink(linkEvent) 
+        
+
+
+
+from twisted.python import log
+
+
+
+
+class CleanUpObserver(object):
+
+    def __init__(self, loggerName="twisted"):
+        pass
+    
+    def emit(self, eventDict):
+        if 'logLevel' in eventDict:
+            level = eventDict['logLevel']
+        elif eventDict['isError']:
+            level = log.logging.ERROR
+        else:
+            level = log.logging.INFO
+        text = log.textFromEventDict(eventDict)
+        if text is None:
+            return
+        if "twisted.web.xmlrpc._QueryFactory" in text:
+            return
+        self.logger.log(level, text)
+   
+log.observers=[]
+log.addObserver(CleanUpObserver)
+print ""
+print ""
+print ""
+print "change observer"

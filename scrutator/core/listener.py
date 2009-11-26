@@ -92,4 +92,4 @@ class SpawnListener(SimpleListener):
 	def action(self, obj, evtMgr):
 		from subprocess import Popen
 		#uri = self.getContext().getBean("distantURI")
-		p = Popen("python agent.py "+obj.brain)
+		p = Popen(["python", "agent.py", obj.brain])

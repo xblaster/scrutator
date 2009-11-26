@@ -7,46 +7,35 @@ Created on 25 Nov 2009
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol
 from twisted.python import log
-from remote.protocols.event import DisconnectEvent
+from remote.protocols.event import DisconnectEvent, ConnectEvent
+from remote.protocols.irc.event import JoinActionEvent, PartEvent, JoinEvent
+from scrutator.core.event import KickEvent
 
 class IrcBot(irc.IRCClient):
-    
-#    def updater(self):
-#        self.botname = self.nickname
-#    
-#        print "updater " + str(self.factory.server.name)
-#        d = dict()
-#        channels_res = dict()
-#        for channel in self.channels:
-#            elt = dict()
-#            elt['status'] = self.channels[channel].status
-#            channels_res[self.channels[channel].name] = elt
-#        
-#        d[self.factory.server.name] = channels_res
-#        pprint.pprint(d)
-#        server = xmlrpclib.ServerProxy("http://scrutator.lo2k.net/index.php?ctrl=API&action=index", verbose=1)
-#        lo2kObj = server.lo2k
-#        #try:
-#        needjoin = lo2kObj.update_channels(self.botname, d)
-#        
-#        for chan in needjoin:
-#            if not chan in self.channels:
-#                print "discover channel " + chan
-#                c = Channel()
-#                c.name = chan
-#                c.status = "offline"
-#                self.channels[chan] = c
-#            self.join(chan)
-#
-#        for channel in self.channels:
-#            if self.channels[channel].verbose == 1:
-#                #try to rejoin channel
-#                self.join(channel)
-                
+     
+     
+    def onInit(self):
+        self.pushToMaster = self.factory.pushToMaster 
+     
+    def created(self, when):
+        self.nickname = self.factory.nickname
+        self.pushToMaster = self.factory.pushToMaster
+        self.bus = self.factory.bus
+        
+        #bus binding
+        self.bus.bind(JoinActionEvent().getType(), self.onJoinEvent)
+        
+    def onJoinEvent(self, eventObj, evtMgr):
+        
+        if not eventObj.hasArgEntry("key"):
+            eventObj.key = None;
+        
+        self.join(eventObj.channel, eventObj.key)
 
         
     def connectionMade(self):
-        pass
+        self.onInit()
+        self.pushToMaster(ConnectEvent())
 
     def connectionLost(self, reason):
         pass
@@ -56,19 +45,27 @@ class IrcBot(irc.IRCClient):
 
     def signedOn(self):
         """Called when bot has succesfully signed on to server."""
-        pass
+        print "signed on !!!!!!!!!!!!!"
+        self.setNick(self.nickname)
+        self.pushToMaster(ConnectEvent())
         
     def joined(self, channel):
-        pass
+        self.pushToMaster(JoinEvent(channel=channel))
 
     def privmsg(self, user, channel, msg):
+        #self.logger.log("* %s %s %s" % (user, channel, msg))
+        self.setNick(self.nickname)
+        print "* "+user+" "+channel+" "+msg
         if not channel.startswith('#'):
             return
         #print channel
 
     def action(self, user, channel, msg):
         """This will get called when the bot sees someone do an action."""
-        pass
+        #pass
+        user = user.split('!', 1)[0]
+        #log.msg("* %s %s" % (user, msg))
+        print user +" "+msg
 
     # irc callbacks
 
@@ -79,10 +76,10 @@ class IrcBot(irc.IRCClient):
         #self.logger.log("%s is now known as %s" % (old_nick, new_nick))
     
     def kickedFrom(self, channel, kicker, message):
-        pass
+        self.pushToMaster(KickEvent(channel=channel, kicker=kicker, message=message))
         
     def left(self, channel):
-        pass
+        self.pushToMaster(PartEvent(channel=channel))
 
 
 class BotFactory(protocol.ClientFactory):
@@ -94,12 +91,14 @@ class BotFactory(protocol.ClientFactory):
     # the class of the protocol to build when new connection is made
     protocol = IrcBot
 
-    def __init__(self, server):
-        pass
+    def __init__(self, nickname, server):
+        self.server = server
+        self.nickname = nickname
 
         
     def clientConnectionLost(self, connector, reason):
         self.pushToMaster(DisconnectEvent())
 
     def clientConnectionFailed(self, connector, reason):
-        pass
+        print "REASON: "+str(reason)
+        self.pushToMaster(DisconnectEvent(reason="arg"))

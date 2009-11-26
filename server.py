@@ -50,8 +50,8 @@ if __name__ == '__main__':
 	ic = GlobalBrainServer()
 	context.setBean('RegistryBrain',ic)
 	
-	sb = SandboxBrainServer()
-	context.setBean('SandboxBrain',sb)
+	#sb = SandboxBrainServer()
+	#context.setBean('SandboxBrain',sb)
 	
 	ib = IrcBrainServer()
 	context.setBean('IrcBrainServer',ib)
