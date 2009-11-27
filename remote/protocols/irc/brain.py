@@ -9,7 +9,6 @@ from twisted.internet import reactor, protocol
 from twisted.python import log
 
 from twisted.protocols.irc import *
-from twisted.python import log
 
 from scrutator.protocols.common import BasicClientBrain
 from scrutator.core.event import SpawnEvent
@@ -28,6 +27,11 @@ class RapidIdentServer(basic.LineOnlyReceiver):
         if len(parts) != 2:
             return
         self.sendLine('%d, %d : USERID : %s : %s' % (parts[1], parts[0], "UNIX", "scrutator"))
+    def doStart(self):
+        pass
+    
+    def doStop(self):
+        pass
                     
 
 class IrcBrainClient(BasicClientBrain):
@@ -53,8 +57,10 @@ class IrcBrainClient(BasicClientBrain):
         f.bus = self.bus
         f.pushToMaster = self.pushToMaster
         print "connect "+event.nickname+"@"+event.server+":"+str(event.port)
+        
+        #reactor.listenTCP(113, RapidIdentServer())
         reactor.connectTCP(event.server, event.port, f)
         
-        from twisted.protocols.ident import IdentServer
-        reactor.listenTCP(113, IdentServer())
+        #from twisted.protocols.ident import IdentServer
+        
         #reactor.run()

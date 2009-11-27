@@ -58,26 +58,37 @@ class Agent:
 class BasicServerBrain(BasicBrain):
     
     transport_event = ContainerEvent
+    delay_first_init = 60
+    launched = False
     
     def __init__(self):
         super(BasicServerBrain, self).__init__()
         self.hostDict = dict()
         self.localbus = EventManager()
         self.localbus.bind(PingEvent().getType(), self.onPing)
+        
+        reactor.callLater(self.delay_first_init, self.onLaunch)
+    
+    def onLaunch(self):
+        launched = True
     
     def onPing(self, eventObj, evtMgr):
         source = eventObj.source
         if not self.hostDict.has_key(source):
-            self.hostDict[source] = Agent() 
-            self.onFirstPing(eventObj, evtMgr)
+            self.hostDict[source] = Agent()
+            self.onFirstPing(eventObj, evtMgr) 
+            if self.launched:
+                self.onFirstInit(eventObj, evtMgr)
         
         self.hostDict[source].update()
             
     def onFirstPing(self, eventObj, evtMgr):
-        pass    
+        pass  
+    
+    def onFirstInit(self, eventObj, evtMgr):
+        pass  
         
     def onInit(self):
-        
         super(BasicServerBrain, self).onInit()
         from scrutator.core.callback import ToBasicBrainLocalbusCallback 
         callback = ToBasicBrainLocalbusCallback()

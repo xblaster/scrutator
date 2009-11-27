@@ -16,7 +16,7 @@ import xmlrpclib
 
 
 def addLink(linkEvent): 
-    for arg in ["url", "author", "channel", "desc", "network"]:
+    for arg in ["url", "author", "channel", "network"]:
             if not linkEvent.hasArgEntry(arg):
                 linkEvent.setArgEntry(arg,"unknown")
     server = xmlrpclib.ServerProxy("http://scrutator.lo2k.net/index.php?ctrl=API&action=index")

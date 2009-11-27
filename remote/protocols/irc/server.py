@@ -23,9 +23,10 @@ class IrcBrainServer(GenericBrainServer):
         
     
     def onFirstPing(self, eventObj, evtMgr):
-        #print "NEW CLIENT !!!!!!!!"
+        print "NEW CLIENT !!!!!!!!"
         source = eventObj.source
         self.sendTo(source, ConnectEventAction(nickname="scrutator", server="irc.worldnet.net", port=6667))
+        #self.sendTo(source, ConnectEventAction(nickname="ERNEST", server="irc.worldnet.net", port=6667))
      
     def onDisconnectEvent(self, eventObj, evtMgr):
         source = eventObj.source
@@ -34,6 +35,8 @@ class IrcBrainServer(GenericBrainServer):
     def onConnectEvent(self, eventObj, evtMgr):
         source = eventObj.source
         self.sendTo(source, JoinActionEvent(channel="#funradio"))
+        self.sendTo(source, JoinActionEvent(channel="#cochonne"))
+        self.sendTo(source, JoinActionEvent(channel="#scrutator"))
  
      
     def onThink(self):

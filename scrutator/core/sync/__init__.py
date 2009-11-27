@@ -27,6 +27,7 @@ class SyncHook(ihooks.ModuleImporter):
     def import_module(self, name, globals=None, locals=None, fromlist=None, level = -1):
         #smart_import(name)
         try:
+            #print "import_module " + name
             imp = ihooks.ModuleImporter.import_module(self, name, globals, locals, fromlist)
         except Exception:
             import traceback

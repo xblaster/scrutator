@@ -57,6 +57,7 @@ def smart_import(packageName):
 def __safeimport(packageName):
 	try:
 		#log.msg("EXEC "+packageName)
+		#__import__(packageName)
 		exec(packageName)
 		#print "REPLICATE"
 	except (NameError),e:
