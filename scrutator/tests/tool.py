@@ -28,7 +28,7 @@ class TestTool(unittest.TestCase):
 		
 		bus = EventManager()
 		bus.bind(FileContent().getType(),FileContentListener())
-		bus.bind('all',PrintListener())
+		#bus.bind('all',PrintListener())
 		
 		
 		bus.push(FileContent(filename="hello/world/nimp/__init__.py",content="print \"init\""))

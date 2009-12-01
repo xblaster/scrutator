@@ -67,7 +67,7 @@ def __safeimport(packageName):
 		#log.msg("safe import " +str(__safeimport_dict))
 		
 		if not packageName in __safeimport_dict:
-			log.msg("__safeimport " + packageName)
+			#log.msg("__safeimport " + packageName)
 			__safeimport_dict[packageName] = __try_import(packageName)
 		
 		#put packageName in global
@@ -127,7 +127,7 @@ def __try_import(packageName):
 	while imp == None:
 		packageFile = packagename_to_packagefile(packageName)
 		
-		log.msg(str(packageFile))
+		#log.msg(str(packageFile))
 		#log.msg("Loop")
 		#if source file does not exist
 		#log.msg("package file "+packageFile)
@@ -139,7 +139,7 @@ def __try_import(packageName):
 			reactor.iterate(4)
 		else:
 			try:
-				log.msg("try importing")
+				#log.msg("try importing")
 				imp = __import__(packageName)	
 			except (Exception):
 				import traceback
