@@ -4,7 +4,7 @@ Created on 27 Nov 2009
 @author: wax
 '''
 
-from remote.protocols.irc.model import IrcServices
+from remote.protocols.irc.services import IrcServices
 
 
 
@@ -18,7 +18,7 @@ if __name__ == '__main__':
         print server.host
         
         for chan in server.getChannels():
-            print "*** "+chan.name 
+            print "*** "+chan.name
     
     #d.addCallback(display)
     #reactor.run()

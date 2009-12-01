@@ -7,6 +7,7 @@ from scrutator.tests.tool import *
 from scrutator.tests.helpers import *
 
 from scrutator.tests.injector import *
+from scrutator.tests.irc import *
 
 
 if __name__ == "__main__":
