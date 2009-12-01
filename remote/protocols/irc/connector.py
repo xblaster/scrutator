@@ -71,7 +71,11 @@ class LogBot(irc.IRCClient):
         address = url.detect_link(msg)
         
         if address != None:
-            self.pushToMaster(LinkEvent(author=user, channel=channel, url=address, desc=url.get_comment(msg),server= self.factory.server))
+            comment = url.get_comment(msg)
+            if comment == None:
+                self.pushToMaster(LinkEvent(author=user, channel=channel, url=address, desc="",server= self.factory.server))
+            else:
+                self.pushToMaster(LinkEvent(author=user, channel=channel, url=address, desc=comment,server= self.factory.server))
             
         if msg.startswith(self.nickname + ":"):
             self.msg(channel, user + ": " + doreply(msg))

@@ -9,6 +9,11 @@ from scrutator.core.event import SpawnEvent, DieEvent
 from remote.protocols.event import ConnectEventAction, ConnectEvent,\
     DisconnectEvent
 
+
+
+
+
+
 class IrcBrainServer(GenericBrainServer):
     transport_event = IrcEvent
     def __init__(self):

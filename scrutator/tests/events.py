@@ -33,6 +33,18 @@ class TestEvents(unittest.TestCase):
 		res = es.event2array(s)
 		self.assertEqual(res['type'], s.getType())
 		#self.assertEqual(res['arg'], s.getArg())
+		
+		
+	def testEventSerializerEvent2ArrWithNone(self):
+		s = self.getMockupEvent()
+		s.setArgEntry("plop", None)
+		es = EventSerializer()
+		res = es.event2array(s)
+		
+		s_reconstruct = es.array2event(res)
+			
+		if not isinstance(s_reconstruct, BanEvent):
+			self.fail('Bad reconstruction :)')
 	
 	def testEventSerializerArr2Event(self):
 		s = self.getMockupEvent()
