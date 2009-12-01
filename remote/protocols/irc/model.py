@@ -30,6 +30,11 @@ class IrcServer:
     def getChannels(self):
         return self.channels.values()
     
+    def getChannel(self,name):
+        if isinstance(name, IrcChannel):
+            name = str(name.name)
+        return self.channels[name]
+    
     def removeChannel(self, channel):
         del self.channels[str(channel.name)]
 

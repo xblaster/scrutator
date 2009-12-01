@@ -3,6 +3,7 @@
 import unittest
 
 from scrutator.helpers import url
+from remote.services.helpers import *
 
 class TestUriHelper(unittest.TestCase):
 		
@@ -29,3 +30,11 @@ class TestUriHelper(unittest.TestCase):
 		
 		to_catch = "http://bashfr.org"
 		self.assertEqual(None, url.get_comment(to_catch))
+		
+	def testComputerName(self):
+		name = "maury/5161-13513-153153-15313"
+		self.assertEqual("maury", getComputername(name))
+		
+		name = "oil-ocean/5161-13513-153153-15313"
+		self.assertEqual("oil-ocean", getComputername(name))
+		

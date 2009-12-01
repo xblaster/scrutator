@@ -64,13 +64,31 @@ class TestIrcModel(unittest.TestCase):
         chan.name = "#funradio"
         server.addChannel(chan)
     
-        chan = IrcChannel()
-        chan.name = "#scrutator"
-        server.addChannel(chan)
+        chan2 = IrcChannel()
+        chan2.name = "#scrutator"
+        server.addChannel(chan2)
         
-        server.removeChannel(chan)
+        server.removeChannel(chan2)
         
         self.assertEqual(1, len(server.getChannels()))
+        
+        chan_test = server.getChannels().pop()
+        self.assertEqual(chan,chan_test);
+        
+    def testIrcChanGet(self):
+        server = IrcServer()
+        server.host = "irc.epiknet.org"
+    
+        chan = IrcChannel()
+        chan.name = "#funradio"
+        server.addChannel(chan)
+    
+        chan2 = IrcChannel()
+        chan2.name = "#scrutator"
+        server.addChannel(chan2)
+        
+        self.assertEqual(chan2, server.getChannel(chan2))
+        self.assertEqual(chan2, server.getChannel("#scrutator"))
         
         
         
