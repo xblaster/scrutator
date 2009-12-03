@@ -14,12 +14,14 @@ from scrutator.protocols.common import BasicClientBrain
 from scrutator.core.event import SpawnEvent
 from remote.protocols.irc.event import IrcEvent
 from remote.protocols.genericbrain import GenericBrainClient
-from remote.protocols.event import LinkEvent, ConnectEventAction
+from remote.protocols.event import LinkEvent, ConnectEventAction,\
+    InfoRequestEvent, InfoContentEvent
 
 from remote.protocols.irc.connector import BotFactory
 
 
 from twisted.protocols import basic
+from remote.protocols.irc.model import IrcServer
 
 class RapidIdentServer(basic.LineOnlyReceiver):
     def lineReceived(self, line):
@@ -38,7 +40,7 @@ class IrcBrainClient(BasicClientBrain):
     transport_event = IrcEvent
     def __init__(self):
         super(IrcBrainClient, self).__init__()
-        
+
     def onInit(self):
         super(IrcBrainClient, self).onInit()
         #self.pushToMaster(LinkEvent(url="http://diveintopython.adrahon.org/xml_processing/packages.html", author="test", channel="phantom"))

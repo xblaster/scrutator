@@ -8,6 +8,9 @@ from scrutator.core.event import SimpleEvent
 class InfoRequestEvent(SimpleEvent):
     pass
 
+class InfoContentEvent(SimpleEvent):
+    pass
+
 class ConnectEvent(SimpleEvent):
     pass
 

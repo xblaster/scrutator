@@ -7,11 +7,30 @@ from remote.protocols.genericbrain import GenericBrainServer
 from remote.protocols.irc.event import IrcEvent, JoinActionEvent
 from scrutator.core.event import SpawnEvent, DieEvent
 from remote.protocols.event import ConnectEventAction, ConnectEvent,\
-    DisconnectEvent
+    DisconnectEvent, InfoContentEvent
+from remote.protocols.irc.services import IrcServices
+from remote.protocols.irc.model import IrcRessourceManager
+from remote.services.helpers import getComputername
 
 
 
 
+class IrcSQLRessourceManager(IrcRessourceManager):
+    def __init__(self):
+        super(IrcSQLRessourceManager, self).__init__()
+        services = IrcServices()
+        self.request = services.getModel()
+        
+        self.docked = list()
+        
+        for server in self.request:
+            self.docked = server.emptyClone()
+            
+       
+    
+    def getRootAgents(self):
+        return self.getContext().getBean('RegistryBrain').getHostList()
+    
 
 
 class IrcBrainServer(GenericBrainServer):
@@ -19,14 +38,16 @@ class IrcBrainServer(GenericBrainServer):
     def __init__(self):
         super(IrcBrainServer, self).__init__()
         self.spawned = list()
+        self.resManager = IrcRessourceManager()
+        
         
     def onInit(self):
         super(IrcBrainServer, self).onInit()
         
         self.localbus.bind(ConnectEvent().getType(), self.onConnectEvent)
         self.localbus.bind(DisconnectEvent().getType(), self.onDisconnectEvent)
+        self.localbus.bind(InfoContentEvent().getType(), self.resManager.onInfoContent)
         
-    
     def onFirstPing(self, eventObj, evtMgr):
         print "NEW CLIENT !!!!!!!!"
         source = eventObj.source

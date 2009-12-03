@@ -7,10 +7,13 @@ Created on 25 Nov 2009
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol
 from twisted.python import log
-from remote.protocols.event import DisconnectEvent, ConnectEvent, LinkEvent
+from remote.protocols.event import DisconnectEvent, ConnectEvent, LinkEvent,\
+    InfoRequestEvent, InfoContentEvent
 from remote.protocols.irc.event import JoinActionEvent, PartEvent, JoinEvent
 from scrutator.core.event import KickEvent
 from scrutator.helpers import url
+from remote.protocols.irc.model import IrcServer
+from legacy.scrutmodel import Channel
 
 class LogBot(irc.IRCClient):
 
@@ -19,18 +22,25 @@ class LogBot(irc.IRCClient):
     nickname = property(_get_nickname)
 
     def onInit(self):
+        self.server = IrcServer()
+        
         self.nickname = self.factory.nickname
         self.pushToMaster = self.factory.pushToMaster
         #bus binding
         self.bus = self.factory.bus
         self.bus.bind(JoinActionEvent().getType(), self.onJoinEvent) 
+        self.bus.bind(InfoRequestEvent().getType(), self.onInfoRequest)
+
 #     
 #    #def created(self, when):
 #    #    self.pushToMaster = self.factory.pushToMaster
 #    #    self.bus = self.factory.bus
 #    #    
 #        
-#        
+#     
+    def onInfoRequest(self, event, evtMgr):  
+        self.pushToMaster(InfoContentEvent(server=self.server))  
+   
     def onJoinEvent(self, eventObj, evtMgr):
         
         if not eventObj.hasArgEntry("key"):
@@ -59,6 +69,12 @@ class LogBot(irc.IRCClient):
 #        
     def joined(self, channel):
         self.pushToMaster(JoinEvent(channel=channel))
+        
+        chan = Channel()
+        chan.name = channel
+        
+        self.server.addChannel(chan)
+        
 #
     def privmsg(self, user, channel, msg):
         #self.logger.log("* %s %s %s" % (user, channel, msg))
@@ -99,8 +115,9 @@ class LogBot(irc.IRCClient):
 #        #new_nick = params[0]
 #        #self.logger.log("%s is now known as %s" % (old_nick, new_nick))
 #    
-#    def kickedFrom(self, channel, kicker, message):
-#        self.pushToMaster(KickEvent(channel=channel, kicker=kicker, message=message))
+    def kickedFrom(self, channel, kicker, message):
+        self.pushToMaster(KickEvent(channel=channel, kicker=kicker, message=message))
+        self.server.removeChannel(channel)
 #        
 #    def left(self, channel):
 #        self.pushToMaster(PartEvent(channel=channel))

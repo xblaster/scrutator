@@ -3,10 +3,59 @@ Created on 27 Nov 2009
 
 @author: wax
 '''
+from remote.services.helpers import getComputername
 
+class Agent(object):
+    def __init__(self):
+        self.name = ""
+        self.server =""
+        self.chan = list()
+        self.nbchan = 0 
 
+class IrcRessourceManager(object):
+    def __init__(self):
+        self.request = list()
+        self.docked = list()
+        self.running_agents = dict()
+        
+    def onInfoContent(self, eventObj, evtMgr):
+        source = eventObj.source
+        server = eventObj.server
+        
+    def getRootAgents(self):
+        raise "Not implemented"
+    
+    def getRunnningAgents(self):
+        return self.running_agents.values()     
 
-class IrcChannel:
+    def bestAgentFor(self, channel, server):
+        allowed = self.getRootAgents()        
+        
+        candidate = list()
+        
+        for agent in self.getRunnningAgents():
+            if agent.server == server:    
+                if agent.nbchan < 8:
+                    candidate.append(agent)
+                for root_agent in allowed:
+                    if getComputername(root_agent)==getComputername(agent.name):
+                        allowed.remove(root_agent) 
+        
+        #if no candidate
+        if len(candidate)==0:
+            print allowed
+            return None
+         
+        return candidate.pop()
+                
+    def onRegisterAgent(self, agent):
+        self.running_agents[agent.name] = agent
+        
+    def onUnregisterAgent(self,agent):
+        del self.running_agents[agent.name]
+        
+
+class IrcChannel(object):
     def __init__(self):
         self.name = "unknown"
         self.verbose = 0
@@ -14,10 +63,10 @@ class IrcChannel:
         self.canLearn = 0
         self.status = "offline"
 
-class IrcServer:
+class IrcServer(object):
     def __init__(self):
         self.name = "unknown"
-        self.host = "127.0.0.1"
+        self.host = "unknown"
         self.channels = dict()
         self.nickname = "red_abzeu"
 
@@ -37,6 +86,12 @@ class IrcServer:
     
     def removeChannel(self, channel):
         del self.channels[str(channel.name)]
+        
+    def emptyClone(self):
+        serv = IrcServer()
+        serv.name = self.name
+        serv.host = self.host
+        
 
 
                 
