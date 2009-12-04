@@ -106,7 +106,12 @@ class XMLRPCClient:
 	def initSource(self):
 		import socket
 		import uuid
-		self.source = str(socket.gethostname())+"/"+str(uuid.uuid1())
+		identifier = str(uuid.uuid1())
+		self.source = str(socket.gethostname())+"/"+identifier
+		from twisted.python import log
+		
+		log.startLogging(open('log/'+identifier+".log", 'w'))
+
 
 	def reinject(self, msgList):
 		es = EventSerializer()

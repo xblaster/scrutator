@@ -23,3 +23,6 @@ class PartEvent(SimpleEvent):
 
 class JoinEvent(SimpleEvent):
     pass
+
+class InitEvent(SimpleEvent):
+    pass

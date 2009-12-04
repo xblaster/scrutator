@@ -25,7 +25,7 @@ class Brain(object):
     
 
 class BasicBrain(Brain):
-    think_period = 10
+    think_period = 30
     
     
     def __init__(self):

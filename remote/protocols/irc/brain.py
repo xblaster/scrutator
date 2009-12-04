@@ -12,13 +12,12 @@ from twisted.protocols.irc import *
 
 from scrutator.protocols.common import BasicClientBrain
 from scrutator.core.event import SpawnEvent
-from remote.protocols.irc.event import IrcEvent
+from remote.protocols.irc.event import IrcEvent, InitEvent
 from remote.protocols.genericbrain import GenericBrainClient
 from remote.protocols.event import LinkEvent, ConnectEventAction,\
     InfoRequestEvent, InfoContentEvent
 
 from remote.protocols.irc.connector import BotFactory
-
 
 from twisted.protocols import basic
 from remote.protocols.irc.model import IrcServer
@@ -46,6 +45,7 @@ class IrcBrainClient(BasicClientBrain):
         #self.pushToMaster(LinkEvent(url="http://diveintopython.adrahon.org/xml_processing/packages.html", author="test", channel="phantom"))
         #self.bus.bind(DieEvent().getType(), self.onDieEvent)
         self.bus.bind(ConnectEventAction().getType(), self.onConnectAction)
+        self.pushToMaster(InitEvent())
         
     def onThink(self):
         super(IrcBrainClient, self).onThink()

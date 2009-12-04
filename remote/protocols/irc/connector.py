@@ -16,6 +16,7 @@ from remote.protocols.irc.model import IrcServer, IrcChannel
 from twisted.internet.task import LoopingCall
 
 
+
 class LogBot(irc.IRCClient):
 
     def _get_nickname(self):
@@ -33,7 +34,7 @@ class LogBot(irc.IRCClient):
         self.bus.bind(JoinActionEvent().getType(), self.onJoinEvent) 
         self.bus.bind(InfoRequestEvent().getType(), self.onInfoRequest)
         
-        lc = LoopingCall(self.onInfoRequest())
+        lc = LoopingCall(self.onInfoRequest)
         lc.start(30)
         
 
@@ -68,10 +69,11 @@ class LogBot(irc.IRCClient):
 #
     def signedOn(self):
         """Called when bot has succesfully signed on to server."""
-        print "signed on !!!!!!!!!!!!!"
+        #print "signed on !!!!!!!!!!!!!"
         #self.onInit()
         self.setNick(self.nickname)
         self.pushToMaster(ConnectEvent())
+        self.onInfoRequest()
 #        
     def joined(self, channel):
         self.pushToMaster(JoinEvent(channel=channel))
@@ -86,6 +88,7 @@ class LogBot(irc.IRCClient):
 #
     def privmsg(self, user, channel, msg):
         #self.logger.log("* %s %s %s" % (user, channel, msg))
+        log.msg("* %s %s %s" % (user, channel, msg))
         #self.setNick(self.nickname)
         user = user.split('!', 1)[0]
         #print "* "+user+" "+channel+" "+msg
@@ -152,7 +155,7 @@ class BotFactory(protocol.ClientFactory):
         self.pushToMaster(DisconnectEvent())
 
     def clientConnectionFailed(self, connector, reason):
-        print "REASON: "+str(reason)
+        print "CONNECTION FAILED REASON: "+str(reason)
         self.pushToMaster(DisconnectEvent(reason="arg"))
         
 import xmlrpclib
