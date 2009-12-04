@@ -5,6 +5,8 @@ Created on 1 Dec 2009
 '''
 
 from remote.protocols.irc.model import *
+from scrutator.core.manager import EventManager
+from remote.protocols.event import InfoContentEvent
 import unittest
 
 
@@ -47,7 +49,7 @@ class IrcMockRessourceManager(IrcRessourceManager):
         self.docked = list()
         
         for server in self.request:
-            self.docked = server.emptyClone()
+            self.docked.append(server.emptyClone())
             
     def getRootAgents(self):
         res = list()
@@ -85,7 +87,101 @@ class TestIrcRessouce(unittest.TestCase):
         manager.onRegisterAgent(agent)
         
         self.assertEqual(None,manager.bestAgentFor("#scrutator", "irc.epiknet.org"))
+    
+    def testOnInfoContent(self):
+        manager = IrcMockRessourceManager()
+        agent = Agent()
+        agent.name = "Prio/15616-1531561"
+        agent.server = "irc.epiknet.org"
+        agent.nbchan = 99
+        manager.onRegisterAgent(agent)
         
+        agent = Agent()
+        agent.name = "Prio/14488645616-1531561"
+        agent.server = "irc.worldnet.org"
+        agent.nbchan = 0
+        manager.onRegisterAgent(agent)
+        
+        #create content
+        server = IrcServer()
+        server.host = "irc.epiknet.org"
+        
+        channel = IrcChannel()
+        channel.name = "#funradio"
+        server.addChannel(channel)
+        
+        channelfun3 = IrcChannel()
+        channelfun3.name = "#funradio3"
+        server.addChannel(channelfun3)
+        
+        manager.onInfoContent(InfoContentEvent(server=server, source="sample/546846486"), EventManager())
+        
+        serv = manager.getDockedServerFor("irc.epiknet.org")
+        self.assertEqual(True, serv.hasChannel(channel))
+        self.assertEqual(True, serv.hasChannel(channelfun3))
+        
+        channelunk = IrcChannel()
+        channelunk.name = "#unknown"
+        server.addChannel(channelunk)
+        
+        self.assertEqual(False, serv.hasChannel(channelunk))
+        
+    def testOnInfoContentRemove(self):
+        manager = IrcMockRessourceManager()
+        agent = Agent()
+        agent.name = "Prio/15616-1531561"
+        agent.server = "irc.epiknet.org"
+        agent.nbchan = 99
+        manager.onRegisterAgent(agent)
+        
+        agent = Agent()
+        agent.name = "Prio/14488645616-1531561"
+        agent.server = "irc.worldnet.org"
+        agent.nbchan = 0
+        manager.onRegisterAgent(agent)
+        
+        #create content
+        server = IrcServer()
+        server.host = "irc.epiknet.org"
+        
+        channel = IrcChannel()
+        channel.name = "#funradio"
+        server.addChannel(channel)
+        
+        channelfun3 = IrcChannel()
+        channelfun3.name = "#funradio3"
+        server.addChannel(channelfun3)
+        
+        manager.onInfoContent(InfoContentEvent(server=server, source="sample/546846486"), EventManager())
+        
+        serv = manager.getDockedServerFor("irc.epiknet.org")
+        self.assertEqual(True, serv.hasChannel(channel))
+        self.assertEqual(True, serv.hasChannel(channelfun3))
+        
+        channelunk = IrcChannel()
+        channelunk.name = "#unknown"
+        server.addChannel(channelunk)
+        
+        self.assertEqual(False, serv.hasChannel(channelunk))
+        
+        #remove now
+        #create content
+        server = IrcServer()
+        server.host = "irc.epiknet.org"
+        
+        channelfun3 = IrcChannel()
+        channelfun3.name = "#funradio3"
+        server.addChannel(channelfun3)
+
+        channelscrut = IrcChannel()
+        channelscrut.name = "#scrut"
+        server.addChannel(channelscrut)
+        
+        manager.onInfoContent(InfoContentEvent(server=server, source="sample/546846486"), EventManager())
+        
+        serv = manager.getDockedServerFor("irc.epiknet.org")
+        self.assertEqual(False, serv.hasChannel(channel))
+        self.assertEqual(True, serv.hasChannel(channelscrut))
 
 class TestIrcModel(unittest.TestCase):
         
