@@ -81,7 +81,7 @@ class IrcRessourceManager(object):
     def getRunnningAgents(self):
         return self.running_agents.values()    
     
-    def requestNewAgent(self, allowed):
+    def requestNewAgent(self, allowed, server):
          pass
 
     def bestAgentFor(self, channel, server):
@@ -99,7 +99,7 @@ class IrcRessourceManager(object):
         
         #if no candidate
         if len(candidate)==0:
-            self.requestNewAgent(allowed)
+            self.requestNewAgent(allowed, server)
             return None
          
         return candidate.pop()

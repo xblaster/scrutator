@@ -12,8 +12,9 @@ from remote.protocols.event import DisconnectEvent, ConnectEvent, LinkEvent,\
 from remote.protocols.irc.event import JoinActionEvent, PartEvent, JoinEvent
 from scrutator.core.event import KickEvent
 from scrutator.helpers import url
-from remote.protocols.irc.model import IrcServer
-from legacy.scrutmodel import Channel
+from remote.protocols.irc.model import IrcServer, IrcChannel
+from twisted.internet.task import LoopingCall
+
 
 class LogBot(irc.IRCClient):
 
@@ -23,6 +24,7 @@ class LogBot(irc.IRCClient):
 
     def onInit(self):
         self.server = IrcServer()
+        self.server.host = self.factory.server
         
         self.nickname = self.factory.nickname
         self.pushToMaster = self.factory.pushToMaster
@@ -30,6 +32,10 @@ class LogBot(irc.IRCClient):
         self.bus = self.factory.bus
         self.bus.bind(JoinActionEvent().getType(), self.onJoinEvent) 
         self.bus.bind(InfoRequestEvent().getType(), self.onInfoRequest)
+        
+        lc = LoopingCall(self.onInfoRequest())
+        lc.start(30)
+        
 
 #     
 #    #def created(self, when):
@@ -38,7 +44,7 @@ class LogBot(irc.IRCClient):
 #    #    
 #        
 #     
-    def onInfoRequest(self, event, evtMgr):  
+    def onInfoRequest(self, event = None, evtMgr = None):  
         self.pushToMaster(InfoContentEvent(server=self.server))  
    
     def onJoinEvent(self, eventObj, evtMgr):
@@ -70,10 +76,12 @@ class LogBot(irc.IRCClient):
     def joined(self, channel):
         self.pushToMaster(JoinEvent(channel=channel))
         
-        chan = Channel()
+        chan = IrcChannel()
         chan.name = channel
         
         self.server.addChannel(chan)
+        
+        self.pushToMaster(InfoContentEvent(server=self.server))
         
 #
     def privmsg(self, user, channel, msg):
@@ -117,7 +125,10 @@ class LogBot(irc.IRCClient):
 #    
     def kickedFrom(self, channel, kicker, message):
         self.pushToMaster(KickEvent(channel=channel, kicker=kicker, message=message))
-        self.server.removeChannel(channel)
+        chan_obj = IrcChannel()
+        chan_obj.name = channel
+        self.server.removeChannel(chan_obj)
+        self.pushToMaster(InfoContentEvent(server=self.server))
 #        
 #    def left(self, channel):
 #        self.pushToMaster(PartEvent(channel=channel))
