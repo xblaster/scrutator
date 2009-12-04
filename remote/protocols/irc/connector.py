@@ -7,8 +7,7 @@ Created on 25 Nov 2009
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol
 from twisted.python import log
-from remote.protocols.event import DisconnectEvent, ConnectEvent, LinkEvent,\
-    InfoRequestEvent, InfoContentEvent
+from remote.protocols.event import DisconnectEvent, ConnectEvent, LinkEvent, InfoRequestEvent, InfoContentEvent
 from remote.protocols.irc.event import JoinActionEvent, PartEvent, JoinEvent
 from scrutator.core.event import KickEvent
 from scrutator.helpers import url
@@ -157,7 +156,7 @@ class BotFactory(protocol.ClientFactory):
         
     def clientConnectionLost(self, connector, reason):
         self.pushToMaster(DisconnectEvent())
-
+        
     def clientConnectionFailed(self, connector, reason):
         print "CONNECTION FAILED REASON: "+str(reason)
         self.pushToMaster(DisconnectEvent(reason="arg"))

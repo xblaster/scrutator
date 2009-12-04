@@ -104,11 +104,14 @@ class IrcRessourceManager(object):
                         allowed.remove(root_agent) 
         
         #if no candidate
+        self.requestNewAgent(allowed, server)
         if len(candidate)==0:
-            self.requestNewAgent(allowed, server)
             return None
+        
+        from random import Random
+        rnd = Random()
          
-        return candidate.pop()
+        return candidate[rnd.randint(0, len(candidate)-1)]
     
     def getAgentByName(self, name):
         if not self.running_agents.has_key(name):

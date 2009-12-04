@@ -68,6 +68,17 @@ class BasicServerBrain(BasicBrain):
         self.localbus.bind(PingEvent().getType(), self.onPing)
         
         reactor.callLater(self.delay_first_init, self.onLaunch)
+        
+        
+    def garbageAgent(self):
+        for agentName in self.hostDict:
+            agent = self.hostDict[agentName]
+            
+            if agent.getLastPing() > 360:
+                del(self.hostDict[agentName])
+            
+    def onLooseAgent(self,agentName):
+        pass        
     
     def onLaunch(self):
         launched = True
@@ -96,6 +107,11 @@ class BasicServerBrain(BasicBrain):
         self.bus.bind(self.transport_event().getType(), gate_listener)
         
         self.localbus.bind('all', PrintListener())
+        
+        #garbage agent which not respond
+        from twisted.internet.task import LoopingCall
+        lc = LoopingCall(self.garbageAgent)
+        lc.start(60)
     
     def sendTo(self, to, msg):
         self.bus.getMessageBoxManager().push(SimpleEvent(to=to, msg=msg))

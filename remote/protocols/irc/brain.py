@@ -14,8 +14,7 @@ from scrutator.protocols.common import BasicClientBrain
 from scrutator.core.event import SpawnEvent
 from remote.protocols.irc.event import IrcEvent, InitEvent
 from remote.protocols.genericbrain import GenericBrainClient
-from remote.protocols.event import LinkEvent, ConnectEventAction,\
-    InfoRequestEvent, InfoContentEvent
+from remote.protocols.event import LinkEvent, ConnectEventAction, InfoRequestEvent, InfoContentEvent
 
 from remote.protocols.irc.connector import BotFactory
 

@@ -6,13 +6,13 @@ Created on 20 Nov 2009
 from remote.protocols.genericbrain import GenericBrainServer
 from remote.protocols.irc.event import IrcEvent, JoinActionEvent, InitEvent
 from scrutator.core.event import SpawnEvent, DieEvent, SimpleEvent
-from remote.protocols.event import ConnectEventAction, ConnectEvent,\
-    DisconnectEvent, InfoContentEvent
+from remote.protocols.event import ConnectEventAction, ConnectEvent, DisconnectEvent, InfoContentEvent
 from remote.protocols.irc.services import IrcServices
 from remote.protocols.irc.model import IrcRessourceManager, Agent
 from remote.services.helpers import getComputername, getNickName
 
 from twisted.internet.task import LoopingCall
+from twisted.internet import reactor
 
 class IrcSQLRessourceManager(IrcRessourceManager):
     def __init__(self):
@@ -49,7 +49,11 @@ class IrcSQLRessourceManager(IrcRessourceManager):
     def requestNewAgent(self, allowed, server):
         if len(allowed) == 0:
             return
-        agentname = allowed.pop()
+        
+        from random import Random
+        rnd = Random()
+
+        agentname = allowed[rnd.randint(0, len(allowed)-1)]
         
         self.addSpawnRequest(agentname, server)
        
@@ -62,6 +66,8 @@ class IrcSQLRessourceManager(IrcRessourceManager):
     
     def onClientInit(self, eventObj, evtMgr):
         source = eventObj.source
+        
+        print "SPAWNNN: "+str(self.spawnRequest)
         
         if self.hasSpawnRequest(source):
             server = self.getSpawnRequest(source)
@@ -108,7 +114,6 @@ class IrcBrainServer(GenericBrainServer):
         self.resManager.sendTo = self.sendTo
         
         
-        
     def onInit(self):
         super(IrcBrainServer, self).onInit()
         self.resManager.getContext = self.getContext
@@ -118,6 +123,9 @@ class IrcBrainServer(GenericBrainServer):
         self.localbus.bind(InitEvent().getType(), self.resManager.onClientInit)
         #self.resManager.pushToMaster = self.pushToMaster
         
+        reactor.callLater(20,self.launchManagerChannel)
+        
+    def launchManagerChannel(self):
         lc = LoopingCall(self.resManager.manageChannel)
         lc.start(30)
         
