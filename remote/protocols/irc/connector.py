@@ -47,6 +47,10 @@ class LogBot(irc.IRCClient):
 #     
     def onInfoRequest(self, event = None, evtMgr = None):  
         self.pushToMaster(InfoContentEvent(server=self.server))  
+        log.msg("sending info request ***")
+        for chan in self.server.getChannels():
+            log.msg("--> on chan "+ str(chan.name))
+            
    
     def onJoinEvent(self, eventObj, evtMgr):
         

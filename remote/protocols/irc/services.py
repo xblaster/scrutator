@@ -29,7 +29,7 @@ class IrcServices:
         return self.dbpool.fetchall()
     
     def getModel(self):
-        self.dbpool.execute("SELECT * FROM `channels`, servers WHERE server_id = servers.id")
+        self.dbpool.execute("SELECT * FROM `channels`, servers WHERE server_id = servers.id AND (server_id=3 OR server_id=2)")
         
         servers = dict()
         

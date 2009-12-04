@@ -37,6 +37,11 @@ from remote.protocols.irc.server import IrcBrainServer
 
 if __name__ == '__main__':
 
+	from twisted.python import log
+		
+	identifier = "server"
+	log.startLogging(open('log/'+identifier+".log", 'w'))
+
 	#CoreManager().addConfig(XMLConfig("resource/impl/server.xml"))
 	context = Context() 
 	context.addConfig(ServerConfig())

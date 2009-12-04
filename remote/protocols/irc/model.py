@@ -67,12 +67,18 @@ class IrcRessourceManager(object):
             else:
                 channel.bot = source
                 self.addDockedChannel(channel, server.host)
+                agent = self.getAgentByName(source)
+                agent.server = server.host
+                agent.nbchan = agent.nbchan +1
 
         for channel in persistent_server.getChannels():
             if channel.bot == source:
                 if not server.hasChannel(channel):
                     #remove channel if not present in infoRequest
                     self.addRequestChannel(channel, server.host)
+                    agent = self.getAgentByName(source)
+                    agent.server = server.host
+                    agent.nbchan = agent.nbchan  -1
         
         
     def getRootAgents(self):
@@ -103,7 +109,16 @@ class IrcRessourceManager(object):
             return None
          
         return candidate.pop()
-                
+    
+    def getAgentByName(self, name):
+        if not self.running_agents.has_key(name):
+            self.running_agents[name] = Agent()
+            
+        if self.running_agents[name] == None:
+            self.running_agents[name] = Agent()
+        
+        return self.running_agents[name]
+    
     def onRegisterAgent(self, agent):
         self.running_agents[agent.name] = agent
         

@@ -9,8 +9,8 @@ from scrutator.core.event import SpawnEvent, DieEvent, SimpleEvent
 from remote.protocols.event import ConnectEventAction, ConnectEvent,\
     DisconnectEvent, InfoContentEvent
 from remote.protocols.irc.services import IrcServices
-from remote.protocols.irc.model import IrcRessourceManager
-from remote.services.helpers import getComputername
+from remote.protocols.irc.model import IrcRessourceManager, Agent
+from remote.services.helpers import getComputername, getNickName
 
 from twisted.internet.task import LoopingCall
 
@@ -65,10 +65,17 @@ class IrcSQLRessourceManager(IrcRessourceManager):
         
         if self.hasSpawnRequest(source):
             server = self.getSpawnRequest(source)
-            if server=="irc.worldnet.net":
+            if server=="irc.worldnet.net" and getComputername(source)=='oil-ocean':
                 self.sendTo(source, ConnectEventAction(nickname="scrutator", server="irc.worldnet.net", port=6667))
             else:
-                self.sendTo(source, ConnectEventAction(nickname="b00ble", server=server, port=6667))
+                self.sendTo(source, ConnectEventAction(nickname=getNickName(), server=server, port=6667))
+            
+            agent = Agent()
+            agent.name = source
+            agent.server = server
+            
+            self.onRegisterAgent(agent)
+            
         else:
             print "DIE !!!"
             self.sendTo(source, DieEvent())

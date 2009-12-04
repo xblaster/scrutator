@@ -1,2 +1,3 @@
 *.pyc
 upload
+log/*.log
