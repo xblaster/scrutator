@@ -4,6 +4,7 @@ Created on 27 Nov 2009
 @author: wax
 '''
 from remote.services.helpers import getComputername
+from twisted.python import log
 
 class Agent(object):
     def __init__(self):
@@ -96,14 +97,17 @@ class IrcRessourceManager(object):
         candidate = list()
         
         for agent in self.getRunnningAgents():
+            print agent.server+"/"+server
             if agent.server == server:    
                 if agent.nbchan < 8:
                     candidate.append(agent)
                 for root_agent in allowed:
+                    #print "computer name: "+getComputername(root_agent)+"/"+getComputername(agent.name)+"y"+agent.name
                     if getComputername(root_agent)==getComputername(agent.name):
                         allowed.remove(root_agent) 
         
         #if no candidate
+        log.msg("ALLOWED "+str(allowed))
         self.requestNewAgent(allowed, server)
         if len(candidate)==0:
             return None
@@ -115,10 +119,14 @@ class IrcRessourceManager(object):
     
     def getAgentByName(self, name):
         if not self.running_agents.has_key(name):
-            self.running_agents[name] = Agent()
+            a = Agent()
+            a.name = name
+            self.running_agents[name] = a 
             
         if self.running_agents[name] == None:
-            self.running_agents[name] = Agent()
+            a = Agent()
+            a.name = name
+            self.running_agents[name] = a
         
         return self.running_agents[name]
     

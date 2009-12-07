@@ -71,10 +71,11 @@ class BasicServerBrain(BasicBrain):
         
         
     def garbageAgent(self):
-        for agentName in self.hostDict:
+        for agentName in self.hostDict.keys():
             agent = self.hostDict[agentName]
             
             if agent.getLastPing() > 360:
+                self.onLooseAgent(agentName)
                 del(self.hostDict[agentName])
             
     def onLooseAgent(self,agentName):

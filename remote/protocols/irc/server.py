@@ -11,6 +11,7 @@ from remote.protocols.irc.services import IrcServices
 from remote.protocols.irc.model import IrcRessourceManager, Agent
 from remote.services.helpers import getComputername, getNickName
 
+from twisted.python import log
 from twisted.internet.task import LoopingCall
 from twisted.internet import reactor
 
@@ -88,16 +89,32 @@ class IrcSQLRessourceManager(IrcRessourceManager):
         #self.sendTo(source, JoinActionEvent(channel="#funradio"))
         #self.sendTo(source, JoinActionEvent(channel="#cochonne"))
         #self.sendTo(source, JoinActionEvent(channel="#scrutator"))
-        
+    
+    def hasRunnningAgentsWithName(self, name):
+        for agent in self.getRunnningAgents():
+            if agent.name == name:
+                return True
+        return False
+    
     def manageChannel(self):
-        print "Manage Channel"
+        log.msg("Manage Channel")
         for server in self.request:
-            print "--> server "+server.host
+            log.msg("--> server "+server.host)
             for channel in server.getChannels():
-                print "---> channel "+channel.name
+                log.msg("---> channel "+channel.name)
                 agent = self.bestAgentFor(channel, server.host)
                 if agent != None:
                     self.sendTo(agent.name, JoinActionEvent(channel=channel.name))
+        
+        #garbage collector chan
+        for server in self.docked:
+            for channel in server.getChannels():
+                #print "bot name "+channel.bot
+                #print "runnin" +str(self.getRunnningAgents())
+                notfound = True
+                if not self.hasRunnningAgentsWithName(channel.bot):
+                    log.msg("Garbage collector chan "+channel.name)
+                    self.addRequestChannel(channel, server.host) 
         
         print self.spawnRequest
         
@@ -123,7 +140,12 @@ class IrcBrainServer(GenericBrainServer):
         self.localbus.bind(InitEvent().getType(), self.resManager.onClientInit)
         #self.resManager.pushToMaster = self.pushToMaster
         
-        reactor.callLater(20,self.launchManagerChannel)
+        reactor.callLater(60,self.launchManagerChannel)
+    
+    def onLooseAgent(self,agentName):
+        a = Agent()
+        a.name = agentName
+        self.resManager.onUnregisterAgent(a)
         
     def launchManagerChannel(self):
         lc = LoopingCall(self.resManager.manageChannel)

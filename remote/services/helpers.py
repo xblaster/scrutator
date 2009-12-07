@@ -5,6 +5,8 @@ Created on 1 Dec 2009
 '''
 
 def getComputername(identifier):
+    if not "/" in identifier:
+        return identifier 
     return identifier.split("/")[0]
 
 
