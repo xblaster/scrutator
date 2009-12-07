@@ -1,0 +1,6 @@
+[database]
+host=127.0.0.1
+
+username=scrutator
+passwd=lol
+db=lol
