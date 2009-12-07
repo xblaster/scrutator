@@ -18,14 +18,23 @@ from twisted.internet import reactor
 class IrcSQLRessourceManager(IrcRessourceManager):
     def __init__(self):
         super(IrcSQLRessourceManager, self).__init__()
-        services = IrcServices()
-        self.request = services.getModel()
+        self.services = IrcServices()
+        self.request = self.services.getModel()
         
         self.docked = list()
         self.spawnRequest= dict()
         for server in self.request:
             self.docked.append(server.emptyClone())
-            
+         
+         
+    def addDockedChannel(self, channel, host):
+        super(IrcSQLRessourceManager, self).addDockedChannel(channel, host)
+        self.services.setChanStatus(channel)
+        
+    def addRequestChannel(self, channel, host):
+        channel.bot = "offline"
+        super(IrcSQLRessourceManager, self).addRequestChannel(channel, host)
+        self.services.setChanStatus(channel)
     
     def addSpawnRequest(self, agentname, server):
         if not self.spawnRequest.has_key(getComputername(agentname)):
@@ -161,7 +170,7 @@ class IrcBrainServer(GenericBrainServer):
      
     def onDisconnectEvent(self, eventObj, evtMgr):
         source = eventObj.source
-        #self.sendTo(source, DieEvent())
+        self.sendTo(source, DieEvent())
      
     def onConnectEvent(self, eventObj, evtMgr):
         source = eventObj.source

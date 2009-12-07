@@ -77,9 +77,7 @@ class BasicServerBrain(BasicBrain):
             if agent.getLastPing() > 360:
                 self.onLooseAgent(agentName)
                 del(self.hostDict[agentName])
-            
-    def onLooseAgent(self,agentName):
-        pass        
+                    
     
     def onLaunch(self):
         launched = True

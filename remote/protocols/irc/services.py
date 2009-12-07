@@ -50,3 +50,15 @@ class IrcServices:
             server.addChannel(channel)
             
         return servers.values()
+    
+    def setChanStatus(self, channel):
+        self.dbpool.execute("UPDATE `channels` SET `status` = '"+channel.bot+"', `lastupdate` = '"+getNowInMysql()+"' WHERE `name` ='"+channel.name+"' LIMIT 1")
+
+
+def getNowInMysql():
+    from datetime import datetime
+    from time import strftime
+    newdate = datetime.now()
+    mysqldate = strftime("%Y-%m-%d %H:%M:%S", newdate.timetuple()) 
+    
+    return mysqldate    
